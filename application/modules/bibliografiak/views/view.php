@@ -28,6 +28,10 @@ td{
 	width: fit-content;
 }
 */
+
+
+
+/*
 table.dataTable thead .sorting_asc:after {
     content: none !important;
 }
@@ -35,9 +39,24 @@ table.dataTable thead .sorting_asc:after {
 .sorting_desc:after {
     content: none !important;
 }
+*/
 
 #ezaz tbody td{
 	max-width: 400px !important;
+}
+
+.editor-active{
+	text-rendering: auto;
+    color: initial;
+    letter-spacing: normal;
+    word-spacing: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    display: inline-block;
+    text-align: start;
+    margin: 0em;
+    font: 400 13.3333px Arial;
 }
 
 </style>

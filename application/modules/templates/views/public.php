@@ -13,7 +13,7 @@ $second_segment = $this->uri->segment(2);
 <link rel="icon" href="<?= base_url() ?>dist/img/llama_ico.png">
 
 <link rel="stylesheet" href="<?=base_url()?>bower_components/bootstrap/dist/css/bootstrap.min.css">
-<!--script src="<?=base_url()?>bower_components/jquery/dist/jquery.min.js"></script-->
+<script src="<?=base_url()?>bower_components/jquery/dist/jquery.min.js"></script>
 <!--script src="<?=base_url()?>bower_components/bootstrap/dist/js/popper.js"></script-->
 <!--script src="<?=base_url()?>bower_components/bootstrap/dist/js/bootstrap.min.js"></script-->
 

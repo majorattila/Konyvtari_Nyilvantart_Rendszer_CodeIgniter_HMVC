@@ -22,7 +22,7 @@ function get_elofoglalasok_to_datatable(){
     foreach($query->result() as $row){        
 
         $var = $row->id;
-        $actions = '<input type=\"checkbox\" name=\"eltavolit('.$id.')\" value=\"'.$var.'\">';
+        $actions = '<input type=\"checkbox\" class=\"editor-active\" name=\"eltavolit('.$id.')\" value=\"'.$var.'\">';
         
         $tabla.='{
                   "actions":"'.trim($actions).'",
@@ -75,7 +75,7 @@ function elofoglalas()
     foreach($checked_elements as $element) { 
         if(is_numeric($element)){
 
-            if($query->num_rows()==0){
+            if(!is_numeric($query) && $query->num_rows()==0){
 
                 $mysql_query = "INSERT INTO biblioteka.elofoglalasok (leltari_szam, datum) values (?, ?)";
                 $this->db->query($mysql_query, array($element, date('Y-m-d')));
