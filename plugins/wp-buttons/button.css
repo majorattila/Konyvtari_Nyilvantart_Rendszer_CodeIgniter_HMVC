@@ -1,0 +1,269 @@
+/*
+ * Plugin Name: Metro Buttons
+ * Plugin URI: http://satrya.me/metro-buttons/
+ * Description: Easily display catchy looking Metro style button with [button] shortcode in your posts, pages and widgets.
+ * Version: 1.0
+ * Author: Satrya
+ * Author URI: http://satrya.me
+ *
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU 
+ * General Public License as published by the Free Software Foundation; either version 2 of the License, 
+ * or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * You should have received a copy of the GNU General Public License along with this program; if not, write 
+ * to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ *
+ * @author    Satrya
+ * @copyright Copyright (c) 2013, Satrya
+ * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ */
+.metro-button {
+  background: #00aba9;
+  color: white;
+  font-size: 14px;
+  padding: 12px 24px;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  cursor: pointer;
+  font-weight: normal;
+  line-height: 1;
+  margin: 0 5px 10px;
+  position: relative;
+  text-decoration: none;
+}
+.metro-button:hover, .metro-button:focus {
+  background: #009190;
+}
+.metro-button:active {
+  outline: 0;
+}
+.metro-button:hover, .metro-button:focus {
+  color: white;
+  text-decoration: none;
+}
+.metro-button:visited {
+  color: white;
+}
+
+/**
+ * Button sizes.
+ */
+.mtr-tiny {
+  font-size: 10px;
+  padding: 4px 14px;
+}
+
+.mtr-small {
+  font-size: 12px;
+  padding: 8px 18px;
+}
+
+.mtr-large {
+  font-size: 18px;
+  padding: 16px 30px;
+}
+
+/**
+ * Button types.
+ */
+.mtr-radius {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+
+.mtr-round {
+  -webkit-border-radius: 100px;
+  -moz-border-radius: 100px;
+  border-radius: 100px;
+}
+
+/**
+ * Button colors.
+ */
+.mtr-lime {
+  background: #a4c400;
+  color: white;
+}
+.mtr-lime:hover, .mtr-lime:focus {
+  background: #8fab00;
+}
+
+.mtr-green {
+  background: #60a917;
+  color: white;
+}
+.mtr-green:hover, .mtr-green:focus {
+  background: #539314;
+}
+
+.mtr-emerald {
+  background: #008a00;
+  color: white;
+}
+.mtr-emerald:hover, .mtr-emerald:focus {
+  background: #007100;
+}
+
+.mtr-teal {
+  background: #00aba9;
+  color: white;
+}
+.mtr-teal:hover, .mtr-teal:focus {
+  background: #009190;
+}
+
+.mtr-cyan {
+  background: #1ba1e2;
+  color: white;
+}
+.mtr-cyan:hover, .mtr-cyan:focus {
+  background: #1891cb;
+}
+
+.mtr-cobalt {
+  background: #0050ef;
+  color: white;
+}
+.mtr-cobalt:hover, .mtr-cobalt:focus {
+  background: #0047d5;
+}
+
+.mtr-indigo {
+  background: #6a00ff;
+  color: white;
+}
+.mtr-indigo:hover, .mtr-indigo:focus {
+  background: #5f00e6;
+}
+
+.mtr-violet {
+  background: #aa00ff;
+  color: white;
+}
+.mtr-violet:hover, .mtr-violet:focus {
+  background: #9900e6;
+}
+
+.mtr-pink {
+  background: #f472d0;
+  color: white;
+}
+.mtr-pink:hover, .mtr-pink:focus {
+  background: #f25ac8;
+}
+
+.mtr-magenta {
+  background: #d80073;
+  color: white;
+}
+.mtr-magenta:hover, .mtr-magenta:focus {
+  background: #bf0065;
+}
+
+.mtr-crimson {
+  background: #a20025;
+  color: white;
+}
+.mtr-crimson:hover, .mtr-crimson:focus {
+  background: #89001f;
+}
+
+.mtr-red {
+  background: #e51400;
+  color: white;
+}
+.mtr-red:hover, .mtr-red:focus {
+  background: #cc1200;
+}
+
+.mtr-orange {
+  background: #fa6800;
+  color: white;
+}
+.mtr-orange:hover, .mtr-orange:focus {
+  background: #e15d00;
+}
+
+.mtr-amber {
+  background: #f0a30a;
+  color: white;
+}
+.mtr-amber:hover, .mtr-amber:focus {
+  background: #d89209;
+}
+
+.mtr-yellow {
+  background: #e3c800;
+  color: white;
+}
+.mtr-yellow:hover, .mtr-yellow:focus {
+  background: #cab200;
+}
+
+.mtr-brown {
+  background: #825a2c;
+  color: white;
+}
+.mtr-brown:hover, .mtr-brown:focus {
+  background: #6f4d26;
+}
+
+.mtr-olive {
+  background: #6d8764;
+  color: white;
+}
+.mtr-olive:hover, .mtr-olive:focus {
+  background: #617859;
+}
+
+.mtr-steel {
+  background: #647687;
+  color: white;
+}
+.mtr-steel:hover, .mtr-steel:focus {
+  background: #596978;
+}
+
+.mtr-mauve {
+  background: #76608a;
+  color: white;
+}
+.mtr-mauve:hover, .mtr-mauve:focus {
+  background: #69567b;
+}
+
+.mtr-taupe {
+  background: #87794e;
+  color: white;
+}
+.mtr-taupe:hover, .mtr-taupe:focus {
+  background: #776b45;
+}
+
+/**
+ * Button alignment.
+ */
+.mtr-alignleft {
+  display: inline;
+  float: left;
+}
+
+.mtr-alignright {
+  display: inline;
+  float: right;
+}
+
+.mtr-alignnone {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  float: none;
+}

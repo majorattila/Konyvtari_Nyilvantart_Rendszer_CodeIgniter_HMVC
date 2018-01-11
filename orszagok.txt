@@ -1,0 +1,193 @@
+ Afganisztán	AF
+ Albánia	AL
+ Algéria	DZ
+ Andorra	AD
+ Angola	AO
+ Antigua és Barbuda	AG
+ Argentína	AR
+ Ausztrália	AU
+ Ausztria	AT
+ Azerbajdzsán	AZ
+ Bahama-szigetek	BS
+ Bahrein	BH
+ Banglades	BD
+ Barbados	BB
+ Belgium	BE
+ Belize	BZ
+ Benin	BJ
+ Bhután	BT
+ Bissau-Guinea	GW
+ Bolívia	BO
+ Bosznia-Hercegovina	BA
+ Botswana	BW
+ Brazília	BR
+ Brunei	BN
+ Bulgária	BG
+ Burkina Faso	BF
+ Burundi	BI
+ Chile	CL
+ Ciprus	CY
+ Comore-szigetek	KM
+ Costa Rica	CR
+ Csád	TD
+ Csehország	CZ
+ Dánia	DK
+ Dél-afrikai Köztársaság	ZA
+ Dél-Korea	KR
+ Dominikai Közösség	DM
+ Dominikai Köztársaság	DO
+ Dzsibuti	DJ
+ Ecuador	EC
+ Egyenlítői-Guinea	GQ
+ Egyesült Arab Emírségek	AE
+ Egyesült Királyság	GB
+ Egyiptom	EG
+ Elefántcsontpart	CI
+ Eritrea	ER
+ Észak-Korea	KP
+ Észtország	EE
+ Etiópia	ET
+ Fehéroroszország	BY
+ Fidzsi	FJ
+ Finnország	FI
+ Franciaország	FR
+ Fülöp-szigetek	PH
+ Gabon	GA
+ Gambia	GM
+ Ghána	GH
+ Görögország	GR
+ Grenada	GD
+ Grúzia	GE
+ Guatemala	GT
+ Guinea	GN
+ Guyana	GY
+ Haiti	HT
+ Hollandia	NL
+ Honduras	HN
+ Horvátország	HR
+ India	IN
+ Indonézia	ID
+ Irak	IQ
+ Irán	IR
+ Írország	IE
+ Izland	IS
+ Izrael	IL
+ Jamaica	JM
+ Japán	JP
+ Jemen	YE
+ Jordánia	JO
+ Kambodzsa	KH
+ Kamerun	CM
+ Kanada	CA
+ Katar	QA
+ Kazahsztán	KZ
+ Kelet-Timor	TL
+ Kenya	KE
+ Kína	CN
+ Kirgizisztán	KG
+ Kiribati	KI
+ Kolumbia	CO
+ Kongói Demokratikus Köztársaság	CD
+ Kongói Köztársaság	CG
+ Közép-Afrika	CF
+ Kuba	CU
+ Kuvait	KW
+ Laosz	LA
+ Lengyelország	PL
+ Lesotho	LS
+ Lettország	LV
+ Libanon	LB
+ Libéria	LR
+ Líbia	LY
+ Liechtenstein	LI
+ Litvánia	LT
+ Luxemburg	LU
+ Macedónia	MK
+ Madagaszkár	MG
+ Magyarország	HU
+ Malajzia	MY
+ Malawi	MW
+ Maldív-szigetek	MV
+ Mali	ML
+ Málta	MT
+ Marokkó	MA
+ Marshall-szigetek	MH
+ Mauritánia	MR
+ Mauritius	MU
+ Mexikó	MX
+ Mianmar	MM
+ Mikronézia	FM
+ Moldova	MD
+ Monaco	MC
+ Mongólia	MN
+ Montenegró	ME
+ Mozambik	MZ
+ Namíbia	NA
+ Nauru	NR
+ Németország	DE
+ Nepál	NP
+ Nicaragua	NI
+ Niger	NE
+ Nigéria	NG
+ Norvégia	NO
+ Olaszország	IT
+ Omán	OM
+ Örményország	AM
+ Oroszország	RU
+ Pakisztán	PK
+ Palau	PW
+ Panama	PA
+ Pápua Új-Guinea	PG
+ Paraguay	PY
+ Peru	PE
+ Portugália	PT
+ Románia	RO
+ Ruanda	RW
+ Saint Kitts és Nevis	KN
+ Saint Lucia	LC
+ Saint Vincent és a Grenadine-szigetek	VC
+ Salamon-szigetek	SB
+ Salvador	SV
+ San Marino	SM
+ Seychelle-szigetek	SC
+ Sierra Leone	SL
+ Spanyolország	ES
+ Srí Lanka	LK
+ Suriname	SR
+ Svájc	CH
+ Svédország	SE
+ Szamoa	WS
+ Szaúd-Arábia	SA
+ Szenegál	SN
+ Szerbia	RS
+ Szingapúr	SG
+ Szíria	SY
+ Szlovákia	SK
+ Szlovénia	SI
+ Szomália	SO
+ Szudán	SD
+ Szváziföld	SZ
+ São Tomé és Príncipe	ST
+ Tádzsikisztán	TJ
+ Tanzánia	TZ
+ Thaiföld	TH
+ Togo	TG
+ Tonga	TO
+ Törökország	TR
+ Trinidad és Tobago	TT
+ Tunézia	TN
+ Türkmenisztán	TM
+ Tuvalu	TV
+ Uganda	UG
+ Új-Zéland	NZ
+ Ukrajna	UA
+ Uruguay	UY
+ USA	US
+ Üzbegisztán	UZ
+ Vanuatu	VU
+ Vatikán	VA
+ Venezuela	VE
+ Vietnam	VN
+ Zambia	ZM
+ Zimbabwe	ZW
+ Zöld-foki Köztársaság	CV
