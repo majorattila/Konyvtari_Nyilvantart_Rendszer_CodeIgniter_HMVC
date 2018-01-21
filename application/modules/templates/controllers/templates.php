@@ -17,8 +17,11 @@ function login($data){
 function admin_template($data)
 {
     $this->load->module('site_security');
+    
     $this->site_security->_is_admin();
     $this->site_security->_get_details_from_user();
+    $this->site_security->_check_browser();
+    $this->site_security->_click_counter();
 
     $data['username'] = $this->session->userdata('username');
     $data['firstname'] = $this->session->userdata('firstname');
@@ -43,6 +46,14 @@ function public_template($data)
 	$this->load->module('site_security');
 	$data['customer_id'] = $this->site_security->_get_user_id();
 	$this->site_security->_get_details_from_user();
+    $this->site_security->_check_browser();
+    $this->site_security->_click_counter();
+
+    $user_id = $this->site_security->_get_user_id();
+    if(!is_numeric($user_id)){
+        $mysql_query = "UPDATE widget_latogatok set latogatok = latogatok+1";
+        $this->db->query($mysql_query);
+    }
 
 	if(!isset($data['view_module']))
 	{

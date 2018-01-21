@@ -26,7 +26,7 @@ require_once('sort_this_code.php');
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="<?=base_url()?>dist/css/skins/_all-skins.min.css">
   <!-- Morris chart -->
-  <link rel="stylesheet" href="<?=base_url()?>bower_components/morris.js/morris.css">
+  <link rel="stylesheet" href="<?=base_url()?>bower_components/morris.js/morris.css">  
   <!-- jvectormap -->
   <link rel="stylesheet" href="<?=base_url()?>bower_components/jvectormap/jquery-jvectormap.css">
   <!-- Date Picker -->
@@ -39,6 +39,8 @@ require_once('sort_this_code.php');
 
   <!-- Word Press Button -->
   <link rel="stylesheet" href="<?=base_url()?>plugins/wp-buttons/button.css">
+
+  <script src="<?=base_url()?>bower_components/jquery/dist/jquery.min.js"></script>
 
 <?php /*
     <!-- AJAX DATATABLE !!!! -->
@@ -101,11 +103,11 @@ require_once('sort_this_code.php');
 
   .main-header .navbar {
     color: #fff !important;
-    background-color: #605ca8 !important;
+    background-color: #3C8DBC !important;
   }
   .main-header .logo {
     color: #fff !important;
-    background-color: #555299 !important;
+    background-color: #367FA9 !important;
   }
   .main-header .navbar .sidebar-toggle{    
     color: #fff !important;
@@ -120,19 +122,19 @@ require_once('sort_this_code.php');
     border-right-width: 0;
   }
   .main-header .navbar .nav>li>a:hover, .main-header .navbar .nav>li>a:focus{
-    background-color: #555299 !important;
+    background-color: #367FA9 !important;
   }
   .main-header .navbar .sidebar-toggle:hover{    
-    background-color: #555299 !important;
+    background-color: #367FA9 !important;
   }
   .main-header .navbar .sidebar-toggle:focus{
-    background-color: #605ca8 !important;
+    background-color: #3C8DBC !important;
   }
   .skin-black .main-header>.logo {
     border-right: 0px !important;
   }
   .skin-blue .main-header li.user-header {
-    background-color: #605ca8 !important;
+    background-color: #367FA9 !important;
   }
   
 </style>
@@ -372,10 +374,10 @@ require_once('sort_this_code.php');
                 </p>
               </li>
               <!-- Menu Body -->
-              <!--li class="user-body">
+              <li class="user-body">
                 <div class="row">
                   <div class="col-xs-4 text-center">
-                    <a href="#">Followers</a>
+                    <a href="#">Előzmények</a>
                   </div>
                   <div class="col-xs-4 text-center">
                     <a href="#">Sales</a>
@@ -383,7 +385,7 @@ require_once('sort_this_code.php');
                   <div class="col-xs-4 text-center">
                     <a href="#">Friends</a>
                   </div>
-                </div-->
+                </div>
                 <!-- /.row -->
               </li>
               <!-- Menu Footer-->
@@ -415,10 +417,11 @@ require_once('sort_this_code.php');
       <!-- Sidebar user panel -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="<?=base_url()?>dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+          <img src="<?php echo base_url() . 'dist/img/avatar/png/' . $profile?>" class="img-circle special-img" alt="User Image">          
+          <!--img src="<?=base_url()?>dist/img/user2-160x160.jpg" class="img-circle" alt="User Image"-->
         </div>
         <div class="pull-left info">
-          <p>Alexander Pierce</p>
+          <p><?= $lastname." ".$firstname ?></p>
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>
       </div>
@@ -456,6 +459,7 @@ require_once('sort_this_code.php');
             </span>
           </a>
           <ul class="treeview-menu">
+            <li><a href="<?=base_url()?>dashboard/home"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
             <li><a href="<?=base_url()?>https://adminlte.io/docs" class="disabled"><i class="fa fa-search"></i> <span>Tagkereső</span></a></li>
             <li><a href="<?=base_url()?>https://adminlte.io/docs" class="disabled"><i class="fa fa-check-circle"></i> <span>Becsekkolás</span></a></li>
             <li><a href="<?=base_url()?>tagok/manage/20"><i class="fa fa-user-plus"></i> <span>Könyvtári tagok</span></a></li>
@@ -741,7 +745,7 @@ require_once('sort_this_code.php');
 
 <?php if(!isset($sort_this)){?>
 <!-- jQuery 3 - EZEK A SZAROK ZAVARJÁK A DRAG AND DROP-ot !!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
-<script src="<?=base_url()?>bower_components/jquery/dist/jquery.min.js"></script>
+<!--script src="<?=base_url()?>bower_components/jquery/dist/jquery.min.js"></script-->
 <!-- jQuery UI 1.11.4 -->
 <script src="<?=base_url()?>bower_components/jquery-ui/jquery-ui.min.js"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
@@ -761,6 +765,8 @@ require_once('sort_this_code.php');
 <!-- Morris.js charts -->
 <script src="<?=base_url()?>bower_components/raphael/raphael.min.js"></script>
 <script src="<?=base_url()?>bower_components/morris.js/morris.min.js"></script>
+<!-- ChartJS -->
+<script src="<?=base_url()?>bower_components/Chart.js/Chart.js"></script>
 <!-- Sparkline -->
 <script src="<?=base_url()?>bower_components/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
 <!-- jvectormap -->

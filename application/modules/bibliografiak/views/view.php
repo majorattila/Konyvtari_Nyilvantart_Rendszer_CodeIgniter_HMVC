@@ -295,6 +295,13 @@ $create_account_url = base_url()."Tipusok/create";
 			    }
 	        }
 		});
+
+		$('#ezaz').on( 'change', 'input.editor-active', function () {
+	        editor
+	            .edit( $(this).closest('tr'), false )
+	            .set( 'active', $(this).prop( 'checked' ) ? 1 : 0 )
+	            .submit();
+	    } );
 /*
 		setInterval( function () {
 		    table.ajax.reload();

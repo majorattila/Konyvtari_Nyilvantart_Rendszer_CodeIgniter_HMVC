@@ -6,6 +6,62 @@ function __construct() {
 parent::__construct();
 }
 
+function _click_counter(){
+    $this->load->module('diagram_nezettseg');
+
+    $query = $this->diagram_nezettseg->get_with_double_condition('ev', date("Y"), 'honap', date("m"));
+
+    $latogatok_szama = 0;
+    foreach ($query->result() as $row) {
+        $latogatok_szama = $row->latogatok;
+    }
+
+    $data['latogatok'] = $latogatok_szama+1;
+    $this->diagram_nezettseg->_update_with_double_condition('ev', date("Y"), 'honap', date("m"), $data);
+    //die($this->db->last_query());
+}
+
+function _check_browser()
+{
+    $freegeoipjson = file_get_contents("http://freegeoip.net/json/");
+    $jsondata = json_decode($freegeoipjson);
+
+    $ip = $jsondata->ip;
+    $browser = $this->get_browser_properties()['browser'];
+    $orszag = $jsondata->country_name;
+    $regio = $jsondata->region_name;
+
+    $this->load->module("bongeszo_es_ipcim_lista");
+    $data = $this->bongeszo_es_ipcim_lista->get_where_custom("ip",$ip);
+
+    $browser_data["ip"] = $ip;
+    $browser_data["bongeszo"] = $browser;
+    $browser_data["orszag"] = $orszag;
+    $browser_data["regio"] = $regio;    
+
+    if($data->num_rows() > 0)
+    {
+        $bool = false;
+
+        foreach ($data->result() as $row) 
+        {
+            if($row->bongeszo != $browser)
+            {
+                $bool = true;
+            }
+        }
+
+        if($bool)
+        {
+            $this->bongeszo_es_ipcim_lista->_insert($browser_data);            
+        }
+    }
+    else
+    {
+        $this->bongeszo_es_ipcim_lista->_insert($browser_data);
+    } 
+}
+
 function _get_details_from_user()
 {
     $this->load->module('felhasznalok');
@@ -131,5 +187,53 @@ function _check_admin_login_details($username, $password)
         return FALSE;
     }
 }
+
+function get_browser_properties(){
+    $browser =array();
+    $agent=$_SERVER['HTTP_USER_AGENT'];
+
+    if(stripos($agent,"firefox")!==false){
+        $browser['browser'] = 'Firefox'; // Set Browser Name
+        $domain = stristr($agent, 'Firefox');
+        $split =explode('/',$domain);
+        $browser['version'] = $split[1]; // Set Browser Version
+    }
+    if(stripos($agent,"Opera")!==false){
+        $browser['browser'] = 'Opera'; // Set Browser Name
+        $domain = stristr($agent, 'Version');
+        $split =explode('/',$domain);
+        $browser['version'] = $split[1]; // Set Browser Version
+    }
+    if(stripos($agent,"MSIE")!==false){
+        $browser['browser'] = 'Internet Explorer'; // Set Browser Name
+        $domain = stristr($agent, 'MSIE');
+        $split =explode(' ',$domain);
+        $browser['version'] = $split[1]; // Set Browser Version
+    }
+    if(stripos($agent,"Trident")!==false){
+        $browser['browser'] = 'Internet Explorer'; // Set Browser Name
+        $domain = stristr($agent, 'rv:');
+        $split =explode(')',$domain);
+        $browser['version'] = substr($split[0],3,4); // Set Browser Version
+    }
+    if(stripos($agent,"Chrome")!==false){
+        $browser['browser'] = 'Google Chrome'; // Set Browser Name
+        $domain = stristr($agent, 'Chrome');
+        $split1 =explode('/',$domain);
+        $split =explode(' ',$split1[1]);
+        $browser['version'] = $split[0]; // Set Browser Version
+    }
+    else if(stripos($agent,"Safari")!==false){
+        $browser['browser'] = 'Safari'; // Set Browser Name
+        $domain = stristr($agent, 'Version');
+        $split1 =explode('/',$domain);
+        $split =explode(' ',$split1[1]);
+        $browser['version'] = $split[0]; // Set Browser Version
+    }else{
+        $browser['browser'] = "Unknown";
+    }
+
+    return $browser;
+} 
 
 }

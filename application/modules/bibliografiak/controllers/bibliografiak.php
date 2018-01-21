@@ -22,13 +22,13 @@ function get_elofoglalasok_to_datatable(){
     foreach($query->result() as $row){        
 
         $var = $row->id;
-        $actions = '<input type=\"checkbox\" class=\"editor-active\" name=\"eltavolit('.$id.')\" value=\"'.$var.'\">';
+        $actions = '<input style=\"margin: 0 auto; width: 100%;\" type=\"checkbox\" class=\"editor-active\" name=\"eltavolit('.$id.')\" value=\"'.$var.'\">';
         
         $tabla.='{
                   "actions":"'.trim($actions).'",
-                  "datum":"'.trim($row->datum).'",
-                  "nev":"'.trim($row->nev).'",
-                  "cim":"'.trim($row->cim).'"
+                  "datum":"'.substr(trim($row->datum),0,85).'",
+                  "nev":"'.substr(trim($row->nev),0,85).'",
+                  "cim":"'.substr(trim($row->cim),0,85).'"
                 },';    
         $id++;    
     }   
