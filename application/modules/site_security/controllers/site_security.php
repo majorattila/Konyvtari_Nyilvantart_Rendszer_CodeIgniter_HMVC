@@ -2,100 +2,13 @@
 class Site_security extends MX_Controller 
 {
 
+private $jsondata;
+
 function __construct() {
 parent::__construct();
-}
 
-function _click_counter(){
-    $this->load->module('diagram_nezettseg');
-
-    $query = $this->diagram_nezettseg->get_with_double_condition('ev', date("Y"), 'honap', date("m"));
-
-    $latogatok_szama = 0;
-    foreach ($query->result() as $row) {
-        $latogatok_szama = $row->latogatok;
-    }
-
-    $data['latogatok'] = $latogatok_szama+1;
-    $this->diagram_nezettseg->_update_with_double_condition('ev', date("Y"), 'honap', date("m"), $data);
-    //die($this->db->last_query());
-}
-
-function _check_browser()
-{
     $freegeoipjson = file_get_contents("http://freegeoip.net/json/");
-    $jsondata = json_decode($freegeoipjson);
-
-    $ip = $jsondata->ip;
-    $browser = $this->get_browser_properties()['browser'];
-    $orszag = $jsondata->country_name;
-    $regio = $jsondata->region_name;
-
-    $this->load->module("bongeszo_es_ipcim_lista");
-    $data = $this->bongeszo_es_ipcim_lista->get_where_custom("ip",$ip);
-
-    $browser_data["ip"] = $ip;
-    $browser_data["bongeszo"] = $browser;
-    $browser_data["orszag"] = $orszag;
-    $browser_data["regio"] = $regio;    
-
-    if($data->num_rows() > 0)
-    {
-        $bool = false;
-
-        foreach ($data->result() as $row) 
-        {
-            if($row->bongeszo != $browser)
-            {
-                $bool = true;
-            }
-        }
-
-        if($bool)
-        {
-            $this->bongeszo_es_ipcim_lista->_insert($browser_data);            
-        }
-    }
-    else
-    {
-        $this->bongeszo_es_ipcim_lista->_insert($browser_data);
-    } 
-}
-
-function _get_details_from_user()
-{
-    $this->load->module('felhasznalok');
-    $user_id = $this->_get_user_id();
-
-    if(is_numeric($user_id)){
-        $query = $this->felhasznalok->get_where($user_id);
-        foreach ($query->result() as $row) {
-            //send the user data
-            $this->session->set_userdata(
-                array(
-                    'username' => $row->felhasznalonev,
-                    'profile_img' => $row->profilkep,
-                    'lastname' => $row->vezeteknev,            
-                    'firstname' => $row->keresztnev,
-                    'email' => $row->email,
-                    'library_card' => $row->olvasojegy,
-                    'reg_date' => $row->reg_datuma
-                )
-            );
-            //set the session variables expiration time to 1 minute
-            
-            $this->session->mark_as_temp(array(
-                'username' => 50,
-                'profile_img' => 50,
-                'lastname' => 50,            
-                'firstname' => 50,
-                'email' => 50,
-                'library_card' => 50,
-                'reg_date' => 50
-            ));
-            
-        }
-    }
+    $this->jsondata = json_decode($freegeoipjson);
 }
 
 function _get_user_id()
@@ -188,52 +101,148 @@ function _check_admin_login_details($username, $password)
     }
 }
 
-function get_browser_properties(){
-    $browser =array();
-    $agent=$_SERVER['HTTP_USER_AGENT'];
+function get_browser_name()
+{
+    $this->load->module("browser_detect");    
+    $this->browser_detect->detect();
+    $name = $this->browser_detect->getBrowser();
+    return $name;
+}
 
-    if(stripos($agent,"firefox")!==false){
-        $browser['browser'] = 'Firefox'; // Set Browser Name
-        $domain = stristr($agent, 'Firefox');
-        $split =explode('/',$domain);
-        $browser['version'] = $split[1]; // Set Browser Version
-    }
-    if(stripos($agent,"Opera")!==false){
-        $browser['browser'] = 'Opera'; // Set Browser Name
-        $domain = stristr($agent, 'Version');
-        $split =explode('/',$domain);
-        $browser['version'] = $split[1]; // Set Browser Version
-    }
-    if(stripos($agent,"MSIE")!==false){
-        $browser['browser'] = 'Internet Explorer'; // Set Browser Name
-        $domain = stristr($agent, 'MSIE');
-        $split =explode(' ',$domain);
-        $browser['version'] = $split[1]; // Set Browser Version
-    }
-    if(stripos($agent,"Trident")!==false){
-        $browser['browser'] = 'Internet Explorer'; // Set Browser Name
-        $domain = stristr($agent, 'rv:');
-        $split =explode(')',$domain);
-        $browser['version'] = substr($split[0],3,4); // Set Browser Version
-    }
-    if(stripos($agent,"Chrome")!==false){
-        $browser['browser'] = 'Google Chrome'; // Set Browser Name
-        $domain = stristr($agent, 'Chrome');
-        $split1 =explode('/',$domain);
-        $split =explode(' ',$split1[1]);
-        $browser['version'] = $split[0]; // Set Browser Version
-    }
-    else if(stripos($agent,"Safari")!==false){
-        $browser['browser'] = 'Safari'; // Set Browser Name
-        $domain = stristr($agent, 'Version');
-        $split1 =explode('/',$domain);
-        $split =explode(' ',$split1[1]);
-        $browser['version'] = $split[0]; // Set Browser Version
-    }else{
-        $browser['browser'] = "Unknown";
+function _click_counter(){
+    $this->load->module('bongeszo_es_ipcim_lista');
+    $this->load->module('diagram_nezettseg');
+
+    //get number of "latogatok"
+    $query = $this->diagram_nezettseg->get_with_double_condition('ev', date("Y"), 'honap', date("m"));
+
+    $latogatok_szama = 0;
+    foreach ($query->result() as $row) {
+        $latogatok_szama = $row->latogatok;
     }
 
-    return $browser;
-} 
+    //check the currant user
+    $ip = $this->get_ip();
+    $longitude = $this->get_longitude();
+    $latitude = $this->get_latitude();
+
+    $query = $this->bongeszo_es_ipcim_lista->get_where_custom_with_triple_condition("ip",$ip,"longitude",$longitude,"latitude",$latitude);
+    
+    //if the currant user is new, we will increase the number of the visitors
+    if($query->num_rows() == 0)
+    {
+    $data['latogatok'] = $latogatok_szama+1;
+    $this->diagram_nezettseg->_update_with_double_condition('ev', date("Y"), 'honap', date("m"), $data);
+    }  
+    //die($this->db->last_query());  
+}
+
+function get_ip()
+{
+    $ip = $this->jsondata->ip;
+    return $ip;
+}
+
+function get_country_name()
+{
+    $country_name = $this->jsondata->country_name;
+    return $country_name;
+}
+
+function get_region_name()
+{
+    $region_name = $this->jsondata->region_name;
+    return $region_name;
+}
+
+function get_longitude()
+{
+    $longitude = $this->jsondata->longitude;
+    return $longitude;
+}
+
+function get_latitude()
+{
+    $latitude = $this->jsondata->latitude;
+    return $latitude;
+}
+
+function _check_browser()
+{
+    $ip = $this->get_ip();
+    $browser = $this->get_browser_name();
+    $orszag = $this->get_country_name();
+    $regio = $this->get_region_name();
+    $longitude = $this->get_longitude();
+    $latitude = $this->get_latitude();
+
+    $this->load->module("bongeszo_es_ipcim_lista");
+    $data = $this->bongeszo_es_ipcim_lista->get_where_custom_with_triple_condition("ip",$ip,"longitude",$longitude,"latitude",$latitude);
+
+    $browser_data["ip"] = $ip;
+    $browser_data["bongeszo"] = $browser;
+    $browser_data["orszag"] = $orszag;
+    $browser_data["regio"] = $regio;    
+    $browser_data["longitude"] = $longitude;
+    $browser_data["latitude"] = $latitude;    
+
+    if($data->num_rows() > 0)
+    {
+        $bool = false;
+
+        foreach ($data->result() as $row) 
+        {
+            if($row->bongeszo != $browser)
+            {
+                $bool = true;
+            }
+        }
+
+        if($bool)
+        {
+            $this->bongeszo_es_ipcim_lista->_insert($browser_data);            
+        }
+    }
+    else
+    {
+        $this->bongeszo_es_ipcim_lista->_insert($browser_data);
+    } 
+}
+
+function _get_details_from_user()
+{
+    $this->load->module('felhasznalok');
+    $user_id = $this->_get_user_id();
+
+    if(is_numeric($user_id)){
+        $query = $this->felhasznalok->get_where($user_id);
+        foreach ($query->result() as $row) {
+            //send the user data
+            $this->session->set_userdata(
+                array(
+                    'username' => $row->felhasznalonev,
+                    'profile_img' => $row->profilkep,
+                    'lastname' => $row->vezeteknev,            
+                    'firstname' => $row->keresztnev,
+                    'email' => $row->email,
+                    'library_card' => $row->olvasojegy,
+                    'reg_date' => $row->reg_datuma
+                )
+            );
+            //set the session variables expiration time to 1 minute
+            
+            $this->session->mark_as_temp(array(
+                'username' => 120,
+                'profile_img' => 120,
+                'lastname' => 120,            
+                'firstname' => 120,
+                'email' => 120,
+                'library_card' => 120,
+                'reg_date' => 120
+            ));
+            
+        }
+    }
+}
 
 }

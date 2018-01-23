@@ -24,20 +24,24 @@ $create_account_url = base_url()."szemelyzet/create";
 						<table class="table table-striped table-bordered bootstrap-datatable datatable">
 						  <thead>
 							  <tr>
-							 	  <th>ID</th>
-								  <th>Leírás</th>
+								  <th>Vezetéknév</th>
+								  <th>Keresztnév</th>
+								  <th>Lakcím</th>
+								  <th>Pozíció</th>
 								  <th class="col-xs-1">Műveletek</th>
 							  </tr>
 						  </thead>   
 						  <tbody>
 						  <?php
 						  foreach($query->result() as $row){
-						  	$edit_account_url = base_url()."szemelyzet/create/".$row->kiado_id;
-							$view_accounts_url = base_url()."szemelyzet/view/".$row->kiado_id;
+						  	$edit_account_url = base_url()."szemelyzet/create/".$row->szemelyzet_id;
+							$view_accounts_url = base_url()."szemelyzet/view/".$row->szemelyzet_id;
 						  ?>
 							<tr>
-								<td><?= $row->kiado_id ?></td>
-								<td><?= $row->kiado ?></td>								
+								<td><?= $row->vezeteknev ?></td>
+								<td><?= $row->keresztnev ?></td>
+								<td><?= $row->lakcim ?></td>	
+								<td><?= $row->pozicio ?></td>				
 								<td class="center">
 									<a class="btn btn-info" href="<?= $edit_account_url ?>">
 										<i class="fa fa-fw fa-edit"></i>  

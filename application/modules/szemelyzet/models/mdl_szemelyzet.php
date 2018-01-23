@@ -28,7 +28,7 @@ function get_with_limit($limit, $offset, $order_by) {
 
 function get_where($id){
     $table = $this->get_table();
-    $this->db->where('kiado_id', $id);
+    $this->db->where('szemelyzet_id', $id);
     $query=$this->db->get($table);
     return $query;
 }
@@ -56,13 +56,13 @@ function _insert($data){
 
 function _update($id, $data){
     $table = $this->get_table();
-    $this->db->where('kiado_id', $id);
+    $this->db->where('szemelyzet_id', $id);
     $this->db->update($table, $data);
 }
 
 function _delete($id){
     $table = $this->get_table();
-    $this->db->where('kiado_id', $id);
+    $this->db->where('szemelyzet_id', $id);
     $this->db->delete($table);
 }
 
@@ -83,10 +83,10 @@ function count_all() {
 
 function get_max() {
     $table = $this->get_table();
-    $this->db->select_max('kiado_id');
+    $this->db->select_max('szemelyzet_id');
     $query = $this->db->get($table);
     $row=$query->row();
-    $id=$row->kiado_id;
+    $id=$row->szemelyzet_id;
     return $id;
 }
 

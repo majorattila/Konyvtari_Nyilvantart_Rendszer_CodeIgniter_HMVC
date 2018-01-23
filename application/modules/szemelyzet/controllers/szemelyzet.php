@@ -139,14 +139,16 @@ function create()
         //process the form
         $this->config->set_item('language', 'hungarian');
         $this->load->library('form_validation');        
-        $this->form_validation->set_rules('kiado', 'Dolgozó', 'required');
-        $this->form_validation->set_rules('hely', 'Hely', 'required');
+        $this->form_validation->set_rules('vezeteknev', 'Vezetéknév', 'required');
+        $this->form_validation->set_rules('keresztnev', 'Keresztnév', 'required');
+        $this->form_validation->set_rules('lakcim', 'Lakcím', 'required');
+        $this->form_validation->set_rules('pozicio', 'Pozíció', 'required');
 
         if($this->form_validation->run() == TRUE)
         {
             //get the variables
             $data = $this->fetch_data_form_post();
-            $name = $data['fiok_id'];
+            //$name = $data['fiok_id'];
 
             if(is_numeric($update_id))
             {

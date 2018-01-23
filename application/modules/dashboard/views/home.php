@@ -11,6 +11,8 @@
 <p>Reméljük hasznosak voltak tanácsaink.</p>
 <?php */ ?>
 
+<div id="error_msg"></div>
+
 <section class="content">
       <div class="row">
 
