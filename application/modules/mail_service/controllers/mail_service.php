@@ -14,7 +14,7 @@ function config()
     $config['smtp_user'] = 'attilamajor1997@gmail.com';
     $config['smtp_pass'] = 'QTSVTFGgyB7';  //sender's password
     $config['mailtype'] = 'html';
-    $config['charset'] = 'iso-8859-1';
+    $config['charset'] = 'utf-8'; //iso-8859-1
     $config['wordwrap'] = 'TRUE';
     $config['newline'] = "\r\n"; 
     return $config;  
