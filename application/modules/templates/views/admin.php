@@ -65,7 +65,24 @@ require_once('sort_this_code.php');
   <link rel="stylesheet" href="<?=base_url()?>https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 -->
 
-<style>
+<style> 
+  *{
+    word-wrap:break-word;
+  } 
+  body{    
+    overflow-y: scroll;
+  }  
+  .affix {
+      position: static;
+      width: 100%;
+      z-index: 9999 !important;
+  }
+  .pointer{
+    cursor:pointer;
+  }
+  #pnProductNavContents .pn-ProductNav_Link{
+    background-color: #FFFFFF !important;
+  }
   .main-footer {
     display: inline-flex;
     width: -webkit-fill-available;
@@ -136,6 +153,77 @@ require_once('sort_this_code.php');
   .skin-blue .main-header li.user-header {
     background-color: #367FA9 !important;
   }
+
+@media only screen and (max-width: 768px) {
+  .affix {
+    position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 9999 !important;
+  }
+}
+@media only screen and (max-width: 800px) {
+  h1{
+    font-size:20pt;
+    margin-left:10px;
+  }
+  .form-control{
+    height: 35px;
+    font-size: 15px !important;
+  }
+  .modal-body br{
+    display: none;
+    padding: 15px 0 15px 0 !important;
+  }
+
+  /* Force table to not be like tables anymore */
+  table, 
+  thead, 
+  tfoot, 
+  tbody, 
+  th, 
+  td, 
+  tr { 
+    display: block !important; 
+  }
+ 
+  /* Hide table headers (but not display: none !important;, for accessibility) */
+  thead tr { 
+    position: absolute !important;
+    top: -9999px !important;
+    left: -9999px !important;
+  }
+ 
+  tr { border: 1px solid #ccc !important; }
+ 
+  tbody td { 
+    /* Behave  like a "row" */
+    border: none !important;
+    border-bottom: 1px solid #eee !important; 
+    position: relative !important;
+    padding-left: 50% !important; 
+    white-space: normal !important;
+    text-align:left !important;
+  }
+ 
+  tbody td:before { 
+    /* Now like a table header */
+    position: absolute !important;
+    /* Top/left values mimic padding */
+    top: 6px !important;
+    left: 6px !important;
+    width: 45% !important; 
+    padding-right: 10px !important; 
+    white-space: nowrap !important;
+    text-align:left !important;
+    font-weight: bold !important;
+  }
+ 
+  /*
+  Label the data
+  */
+  tbody td:before { content: attr(data-title) !important; }
+}
   
 </style>
 
@@ -151,8 +239,8 @@ require_once('sort_this_code.php');
       <!-- logo for regular state and mobile devices -->
       <span class="logo-lg"><b>Kossuth</b>könyvtár 2.0</span>
     </a>
-    <!-- Header Navbar: style can be found in header.less -->
-    <nav class="navbar navbar-static-top">
+    <!-- Header Navbar: style can be found in header.less (navbar-static-top)-->
+    <nav class="navbar" data-spy="affix" data-offset-top="110">
       <!-- Sidebar toggle button-->
       <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
         <span class="sr-only">Toggle navigation</span>
@@ -477,11 +565,15 @@ require_once('sort_this_code.php');
            <li><a href="<?=base_url()?>katalogus/kereses"><i class="fa fa-search"></i> <span>Keresés</span></a></li>
            <li><a href="<?=base_url()?>bibliografiak/manage/20"><i class="fa fa-book"></i> <span>Bibliográfiák</span></a></li>
              <li><a href="<?=base_url()?>konyvtarak/manage"><i class="fa fa-file-o"></i> <span>Könyvtárak</span></a></li>
+             <li><a href="<?=base_url()?>szerzok/manage"><i class="fa fa-file-o"></i> <span>Szerzők</span></a></li>
              <li><a href="<?=base_url()?>nyelvek/manage"><i class="fa fa-file-o"></i> <span>Nyelvek</span></a></li>
              <li><a href="<?=base_url()?>tipusok/manage"><i class="fa fa-file-o"></i> <span>Dokumentum típusok</span></a></li>
              <li><a href="<?=base_url()?>gyujtemenyek/manage"><i class="fa fa-file-o"></i> <span>Gyűjtemények</span></a></li>
+             <li><a href="<?=base_url()?>kiadok/manage"><i class="fa fa-file-o"></i> <span>Kiadók</span></a></li>
+<?php /* ?>
              <li><a href="<?=base_url()?>https://adminlte.io/docs" class="disabled"><i class="fa fa-file-o"></i> <span>Kölcsönzői jogok</span></a></li>
              <li><a href="<?=base_url()?>https://adminlte.io/docs" class="disabled"><i class="fa fa-file-o"></i> <span>Könyvtárbeállítások</span></a></li>
+<?php */ ?>
           </ul>
         </li>
         <li class="treeview">
@@ -492,6 +584,7 @@ require_once('sort_this_code.php');
             </span>
           </a>
           <ul class="treeview-menu">
+             <li><a href="<?=base_url()?>backup/manage/20"><i class="fa fa-file-o"></i> <span>Backup</span></a></li>
              <li><a href="<?=base_url()?>https://adminlte.io/docs" class="disabled"><i class="fa fa-file-o"></i> <span>Összegzés</span></a></li>
              <li><a href="<?=base_url()?>https://adminlte.io/docs" class="disabled"><i class="fa fa-file-o"></i> <span>Személyzet</span></a></li>             
           </ul>

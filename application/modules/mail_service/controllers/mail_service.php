@@ -46,4 +46,38 @@ function send_email()
 
 }
 
+function reg_mail($email,$code)
+{
+    $config = $this->config();
+    $this->load->library('email', $config);
+
+    $this->email->initialize($config);
+
+    $emailfrom = "reg17@sys.com";
+    $emailto = $email;
+    $subject = "Regisztrálás - KossuthKönyvtár";
+    $message = "
+    <html>
+    <body>
+    <h4>Regisztrálás</h4>
+    <p>A regisztráció érvényesítéséhez kattintson az alábbi linkre:</p>
+    <a href='".base_url()."fiok/validate/".$code."'>".base_url()."fiok/validate/".$code."</a>
+    </body>
+    <html>
+    ";
+
+    $this->email->from($emailfrom, 'robot');
+    $this->email->to($emailto); 
+
+    $this->email->subject($subject);
+    $this->email->message($message);  
+
+    $this->email->send();
+
+    //echo $this->email->print_debugger();
+
+    //$this->load->view('email_view');
+
+}
+
 }

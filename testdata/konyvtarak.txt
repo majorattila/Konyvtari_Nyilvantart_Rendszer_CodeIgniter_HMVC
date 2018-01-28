@@ -1,0 +1,5 @@
+2;Központi Könyvtár;Major Attila ;1083;Budapest;VIII;Töm? utca 48-54 14.em 156;06205534854;;attilamajor1997@gmail.com;Nem tudom - ez vajon  m?ködik?;
+6;Zenei Gy?jtemény;Anonymous;1088;Budapest;;Ötpacsirta utca 4.;0614115011;;;;
+7;Budapest Gy?jtemény;Anonymous;1088;Budapest;;Szabó Ervin tér 1.;0614115026;;;;
+8;Szociológiai Gy?jtemény;Anonymous;1088;Budapest;;Szabó Ervin tér 1.;0614115031;;;;
+9;Sárkányos Gyerekkönyvtár;Anonymous;1088;Budapest;;Szabó Ervin tér 1.;0614115020;;;;

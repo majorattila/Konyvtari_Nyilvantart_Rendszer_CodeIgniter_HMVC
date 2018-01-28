@@ -32,8 +32,8 @@
 		  <fieldset>
 
 			<div class="control-group" style="height:200px;">
-				<button type="submit" name="submit" value="Yes - Delete Collection" class="btn metro-button mtr-red mtr-round margin" >Igen - Könyvtár Eltávolítása</button>
-				<button type="submit" name="submit" value="Cancel" class="btn metro-button mtr-indigo mtr-round margin">Mégse</button>
+				<button type="submit" name="submit" value="Yes - Delete Collection" class="btn btn-danger margin" >Igen - Könyvtár Eltávolítása</button>
+				<button type="submit" name="submit" value="Cancel" class="btn margin">Mégse</button>
 			</div>    
 
 		  </fieldset>

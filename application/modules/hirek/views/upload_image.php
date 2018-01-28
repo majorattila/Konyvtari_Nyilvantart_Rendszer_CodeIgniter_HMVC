@@ -45,8 +45,8 @@ echo form_open_multipart('hirek/do_upload/'.$update_id, $attributes);
 	</div>    
 
 	<div class="form-actions">
-	  <button type="submit" class="btn metro-button mtr-green mtr-round margin">Feltöltés</button>
-	  <button type="submit" class="btn metro-button mtr-orange mtr-round margin" name="submit" value="Cancel">Mégse</button>
+	  <button type="submit" class="btn btn-success margin">Feltöltés</button>
+	  <button type="submit" class="btn btn-secondary margin" name="submit" value="Cancel">Mégse</button>
 	</div>
   </fieldset>
 </form>   

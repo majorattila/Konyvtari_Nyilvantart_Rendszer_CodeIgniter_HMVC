@@ -7,7 +7,7 @@ if(isset($flash))
 }
 $create_account_url = base_url()."Tagok/create";
 ?><p style="margin-top: 30px;">
-	<a href="<?php echo $create_account_url ?>"><button type="button" class="btn metro-button mtr-teal mtr-round margin">Új tag hozzáadása</button></a>
+	<a href="<?php echo $create_account_url ?>"><button type="button" class="btn btn-primary margin">Új tag hozzáadása</button></a>
 	</p>
 <div class="row-fluid sortable">		
 				<div class="box box-default">
@@ -42,17 +42,17 @@ $create_account_url = base_url()."Tagok/create";
 							$view_accounts_url = base_url()."tagok/view/".$row->id;
 						  ?>
 							<tr>
-								<td><?=$row->nev?></td>
-								<td><?=$row->olvasojegy?></td>
-								<td><?=$row->vezeteknev?></td>
-								<td><?=$row->keresztnev?></td>
-								<td><?=$row->lakcim?></td>
-								<td><?=$row->email?></td>
-								<td><?=$row->mettol_ervenyes?></td>
-								<td><?=$row->meddig_ervenyes?></td>
+								<td data-title="fiok (könyvtár)"><?=$row->nev?></td>
+								<td data-title="olvasójegy"><?=$row->olvasojegy?></td>
+								<td data-title="vezetéknév"><?=$row->vezeteknev?></td>
+								<td data-title="keresztnév"><?=$row->keresztnev?></td>
+								<td data-title="lakcím"><?=$row->lakcim?></td>
+								<td data-title="email"><?=$row->email?></td>
+								<td data-title="mettől érvényes"><?=$row->mettol_ervenyes?></td>
+								<td data-title="meddig érvényes"><?=$row->meddig_ervenyes?></td>
 				
-								<td class="center">
-									<a class="btn btn-info" href="<?= $edit_account_url ?>">
+								<td data-title="Műveletek" class="center">
+									<a class="btn btn-primary" href="<?= $edit_account_url ?>">
 										<i class="fa fa-fw fa-edit"></i>  
 									</a>
 								</td>

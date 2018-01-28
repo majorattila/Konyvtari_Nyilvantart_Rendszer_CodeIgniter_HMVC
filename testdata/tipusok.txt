@@ -1,0 +1,11 @@
+20;
+8;b?nügyi novella
+4;dvd
+5;ebook
+15;elektronikus dokumentum
+16;gyermekregény
+3;könyv
+7;periodika
+19;súgópéldány
+18;szakácskönyv
+6;térkép

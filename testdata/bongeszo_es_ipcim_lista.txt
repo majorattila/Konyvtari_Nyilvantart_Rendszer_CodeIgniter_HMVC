@@ -1,0 +1,10 @@
+1;80.98.25.61;Google Chrome;Hungary;Budapest;0;0
+2;80.98.15.62;Google Chrome;Hungary;Budapest;0;0
+3;80.98.25.67;Google Chrome;Hungary;Budapest;0;0
+4;80.98.23.62;Google Chrome;Hungary;Budapest;0;0
+5;80.78.25.62;Google Chrome;Hungary;Budapest;0;0
+6;80.98.25.44;Google Chrome;Hungary;Budapest;0;0
+7;80.98.25.69;Google Chrome;Hungary;Budapest;0;0
+8;80.98.25.62;Google Chrome;Hungary;Budapest;0;0
+9;80.98.25.62;Google Chrome;Hungary;Budapest;19.0833;47.5
+10;195.199.225.249;Google Chrome;Hungary;Budapest;19.0833;47.5

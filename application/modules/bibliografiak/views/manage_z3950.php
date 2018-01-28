@@ -9,7 +9,7 @@ li a{
 <br/><h1><?=$headline?></h1>
 
 
-<br/><a href="<?=base_url()?>bibliografiak/create_z3950" class="btn btn-info margin">Új szerver hozzáadása</a><br/>
+<br/><a href="<?=base_url()?>bibliografiak/create_z3950" class="btn btn-primary margin">Új szerver hozzáadása</a><br/>
 <br/>
 <!--form method="get">
     <input type="checkbox"
@@ -44,7 +44,7 @@ li a{
             </div>
         <input name="search" class="form-control" type="text">
         <div class="input-group-btn">
-          <button class="btn btn-info" type="submit">
+          <button class="btn btn-primary" type="submit">
             Keresés <i class="glyphicon glyphicon-search"></i>
           </button>
         </div>
@@ -68,7 +68,7 @@ li a{
 			<td><?=$row->host?></td>
 			<td><?=$row->port?></td>
 			<td class="col-xs-1">
-				<a class="btn btn-info" href="<?=base_url()?>bibliografiak/create_z3950/<?=$row->id?>"><span class="fa fa-fw fa-pencil"></span></a>
+				<a class="btn btn-primary" href="<?=base_url()?>bibliografiak/create_z3950/<?=$row->id?>"><span class="fa fa-fw fa-pencil"></span></a>
 			</td>
 		</tr>
     	<?php endforeach ?>    	

@@ -63,7 +63,7 @@ $create_msg = base_url()."enquiries/create";
 								<td><?=$sent_by?></td>
 								<td><?=$row->subject?></td>
 								<td  class="span1">
-									<a class="btn btn-info" href="<?= $view_url ?>">
+									<a class="btn btn-primary" href="<?= $view_url ?>">
 										<i class="halflings-icon white edit"></i>  
 									</a>
 								</td>

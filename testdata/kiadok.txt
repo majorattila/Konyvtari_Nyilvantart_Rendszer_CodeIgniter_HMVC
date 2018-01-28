@@ -1,0 +1,16 @@
+6;vmi;vhol
+7;Major;Kalifornia
+8;Anonymous;Budapest
+9;Hungaroton;Anonymous
+10;Typ. Kohlesius;Anonymous
+11;Fischer Unwin;Anonymous
+12;Athenaeum;Anonymous
+13;Könyvmolyképz? K.;Anonymous
+14;Central Kv.;Anonymous
+15;per Martinum de Werdena impresse;Anonymous
+16;Könyvmolyképz? K.;
+17;Agapé;
+18;Vass József Könyvkereskedése;
+19;chez Iean Pepermans ...;
+20;chez Iean Pepermans ...;
+21;Literis Christiani Michaelis;

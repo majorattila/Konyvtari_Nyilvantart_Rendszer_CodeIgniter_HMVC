@@ -36,10 +36,10 @@ $create_account_url = base_url()."kiadok/create";
 							$view_accounts_url = base_url()."kiadok/view/".$row->kiado_id;
 						  ?>
 							<tr>
-								<td><?= $row->kiado_id ?></td>
-								<td><?= $row->kiado ?></td>								
-								<td class="center">
-									<a class="btn btn-info" href="<?= $edit_account_url ?>">
+								<td data-title="ID"><?= $row->kiado_id ?></td>
+								<td data-title="Leírás"><?= $row->kiado ?></td>								
+								<td data-title="Műveletek" class="center">
+									<a class="btn btn-primary" href="<?= $edit_account_url ?>">
 										<i class="fa fa-fw fa-edit"></i>  
 									</a>
 								</td>

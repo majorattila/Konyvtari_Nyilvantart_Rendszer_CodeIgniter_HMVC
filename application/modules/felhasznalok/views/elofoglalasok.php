@@ -7,8 +7,8 @@ if(isset($flash))
 }
 $link = base_url()."felhasznalok/kolcsonzes_create/$update_id";
 ?><p style="margin-top: 30px;">
-	<a href="<?= base_url().'felhasznalok/create/'.$update_id ?>"><button type="button" class="btn metro-button mtr-orange mtr-round margin">Vissza</button></a>
-	<a href="<?php echo $link ?>"><button type="button" class="btn metro-button mtr-teal mtr-round margin">Új Előfoglalás hozzáadása</button></a>
+	<a href="<?= base_url().'felhasznalok/create/'.$update_id ?>"><button type="button" class="btn btn-secondary margin">Vissza</button></a>
+	<a href="<?php echo $link ?>"><button type="button" class="btn btn-primary margin">Új Előfoglalás hozzáadása</button></a>
 	</p>
 <div class="row-fluid sortable">		
 				<div class="box box-default">
@@ -41,7 +41,7 @@ $link = base_url()."felhasznalok/kolcsonzes_create/$update_id";
 								<td><?=$row->cim?></td>
 				
 								<td class="center">
-									<a class="btn btn-info" href="<?= $edit_url ?>">
+									<a class="btn btn-primary" href="<?= $edit_url ?>">
 										<i class="fa fa-fw fa-edit"></i>  
 									</a>
 								</td>

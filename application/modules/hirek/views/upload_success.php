@@ -33,7 +33,7 @@
 		<?php
 			$edit_item_url = base_url()."hirek/create/".$update_id;
 		?>
-			<a href="<?=$edit_item_url;?>"><button type="button" class="btn metro-button mtr-indigo mtr-round margin">Visszatérés a hírekhez</button></a>
+			<a href="<?=$edit_item_url;?>"><button type="button" class="btn margin">Visszatérés a hírekhez</button></a>
 		</p>
 
 		</div>

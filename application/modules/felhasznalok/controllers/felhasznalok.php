@@ -644,6 +644,17 @@ function get_where($id)
     return $query;
 }
 
+function get_user_data($id)
+{
+    if (!is_numeric($id)) {
+        die('Non-numeric variable!');
+    }
+
+    $this->load->model('mdl_felhasznalok');
+    $query = $this->mdl_felhasznalok->get_user_data($id);
+    return $query;
+}
+
 function get_where_custom($col, $value) 
 {
     $this->load->model('mdl_felhasznalok');

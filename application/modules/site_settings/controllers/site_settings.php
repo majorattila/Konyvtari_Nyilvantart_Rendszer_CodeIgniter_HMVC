@@ -25,7 +25,7 @@ function _get_cookie_name(){
 
 function _page_not_found()
 {
-    return '<div class="error-box"><div class="error-body text-center"><h1 style="font-size:113pt">404</h1><h3 class="text-uppercase">A kért oldal nem található!</h3><p class="text-muted m-t-30 m-b-30">ÚGY TŰNIK A HAZVEZETŐ UTAT KERESED</p><a href="'.base_url().'" class="btn btn-info btn-rounded waves-effect waves-light m-b-40">Vissza a főoldalra</a> </div></div>';
+    return '<div class="error-box"><div class="error-body text-center"><h1 style="font-size:113pt">404</h1><h3 class="text-uppercase">A kért oldal nem található!</h3><p class="text-muted m-t-30 m-b-30">ÚGY TŰNIK A HAZVEZETŐ UTAT KERESED</p><a href="'.base_url().'" class="btn btn-primary btn-rounded waves-effect waves-light m-b-40">Vissza a főoldalra</a> </div></div>';
 }
 
 }

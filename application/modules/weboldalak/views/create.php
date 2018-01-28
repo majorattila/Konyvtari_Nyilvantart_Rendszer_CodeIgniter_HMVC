@@ -82,8 +82,8 @@
 							</div>
 
 							<div class="form-actions">
-							  <button type="submit" class="btn metro-button mtr-green mtr-round margin" name="submit" value="Submit">Mentés</button>
-							  <button type="submit" class="btn metro-button mtr-orange mtr-round margin" name="submit" value="Cancel">Mégse</button>
+							  <button type="submit" class="btn btn-success margin" name="submit" value="Submit">Mentés</button>
+							  <button type="submit" class="btn btn-secondary margin" name="submit" value="Cancel">Mégse</button>
 							</div>
 						  </fieldset class="col-sm-12">
 						</form>   
@@ -106,7 +106,7 @@ if(is_numeric($update_id)) { ?>
 					<div class="box-body">
 		<?php
 		if($update_id>2){ ?>
-		<a href="<?= base_url() ?>weboldalak/deleteconf/<?= $update_id ?>"><button type="button" class="btn metro-button mtr-red mtr-round margin">Delete Page</button></a>
+		<a href="<?= base_url() ?>weboldalak/deleteconf/<?= $update_id ?>"><button type="button" class="btn btn-danger margin">Delete Page</button></a>
 		<?php
 		}
 		?>

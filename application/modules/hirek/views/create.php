@@ -112,8 +112,8 @@ $first_segment = $this->uri->segment(1);
 
 
 								<div class="form-actions">
-								  <button type="submit" class="btn metro-button mtr-green mtr-round margin" name="submit" value="Submit">Mentés</button>
-								  <button type="submit" class="btn metro-button mtr-orange mtr-round margin" name="submit" value="Cancel">Mégse</button>
+								  <button type="submit" class="btn btn-success margin" name="submit" value="Submit">Mentés</button>
+								  <button type="submit" class="btn btn-secondary margin" name="submit" value="Cancel">Mégse</button>
 								</div>
 						  </fieldset>
 						</form>   
@@ -137,15 +137,15 @@ if(is_numeric($update_id)) { ?>
 		<?php
 
 		if($kep=="") {?>
-		<a href="<?= base_url() ?>hirek/upload_image/<?= $update_id ?>"><button type="button" class="btn metro-button mtr-indigo mtr-round margin">Kép feltöltése</button></a>
+		<a href="<?= base_url() ?>hirek/upload_image/<?= $update_id ?>"><button type="button" class="btn margin">Kép feltöltése</button></a>
 		<?php
 		}else{ ?>
-		<a href="<?= base_url() ?>hirek/delete_image/<?= $update_id ?>"><button type="button" class="btn metro-button mtr-red mtr-round margin">Kép törlése</button></a>
+		<a href="<?= base_url() ?>hirek/delete_image/<?= $update_id ?>"><button type="button" class="btn btn-danger margin">Kép törlése</button></a>
 		<?php
 		}
 
 		if($update_id>2){ ?>
-		<a href="<?= base_url() ?>hirek/deleteconf/<?= $update_id ?>"><button type="button" class="btn metro-button mtr-red mtr-round margin">Hír eltávolítása</button></a>
+		<a href="<?= base_url() ?>hirek/deleteconf/<?= $update_id ?>"><button type="button" class="btn btn-danger margin">Hír eltávolítása</button></a>
 		<?php
 		}
 		?>

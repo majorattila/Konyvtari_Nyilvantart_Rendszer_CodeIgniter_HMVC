@@ -154,7 +154,7 @@ $form_location = base_url().'fiok/profil';
 		</div>
 		<div class="form-group">
 		    <label for="email">Email:</label>
-		    <input name="email" type="email" class="form-control" id="email" value="<?= $email ?>">
+		    <input type="email" class="form-control" id="email" value="<?= $email ?>" disabled>
 		</div>
 		<div class="form-group">
 		    <label for="olvasojegy">Olvasójegy:</label>

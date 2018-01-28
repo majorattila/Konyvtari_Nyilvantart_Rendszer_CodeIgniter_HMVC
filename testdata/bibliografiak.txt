@@ -1,0 +1,15 @@
+1;1;0;1;15;23;33;19773;Amor verus;;;;;;;;;978-963-417-025-9;;;2016;;8;;;;VupnxHT4Nn2ExNef.png
+2;2;0;2;3;18;32;19792;Madama Butterfly;;;;;;;;;;;;1995;;9;;;;
+3;3;0;3;3;28;32;19789;Dissertatio inauguralis de successore in regimine, quam ... publico examini eruditorum solenniter ventillandam subiicit ...;;;;;;;;;;;;1727;;10;;;;
+4;4;0;4;3;18;32;19788;The decadence of Europe: the paths of reconstruction;;;;;;;;;;;;1923;;11;;;;
+5;5;0;5;15;23;32;19787;A 13-as szoba;;;;;;;;;978-615-5549-53-3;;;2015;krimi; horror;;8;;Edgar Wallace;;;
+6;6;0;6;15;23;32;19787;Miss Grier 70 fontja;;;;;;;;;978-615-5549-61-8;;;2015;;8;;;;
+7;7;0;7;15;23;32;19791;Gyilkos-Anders és barátai, meg akik nem azok;;;;;;;;;978-963-293-513-3;;;cop. 2015;;12;;;;
+8;8;0;8;8;23;34;19794;Kalózok;;;;;;;;;978-963-445-760-2;;;[2016];;9;;;;
+9;9;0;13;16;23;32;19790;Egy hatodikos nindzsa naplója;;;;;;;;;978-963-399-594-5;;;2016;;13;;;;
+10;10;0;14;18;23;33;19781;A Tetovált Séf - grill és barbecue télen-nyáron;;;;;;;;;978-963-341-167-4;;;cop. 2016;;14;;;;
+11;11;0;15;15;28;33;19782;Euagatorium. In presenti libello continentu...;;;;;;;;;;;;jul.;;15;;;;
+12;12;0;21;15;23;33;19782;Értekezés a Szent Sz?z igazi tiszteletér?l;;;;;;;;;978-963-458-355-4;;;2009;;17;;;;
+13;13;0;22;19;23;32;1978;Rejtett arcz;;;;;;;;;;;;1898;;18;;;;
+14;14;0;24;15;24;33;19783;Copie de lettre en forme de manifeste escrite par le ser.me dvc de Parme av seignevr chevalier Alfonse Carandini son resident a Rome et les considerations svr ladicte lettre avec la responce dvdict sr. Carandini;;;;;;;;;;;;1635;;19;;;;
+15;15;0;25;15;28;33;19793;Dissertatio medica inauguralis de febre Hungaria, quam ... sub praesidio ...  Pauli Ammani ... publico eruditorum examini subiicit. Elias Facetius Sax. Transsylv.;;;;;;;;;;;;1668;;21;;;;

@@ -130,8 +130,8 @@ echo validation_errors("<p style='color:red'>","</p>");
 
 <!-- Text input-->
 <div class="form-group">
-  <label class="control-label" for="username"><span class="lightgrey">Felhasználónév</span></label>  
-  <input id="username" name="username" value="<?=$username?>" type="text" class="form-control input-md" required="">
+  <label class="control-label" for="username1"><span class="lightgrey">Felhasználónév</span></label>  
+  <input id="username1" name="username1" value="<?=$username1?>" type="text" class="form-control input-md" required="">
 </div>
 
 <!-- Text input-->

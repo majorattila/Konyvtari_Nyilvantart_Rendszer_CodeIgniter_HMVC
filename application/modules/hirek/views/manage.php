@@ -7,7 +7,7 @@ if(isset($flash))
 }
 $create_oldal_url = base_url()."hirek/create";
 ?><p style="margin-top: 30px;">
-	<a href="<?php echo $create_oldal_url ?>"><button type="button" class="btn metro-button mtr-indigo mtr-round margin">Új hír létrehozása</button></a>
+	<a href="<?php echo $create_oldal_url ?>"><button type="button" class="btn margin">Új hír létrehozása</button></a>
 	</p>
 
 <div class="row-fluid sortable">
@@ -48,13 +48,13 @@ $create_oldal_url = base_url()."hirek/create";
 							$thumbnail_path = base_url().'hirek_pics/'.$thumbnail_name;
 						  ?>
 							<tr>
-								<td><img src="<?= $thumbnail_path ?>"></td>
-								<td><?= $publikalas_datuma ?></td>
-								<td><?= $row->szerzo ?></td>
-								<td><?= $view_oldal_url ?></td>
-								<td class="center"><?= $row->oldal_cim ?></td>
-								<td class="center">
-									<a class="btn btn-info" href="<?= $edit_oldal_url ?>">
+								<td data-title="Kép"><img src="<?= $thumbnail_path ?>"></td>
+								<td data-title="Publikálás dátuma"><?= $publikalas_datuma ?></td>
+								<td data-title="Szerző"><?= $row->szerzo ?></td>
+								<td data-title="URL"><?= $view_oldal_url ?></td>
+								<td data-title="Fejléc" class="center"><?= $row->oldal_cim ?></td>
+								<td data-title="Műveletek" class="center">
+									<a class="btn btn-primary" href="<?= $edit_oldal_url ?>">
 										<i class="fa fa-fw fa-edit"></i>  
 									</a>
 									<a class="btn btn-success" href="<?= $view_oldal_url ?>">

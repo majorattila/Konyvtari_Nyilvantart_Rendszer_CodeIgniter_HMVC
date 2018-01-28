@@ -52,7 +52,7 @@
 		?>
 	</a>
 
-	<a class="btn btn-info" href="<?= $edit_item_url ?>">
+	<a class="btn btn-primary" href="<?= $edit_item_url ?>">
 		<i class="fa fa-fw fa-edit"></i>  
 	</a>
 

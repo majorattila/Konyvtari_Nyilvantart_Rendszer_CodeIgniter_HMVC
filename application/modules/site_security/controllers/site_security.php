@@ -86,7 +86,10 @@ function _is_admin()
 
 function not_allowed()
 {
-    echo "Nem engedélyezett, hogy itt tartózkodj!";
+    //echo "Nem engedélyezett, hogy itt tartózkodj!";
+    $data['oldal_tartalom'] = nl2br('<div class="error-box"><div class="error-body text-center"><h1 style="font-size:113pt">405</h1><h3 class="text-uppercase">A kért oldalhoz nincs jogosultsága!</h3><p class="text-muted m-t-30 m-b-30">ÚGY TŰNIK A HAZVEZETŐ UTAT KERESED</p><a href="'.base_url().'" class="btn btn-primary btn-rounded waves-effect waves-light m-b-40">Vissza a főoldalra</a> </div></div>');
+    $this->load->module('templates');
+    $this->templates->public_template($data);
 }
 
 function _check_admin_login_details($username, $password)
@@ -211,15 +214,19 @@ function _check_browser()
 
 function _get_details_from_user()
 {
+    //$this->session->sess_destroy();
+    //$this->session->unset_userdata('email');
+    
     $this->load->module('felhasznalok');
     $user_id = $this->_get_user_id();
 
     if(is_numeric($user_id)){
-        $query = $this->felhasznalok->get_where($user_id);
+        $query = $this->felhasznalok->get_user_data($user_id);
         foreach ($query->result() as $row) {
             //send the user data
             $this->session->set_userdata(
                 array(
+                    'lib_id' => $row->fiok_id,
                     'username' => $row->felhasznalonev,
                     'profile_img' => $row->profilkep,
                     'lastname' => $row->vezeteknev,            
@@ -232,6 +239,7 @@ function _get_details_from_user()
             //set the session variables expiration time to 1 minute
             
             $this->session->mark_as_temp(array(
+                'lib_id' => 50,
                 'username' => 50,
                 'profile_img' => 50,
                 'lastname' => 50,            
@@ -240,7 +248,6 @@ function _get_details_from_user()
                 'library_card' => 50,
                 'reg_date' => 50
             ));
-            
         }
     }
 }

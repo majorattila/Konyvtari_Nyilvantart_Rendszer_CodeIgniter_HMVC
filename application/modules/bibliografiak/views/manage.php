@@ -8,7 +8,7 @@
 
 <h1>Bibliográfiák Kezelése</h1><br/>
 
-<a href="<?=base_url()?>bibliografiak/create" class="btn metro-button mtr-teal mtr-round margin">Új Bibliográfia</a>
+<a href="<?=base_url()?>bibliografiak/create" class="btn btn-primary margin">Új Bibliográfia</a>
 
 <div class="box box-default">
   <div class="box-header with-border">
@@ -27,22 +27,22 @@
         <table id="myTable" class="table table-striped table-bordered">          
           <thead>
             <tr>
-                <th class="col-xs-2 col-md-2 col-lg-2">Leltári Szám</th>
-                <th class="col-xs-4 col-md-4 col-lg-4">Cím</th>
-                <th class="col-xs-3 col-md-3 col-lg-4">Szerző</th>
-                <th class="col-xs-3 col-md-3 col-lg-4">Dátum</th>
-                <th class="col-xs-3 col-md-3 col-lg-2">Műveletek</th>
+                <th class="col-xs-12 col-sm-2 col-md-2 col-lg-2">Leltári Szám</th>
+                <th class="col-xs-12 col-sm-4 col-md-4 col-lg-4">Cím</th>
+                <th class="col-xs-12 col-sm-3 col-md-3 col-lg-4">Szerző</th>
+                <th class="col-xs-12 col-sm-3 col-md-3 col-lg-4">Dátum</th>
+                <th class="col-xs-12 col-sm-3 col-md-3 col-lg-2">Műveletek</th>
             </tr>
           </thead>
           <tbody>
             <?php
             foreach ($query->result() as $row) {?>
             <tr>
-                <td class="col-xs-2 col-md-2 col-lg-2"><?=$row->leltari_szam?></td>
-                <td class="col-xs-4 col-md-4 col-lg-4"><?=$row->cim?></td>
-                <td class="col-xs-3 col-md-3 col-lg-4"><?=$row->nev?></td>
-                <td class="col-xs-3 col-md-3 col-lg-4"><?=$row->datum?></td>
-                <td class="col-xs-3 col-md-3 col-lg-2">
+                <td data-title="Leltári Szám" class="col-xs-12 col-sm-2 col-md-2 col-lg-2"><?=$row->leltari_szam?></td>
+                <td data-title="Cím" class="col-xs-12 col-sm-4 col-md-4 col-lg-4"><?=$row->cim?></td>
+                <td data-title="Szerző" class="col-xs-12 col-sm-3 col-md-3 col-lg-4"><?=$row->nev?></td>
+                <td data-title="Dátum" class="col-xs-12 col-sm-3 col-md-3 col-lg-4"><?=$row->datum?></td>
+                <td data-title="Műveletek" class="col-xs-12 col-sm-3 col-md-3 col-lg-2">
                   <div class="btn-group" style="width: max-content;">
                     <a href="<?=base_url()?>bibliografiak/create/<?=$row->id?>" class="btn btn-primary"><span class="fa fa-fw fa-edit"></span></a>   
                     <a onClick="newwindow = window.open('<?=base_url()?>bibliografiak/details/<?=$row->id?>', '_blank', 'resizable=yes, scrollbars=yes, titlebar=yes, width=600, height=600, top=10, left=10');" href="javascript:void(0);" class="btn btn-primary"><span class="fa fa-fw fa-eye"></span></a>

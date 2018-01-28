@@ -7,7 +7,7 @@ if(isset($flash))
 }
 $create_oldal_url = base_url()."weboldalak/create";
 ?><p style="margin-top: 30px;">
-	<a href="<?php echo $create_oldal_url ?>"><button type="button" class="btn metro-button mtr-teal mtr-round margin">Új weblap létrehozása</button></a>
+	<a href="<?php echo $create_oldal_url ?>"><button type="button" class="btn btn-primary margin">Új weblap létrehozása</button></a>
 	</p>
 
 <div class="row-fluid sortable">		
@@ -35,10 +35,10 @@ $create_oldal_url = base_url()."weboldalak/create";
 							$view_oldal_url = base_url().$row->oldal_url;
 						  ?>
 							<tr>
-								<td><?= $view_oldal_url ?></td>
-								<td class="center"><?= $row->oldal_cim ?></td>
-								<td class="center">
-									<a class="btn btn-info" href="<?= $edit_oldal_url ?>">
+								<td data-title="Oldal URL"><?= $view_oldal_url ?></td>
+								<td data-title="Oldal Cím" class="center"><?= $row->oldal_cim ?></td>
+								<td data-title="Műveletek" class="center">
+									<a class="btn btn-primary" href="<?= $edit_oldal_url ?>">
 										<i class="fa fa-fw fa-edit"></i>  
 									</a>
 									<a class="btn btn-success" href="<?= $view_oldal_url ?>">

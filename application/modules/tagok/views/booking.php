@@ -28,7 +28,7 @@ $first_segment = $this->uri->segment(1);
 			          </div>
 					</div>
 		<div class="box-body">
-			<a href="<?= base_url() ?>tagok/delete_book_rental/<?= $user_id ?>/<?= $update_id ?>"><button type="button" class="btn metro-button mtr-red mtr-round margin">Kölcsönzés Törlése</button></a>
+			<a href="<?= base_url() ?>tagok/delete_book_rental/<?= $user_id ?>/<?= $update_id ?>"><button type="button" class="btn btn-danger margin">Kölcsönzés Törlése</button></a>
 		</div>
 	</div><!--/span-->
 </div><!--/row-->
@@ -69,8 +69,8 @@ $first_segment = $this->uri->segment(1);
 					<div class="row"><div class="form-group col-xs-12 col-md-10 col-lg-4 col-xl-3"> <label for="datum">Dátum</label> <input name="datum" value="<?=$datum ?>" type="date" class="form-control" id="datum"> </div></div><br/>
 
 				<div class="form-actions">
-				  <button type="submit" class="btn metro-button mtr-green mtr-round margin" name="submit" value="Submit">Mentés</button>
-				  <button type="submit" class="btn metro-button mtr-orange mtr-round margin" name="submit" value="Cancel">Mégse</button>
+				  <button type="submit" class="btn btn-success margin" name="submit" value="Submit">Mentés</button>
+				  <button type="submit" class="btn btn-secondary margin" name="submit" value="Cancel">Mégse</button>
 				</div>
 			  </fieldset>
 			</form>   

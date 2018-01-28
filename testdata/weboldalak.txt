@@ -1,0 +1,7 @@
+1;;Home Page;Home Page Of Biblioteka;Minden látogatót szívesen látunk könyvtárunkban;
+2;rolunk;rolunk;rólunk;A LámaKönyvtár az egyik világvezet? társoság. Már 15 éve...;<h1>Tisztelt Olvasó!</h1>
+
+<p>A LámaKönyvtár köszönti olvasóit.</p>
+
+<p> </p>
+

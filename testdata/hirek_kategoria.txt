@@ -1,0 +1,4 @@
+1;állomány;allomany
+3;rendezvények;rendezvenyek
+4;szolgáltatások;szolgaltatasok
+5;kiállítások;kiallitasok

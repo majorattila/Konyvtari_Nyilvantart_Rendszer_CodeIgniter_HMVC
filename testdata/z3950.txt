@@ -1,0 +1,2 @@
+1;oszk;tagetes2.oszk.hu;1616;ANY;;;
+2;aleph;aleph.unibas.ch;9909;IDS_UTF;;;

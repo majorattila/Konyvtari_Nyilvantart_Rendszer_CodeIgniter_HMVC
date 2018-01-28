@@ -40,6 +40,9 @@
 		    ?>
     	</div>
 
+    </div>
+    <div class="row">
+
         <section class="col-md-6  connectedSortable ui-sortable">
 			<?php
 			/*echo Modules::run("diagram_konyvek/_draw_chart");*/

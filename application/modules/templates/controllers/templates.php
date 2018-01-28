@@ -23,10 +23,12 @@ function admin_template($data)
     $this->site_security->_check_browser();
     $this->site_security->_click_counter();
 
-    $data['username'] = $this->session->userdata('username');
-    $data['firstname'] = $this->session->userdata('firstname');
-    $data['lastname'] = $this->session->userdata('lastname');
-    $data['reg_date'] = $this->session->userdata('reg_date');
+    $data += array(
+        'username' => $this->session->userdata('username'),
+        'firstname' => $this->session->userdata('firstname'),
+        'lastname' => $this->session->userdata('lastname'),
+        'reg_date' => $this->session->userdata('reg_date')
+    );
 
     $profile_img = $this->session->userdata('profile_img');
 

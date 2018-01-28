@@ -33,6 +33,26 @@ function get_where($id){
     return $query;
 }
 
+function get_user_data($id){
+    $table = $this->get_table();
+
+    $this->db->select("
+        felhasznalok.fiok_id,
+        felhasznalok.felhasznalonev, 
+        felhasznalok.profilkep, 
+        felhasznalok.vezeteknev, 
+        felhasznalok.keresztnev, 
+        felhasznalok.email as email, 
+        felhasznalok.olvasojegy, 
+        felhasznalok.reg_datuma
+    ");
+
+    $this->db->where('id', $id);
+    $this->db->join('konyvtarak', 'felhasznalok.fiok_id = konyvtarak.fiok_id');
+    $query=$this->db->get($table);
+    return $query;
+}
+
 function get_where_custom($col, $value) {
     $table = $this->get_table();
     $this->db->where($col, $value);

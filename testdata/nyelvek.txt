@@ -1,0 +1,194 @@
+1; Afganisztán;AF
+2; Albánia;AL
+3; Algéria;DZ
+4; Andorra;AD
+5; Angola;AO
+6; Antigua és Barbuda;AG
+7; Argentína;AR
+8; Ausztrália;AU
+9; Ausztria;AT
+10; Azerbajdzsán;AZ
+11; Bahama-szigetek;BS
+12; Bahrein;BH
+13; Banglades;BD
+14; Barbados;BB
+15; Belgium;BE
+16; Belize;BZ
+17; Benin;BJ
+18; Bhután;BT
+19; Bissau-Guinea;GW
+20; Bolívia;BO
+21; Bosznia-Hercegovina;BA
+22; Botswana;BW
+23; Brazília;BR
+24; Brunei;BN
+25; Bulgária;BG
+26; Burkina Faso;BF
+27; Burundi;BI
+28; Chile;CL
+29; Ciprus;CY
+30; Comore-szigetek;KM
+31; Costa Rica;CR
+32; Csád;TD
+33; Csehország;CZ
+34; Dánia;DK
+35; Dél-afrikai Köztársaság;ZA
+36; Dél-Korea;KR
+37; Dominikai Közösség;DM
+38; Dominikai Köztársaság;DO
+39; Dzsibuti;DJ
+40; Ecuador;EC
+41; Egyenlít?i-Guinea;GQ
+42; Egyesült Arab Emírségek;AE
+43; Egyesült Királyság;GB
+44; Egyiptom;EG
+45; Elefántcsontpart;CI
+46; Eritrea;ER
+47; Észak-Korea;KP
+48; Észtország;EE
+49; Etiópia;ET
+50; Fehéroroszország;BY
+51; Fidzsi;FJ
+52; Finnország;FI
+53; Franciaország;FR
+54; Fülöp-szigetek;PH
+55; Gabon;GA
+56; Gambia;GM
+57; Ghána;GH
+58; Görögország;GR
+59; Grenada;GD
+60; Grúzia;GE
+61; Guatemala;GT
+62; Guinea;GN
+63; Guyana;GY
+64; Haiti;HT
+65; Hollandia;NL
+66; Honduras;HN
+67; Horvátország;HR
+68; India;IN
+69; Indonézia;ID
+70; Irak;IQ
+71; Irán;IR
+72; Írország;IE
+73; Izland;IS
+74; Izrael;IL
+75; Jamaica;JM
+76; Japán;JP
+77; Jemen;YE
+78; Jordánia;JO
+79; Kambodzsa;KH
+80; Kamerun;CM
+81; Kanada;CA
+82; Katar;QA
+83; Kazahsztán;KZ
+84; Kelet-Timor;TL
+85; Kenya;KE
+86; Kína;CN
+87; Kirgizisztán;KG
+88; Kiribati;KI
+89; Kolumbia;CO
+90; Kongói Demokratikus Köztársaság;CD
+91; Kongói Köztársaság;CG
+92; Közép-Afrika;CF
+93; Kuba;CU
+94; Kuvait;KW
+95; Laosz;LA
+96; Lengyelország;PL
+97; Lesotho;LS
+98; Lettország;LV
+99; Libanon;LB
+100; Libéria;LR
+101; Líbia;LY
+102; Liechtenstein;LI
+103; Litvánia;LT
+104; Luxemburg;LU
+105; Macedónia;MK
+106; Madagaszkár;MG
+107; Magyarország;HU
+108; Malajzia;MY
+109; Malawi;MW
+110; Maldív-szigetek;MV
+111; Mali;ML
+112; Málta;MT
+113; Marokkó;MA
+114; Marshall-szigetek;MH
+115; Mauritánia;MR
+116; Mauritius;MU
+117; Mexikó;MX
+118; Mianmar;MM
+119; Mikronézia;FM
+120; Moldova;MD
+121; Monaco;MC
+122; Mongólia;MN
+123; Montenegró;ME
+124; Mozambik;MZ
+125; Namíbia;NA
+126; Nauru;NR
+127; Németország;DE
+128; Nepál;NP
+129; Nicaragua;NI
+130; Niger;NE
+131; Nigéria;NG
+132; Norvégia;NO
+133; Olaszország;IT
+134; Omán;OM
+135; Örményország;AM
+136; Oroszország;RU
+137; Pakisztán;PK
+138; Palau;PW
+139; Panama;PA
+140; Pápua Új-Guinea;PG
+141; Paraguay;PY
+142; Peru;PE
+143; Portugália;PT
+144; Románia;RO
+145; Ruanda;RW
+146; Saint Kitts és Nevis;KN
+147; Saint Lucia;LC
+148; Saint Vincent és a Grenadine-szigetek;VC
+149; Salamon-szigetek;SB
+150; Salvador;SV
+151; San Marino;SM
+152; Seychelle-szigetek;SC
+153; Sierra Leone;SL
+154; Spanyolország;ES
+155; Srí Lanka;LK
+156; Suriname;SR
+157; Svájc;CH
+158; Svédország;SE
+159; Szamoa;WS
+160; Szaúd-Arábia;SA
+161; Szenegál;SN
+162; Szerbia;RS
+163; Szingapúr;SG
+164; Szíria;SY
+165; Szlovákia;SK
+166; Szlovénia;SI
+167; Szomália;SO
+168; Szudán;SD
+169; Szváziföld;SZ
+170; São Tomé és Príncipe;ST
+171; Tádzsikisztán;TJ
+172; Tanzánia;TZ
+173; Thaiföld;TH
+174; Togo;TG
+175; Tonga;TO
+176; Törökország;TR
+177; Trinidad és Tobago;TT
+178; Tunézia;TN
+179; Türkmenisztán;TM
+180; Tuvalu;TV
+181; Uganda;UG
+182; Új-Zéland;NZ
+183; Ukrajna;UA
+184; Uruguay;UY
+185; USA;US
+186; Üzbegisztán;UZ
+187; Vanuatu;VU
+188; Vatikán;VA
+189; Venezuela;VE
+190; Vietnam;VN
+191; Zambia;ZM
+192; Zimbabwe;ZW
+193; Zöld-foki Köztársaság;CV
+194;;

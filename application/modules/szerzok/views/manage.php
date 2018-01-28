@@ -36,10 +36,10 @@ $create_account_url = base_url()."szerzok/create";
 							$view_accounts_url = base_url()."szerzok/view/".$row->szerzo_id;
 						  ?>
 							<tr>
-								<td><?= $row->szerzo_id ?></td>
-								<td><?= $row->nev ?></td>								
-								<td class="center">
-									<a class="btn btn-info" href="<?= $edit_account_url ?>">
+								<td data-title="ID"><?= $row->szerzo_id ?></td>
+								<td data-title="Név"><?= $row->nev ?></td>								
+								<td data-title="Műveletek" class="center">
+									<a class="btn btn-primary" href="<?= $edit_account_url ?>">
 										<i class="fa fa-fw fa-edit"></i>  
 									</a>
 								</td>

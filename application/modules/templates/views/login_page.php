@@ -64,13 +64,15 @@ $form_location = base_url().$first_bit.'/submit_login';
   <div class="login-box-body">
     <p class="login-box-msg">Belépés a könyvtár oldalára</p>
 
+    <?php echo validation_errors('<p style="color: red;">','</p>'); ?>
+
     <form action="<?=$form_location?>" method="post">
       <div class="form-group has-feedback">
-        <input type="text" name="username" value="<?=$username?>" class="form-control" placeholder="Email | Felhasználónév">
+        <input type="text" name="username" value="<?=$username?>" class="form-control" placeholder="Email | Felhasználónév" required>
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
-        <input type="password" name="pword" class="form-control" placeholder="Jelszó">
+        <input type="password" name="pword" class="form-control" placeholder="Jelszó" required>
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
       <div class="row">

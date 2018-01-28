@@ -1,0 +1,4 @@
+1;Kezd?lap;;0;1
+2;Rólunk;rolunk;1;1
+3;Katalógus;katalogus/kereses;0;2
+4;Hírek;hirek/kategoriak;4;4

@@ -21,7 +21,7 @@ if(is_numeric($update_id)) { ?>
 			          </div>
 					</div>
 		<div class="box-body">
-			<a href="<?= base_url() ?>Konyvtarak/deleteconf/<?= $update_id ?>"><button type="button" class="btn metro-button mtr-red mtr-round margin">Könyvtár Törlése</button></a>
+			<a href="<?= base_url() ?>Konyvtarak/deleteconf/<?= $update_id ?>"><button type="button" class="btn btn-danger margin">Könyvtár Törlése</button></a>
 		</div>
 	</div><!--/span-->
 </div><!--/row-->
@@ -59,8 +59,8 @@ if(is_numeric($update_id)) { ?>
 							<div class="row"><div class="form-group col-xs-12 col-md-10 col-lg-4 col-xl-3"> <label for="url">Url</label> <input name="url" value="<?=$url ?>" type="text" class="form-control" id="url"> </div></div><br/>
 
 							<div class="form-actions">
-							  <button type="submit" class="btn metro-button mtr-green mtr-round margin" name="submit" value="Submit">Mentés</button>
-							  <button type="submit" class="btn metro-button mtr-orange mtr-round margin" name="submit" value="Cancel">Mégse</button>
+							  <button type="submit" class="btn btn-success margin" name="submit" value="Submit">Mentés</button>
+							  <button type="submit" class="btn btn-secondary margin" name="submit" value="Cancel">Mégse</button>
 							</div>
 						  </fieldset>
 						</form>   

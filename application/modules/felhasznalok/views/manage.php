@@ -7,7 +7,7 @@ if(isset($flash))
 }
 $create_account_url = base_url()."felhasznalok/create";
 ?><p style="margin-top: 30px;">
-	<a href="<?php echo $create_account_url ?>"><button type="button" class="btn metro-button mtr-teal mtr-round margin">Új fiók hozzáadása</button></a>
+	<a href="<?php echo $create_account_url ?>"><button type="button" class="btn btn-primary margin">Új fiók hozzáadása</button></a>
 	</p>
 <div class="row-fluid sortable">		
 				<div class="box box-default">
@@ -39,13 +39,13 @@ $create_account_url = base_url()."felhasznalok/create";
 							$view_accounts_url = base_url()."felhasznalok/view/".$row->id;
 						  ?>
 							<tr>
-								<td><?= $row->felhasznalonev ?></td>
-								<td><?= $row->keresztnev ?></td>
-								<td><?= $row->vezeteknev ?></td>
-								<td><?= $row->email ?></td>
-								<td><?= $row->reg_datuma ?></td>
-								<td>
-									<a class="btn btn-info" href="<?= $edit_account_url ?>">
+								<td data-title="Felhasználónév"><?= $row->felhasznalonev ?></td>
+								<td data-title="Keresztnév"><?= $row->keresztnev ?></td>
+								<td data-title="Vezetéknév"><?= $row->vezeteknev ?></td>
+								<td data-title="Email"><?= $row->email ?></td>
+								<td data-title="Regisztrálás dátuma"><?= $row->reg_datuma ?></td>
+								<td data-title="Műveletek">
+									<a class="btn btn-primary" href="<?= $edit_account_url ?>">
 										<i class="fa fa-fw fa-edit"></i>  
 									</a>
 								</td>

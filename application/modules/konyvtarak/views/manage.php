@@ -7,7 +7,7 @@ if(isset($flash))
 }
 $create_account_url = base_url()."Konyvtarak/create";
 ?><p style="margin-top: 30px;">
-	<a href="<?php echo $create_account_url ?>"><button type="button" class="btn metro-button mtr-teal mtr-round margin">Új könyvtár hozzáadása</button></a>
+	<a href="<?php echo $create_account_url ?>"><button type="button" class="btn btn-primary margin">Új könyvtár hozzáadása</button></a>
 	</p>
 <div class="row-fluid sortable">		
 				<div class="box box-default">
@@ -39,13 +39,13 @@ $create_account_url = base_url()."Konyvtarak/create";
 							$view_accounts_url = base_url()."Konyvtarak/view/".$row->fiok_id;
 						  ?>
 							<tr>
-								<td><?= $row->nev ?></td>	
-								<td><?= $row->iranyitoszam ?></td>
-								<td><?= $row->varos ?></td>
-								<td><?= $row->kerulet ?></td>
-								<td><?= $row->cim ?></td>							
-								<td class="center">
-									<a class="btn btn-info" href="<?= $edit_account_url ?>">
+								<td data-title="Név"><?= $row->nev ?></td>	
+								<td data-title="Irányítószám"><?= $row->iranyitoszam ?></td>
+								<td data-title="Város"><?= $row->varos ?></td>
+								<td data-title="Kerület"><?= $row->kerulet ?></td>
+								<td data-title="Cím"><?= $row->cim ?></td>							
+								<td data-title="Műveletek" class="center">
+									<a class="btn btn-primary" href="<?= $edit_account_url ?>">
 										<i class="fa fa-fw fa-edit"></i>  
 									</a>
 								</td>

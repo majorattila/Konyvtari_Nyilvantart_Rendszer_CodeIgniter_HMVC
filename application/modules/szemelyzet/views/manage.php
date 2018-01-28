@@ -38,12 +38,12 @@ $create_account_url = base_url()."szemelyzet/create";
 							$view_accounts_url = base_url()."szemelyzet/view/".$row->szemelyzet_id;
 						  ?>
 							<tr>
-								<td><?= $row->vezeteknev ?></td>
-								<td><?= $row->keresztnev ?></td>
-								<td><?= $row->lakcim ?></td>	
-								<td><?= $row->pozicio ?></td>				
-								<td class="center">
-									<a class="btn btn-info" href="<?= $edit_account_url ?>">
+								<td data-title="Vezetéknév"><?= $row->vezeteknev ?></td>
+								<td data-title="Keresztnév"><?= $row->keresztnev ?></td>
+								<td data-title="Lakcím"><?= $row->lakcim ?></td>	
+								<td data-title="Pozíció"><?= $row->pozicio ?></td>				
+								<td data-title="Műveletek" class="center">
+									<a class="btn btn-primary" href="<?= $edit_account_url ?>">
 										<i class="fa fa-fw fa-edit"></i>  
 									</a>
 								</td>

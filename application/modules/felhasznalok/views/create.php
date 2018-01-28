@@ -19,9 +19,9 @@ if(is_numeric($update_id)) { ?>
 			          </div>
 					</div>
 		<div class="box-body"> 
-			<a href="<?= base_url() ?>felhasznalok/update_pword/<?= $update_id ?>"><button type="button" class="btn metro-button mtr-teal mtr-round margin">Jelszó Módosítása</button></a>
-			<a href="<?= base_url() ?>felhasznalok/elofoglalasok/<?= $update_id ?>"><button type="button" class="btn metro-button mtr-teal mtr-round margin">Előfoglalás</button></a>
-			<a href="<?= base_url() ?>felhasznalok/deleteconf/<?= $update_id ?>"><button type="button" class="btn metro-button mtr-red mtr-round margin">Fiók Törlése</button></a>
+			<a href="<?= base_url() ?>felhasznalok/update_pword/<?= $update_id ?>"><button type="button" class="btn btn-primary margin">Jelszó Módosítása</button></a>
+			<a href="<?= base_url() ?>felhasznalok/elofoglalasok/<?= $update_id ?>"><button type="button" class="btn btn-primary margin">Előfoglalás</button></a>
+			<a href="<?= base_url() ?>felhasznalok/deleteconf/<?= $update_id ?>"><button type="button" class="btn btn-danger margin">Fiók Törlése</button></a>
 		</div>
 	</div><!--/span-->
 </div><!--/row-->
@@ -75,8 +75,8 @@ if(is_numeric($update_id)) { ?>
 					        </div><br/>
 
 							<div class="form-actions">
-							  <button type="submit" class="btn metro-button mtr-green mtr-round margin" name="submit" value="Submit">Mentés</button>
-							  <button type="submit" class="btn metro-button mtr-orange mtr-round margin" name="submit" value="Cancel">Mégse</button>
+							  <button type="submit" class="btn btn-success margin" name="submit" value="Submit">Mentés</button>
+							  <button type="submit" class="btn btn-secondary margin" name="submit" value="Cancel">Mégse</button>
 							</div>
 						  </fieldset>
 						</form>   

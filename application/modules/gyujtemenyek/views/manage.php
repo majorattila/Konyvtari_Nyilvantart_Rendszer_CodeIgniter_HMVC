@@ -7,7 +7,7 @@ if(isset($flash))
 }
 $create_account_url = base_url()."gyujtemenyek/create";
 ?><p style="margin-top: 30px;">
-	<a href="<?php echo $create_account_url ?>"><button type="button" class="btn metro-button mtr-teal mtr-round margin">Új gyűjtemény hozzáadása</button></a>
+	<a href="<?php echo $create_account_url ?>"><button type="button" class="btn btn-primary margin">Új gyűjtemény hozzáadása</button></a>
 	</p>
 <div class="row-fluid sortable">		
 				<div class="box box-default">
@@ -36,10 +36,10 @@ $create_account_url = base_url()."gyujtemenyek/create";
 							$view_accounts_url = base_url()."gyujtemenyek/view/".$row->gyujtemeny_id;
 						  ?>
 							<tr>
-								<td><?= $row->gyujtemeny_id ?></td>
-								<td><?= $row->leiras ?></td>								
-								<td class="center">
-									<a class="btn btn-info" href="<?= $edit_account_url ?>">
+								<td data-title="ID"><?= $row->gyujtemeny_id ?></td>
+								<td data-title="Leírás"><?= $row->leiras ?></td>								
+								<td data-title="Műveletek" class="center">
+									<a class="btn btn-primary" href="<?= $edit_account_url ?>">
 										<i class="fa fa-fw fa-edit"></i>  
 									</a>
 								</td>

@@ -1,0 +1,5 @@
+1;1472313365;0;1;Here is a subject line. I need help.;I am a new customer and I need some help.;1;;0
+2;1442313365;0;1;Another Subject Line Here;Here is the second message. It was actually sent before the first one.;0;;0
+3;1512667053;0;1;xxx;xxx;1;;0
+4;1512667096;0;1;Please give me your money.;Please increase your prices!!;0;;0
+5;1512667139;0;1;Please give me your money;Please Increase your prices.;0;;0

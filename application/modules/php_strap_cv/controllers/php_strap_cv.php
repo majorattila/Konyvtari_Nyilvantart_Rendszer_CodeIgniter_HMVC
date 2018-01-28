@@ -15,7 +15,10 @@ function new_modal(
     $ajax_url, 
     $message = null, 
     $custom_script = null, 
-    $enable_back = null)
+    $enable_back = null,
+    $modal_message = null,
+    $button_text = null,
+    $modal_icon = null)
 {
 
 /*
@@ -46,7 +49,10 @@ $data = array(
     'ajax_url' => $ajax_url,
     'message' => $message,    
     'custom_script' => $custom_script,
-    'enable_back' => $enable_back
+    'enable_back' => $enable_back,
+    'modal_message' => $modal_message,
+    'button_text' => $button_text,
+    'modal_icon' => $modal_icon
 );
 
 $this->load->view('modal', $data);
