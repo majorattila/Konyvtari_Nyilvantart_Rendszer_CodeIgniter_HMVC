@@ -9,7 +9,9 @@ $second_segment = $this->uri->segment(2);
 
 <title>Bibliotéka</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<!-- Tell the browser to be responsive to screen width -->
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  
 <link rel="icon" href="<?= base_url() ?>dist/img/llama_ico.png">
 
 <link rel="stylesheet" href="<?=base_url()?>bower_components/bootstrap/dist/css/bootstrap.min.css">
@@ -25,6 +27,70 @@ $second_segment = $this->uri->segment(2);
 <!--link href="https://fonts.googleapis.com/css?family=Fugaz+One" rel="stylesheet"-->
 
 <style>
+.dropdown-menu li a{
+  cursor: pointer;
+}
+.required{
+  font-size: 15pt;
+  color: #007cff;
+}
+.required:after{
+  content: "*";
+}
+.reg_form_box{
+  border: 1px solid #cccccc;
+  margin-top: 25px !important;
+  padding: 9px;
+}
+footer{
+position:relative !important;
+float:left;
+}
+@media only screen and (max-width: 768px) {
+  /*
+  .container{
+    padding:1px;
+    min-height:auto !important;
+  }
+  */
+  body{
+    background-color: #f5f6fb;
+    overflow-x: hidden;
+    background-image: none !important;
+  }
+  h1{
+    font-size:20pt;
+    margin-left:10px;
+  }
+  #reg_panel{
+    /*top: -41px;*/
+    padding: 1px;
+    width:-webkit-fill-available;
+    margin-left:-16px !important;
+    margin-right: -17px !important;
+  }
+  /*
+  .panel-body{
+    padding:1px;
+  }
+  */
+  .dropdown-toggle{
+    width: 100% !important;
+  }
+  .dropdown-menu{
+    width: -webkit-fill-available;
+  }
+  footer{
+    float:none;
+    margin-top: 0 !important;
+    border-top: 1px solid #b5b5b5;    
+    background-color: white;
+    height: 25px;    
+  }
+  footer p{
+    line-height: 37px;
+  }
+}
 /*
   @font-face {
   font-family: "PT Serif Caption";

@@ -239,14 +239,14 @@ function _get_details_from_user()
             //set the session variables expiration time to 1 minute
             
             $this->session->mark_as_temp(array(
-                'lib_id' => 50,
-                'username' => 50,
-                'profile_img' => 50,
-                'lastname' => 50,            
-                'firstname' => 50,
-                'email' => 50,
-                'library_card' => 50,
-                'reg_date' => 50
+                'lib_id' => 500,
+                'username' => 500,
+                'profile_img' => 500,
+                'lastname' => 500,            
+                'firstname' => 500,
+                'email' => 500,
+                'library_card' => 500,
+                'reg_date' => 500
             ));
         }
     }

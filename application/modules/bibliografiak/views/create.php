@@ -259,7 +259,7 @@ $form_location = base_url()."bibliografiak/create/".$update_id;
         <?php if(!isset($update_id) && !empty($update_id)){ ?>
         <a href="<?=base_url()?>bibliografiak/borito_feltoltes/<?=$update_id?>" class="pn-ProductNav_Link" aria-selected="false">Borító feltöltése</a>
         <?php } ?>
-        <a <?=!empty($update_id)?"href=\"<?=base_url()?>bibliografiak/deleteconf/<?=$update_id?>\"":"href=\"javascript:void(0);\""?> class="pn-ProductNav_Link" aria-selected="false">Törlés</a>
+        <a <?=!empty($update_id)&&is_numeric($update_id)?"href=\"".base_url()."bibliografiak/deleteconf/".$update_id."\"":"href=\"javascript:void(0);\""?> class="pn-ProductNav_Link" aria-selected="false">Törlés</a>
 
         <a href="<?=base_url()?>szerzok/manage/20" target="_blank" class="pn-ProductNav_Link" aria-selected="false">Szerzők</a>
         <a href="<?=base_url()?>konyvtarak/manage/20" target="_blank" class="pn-ProductNav_Link" aria-selected="false">könyvtárak</a>
@@ -378,8 +378,13 @@ $form_location = base_url()."bibliografiak/create/".$update_id;
         <input name="kiadasjelzes" value="<?=$kiadasjelzes?>" maxlength="100" type="text" class="form-control" id="kiadasjelzes">
       </div>
       <div class="form-group col-xs-12 col-sm-4">
-        <label for="lelohely">lelőhely:</label>
-        <input name="lelohely" value="<?=$lelohely?>" maxlength="300" type="text" class="form-control" id="lelohely">
+        <label for="lelohelyek">lelőhely:</label>
+        <input name="lelohely" value="<?=$lelohely?>" maxlength="300" type="text" class="form-control" id="lelohelyek" list="lelohely" autocomplete="off">
+        <datalist id="lelohely">
+          <?php foreach($query->result() as $row){ ?>
+          <option><?= $row->terem_neve ?></option>
+          <?php } ?>
+        </datalist>
       </div>
       <div class="form-group col-xs-12 col-sm-2">
         <label for="dok_stat">dok stat:</label>
@@ -487,7 +492,7 @@ $form_location = base_url()."bibliografiak/create/".$update_id;
       </div>
       <div class="form-group col-xs-12 col-sm-2 col-lg-2">
         <label for="csz">Csz:</label>
-        <input name="csz" value="<?=empty($csz)?$auto_cutter:$css?>" maxlength="10" type="text" class="form-control" id="csz">
+        <input name="csz" value="<?=empty($csz)?$auto_cutter:$csz?>" maxlength="10" type="text" class="form-control" id="csz">
       </div>
     </div>
 

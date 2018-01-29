@@ -367,7 +367,7 @@ function _process_create_account(){
     
     $data = $this->fetch_data_from_post();
     $data['felhasznalonev'] = $data['username1'];
-    $data['reg_datuma'] = now('Y-m-d');
+    $data['reg_datuma'] = date('Y-m-d');
     unset($data['username1']);
     unset($data['pword']);
     unset($data['repeat_pword']);
@@ -383,7 +383,10 @@ function _process_create_account(){
 
 function start()
 {
+    $this->load->module('konyvtarak');    
+
     $data = $this->fetch_data_from_post();
+    $data['query'] = $this->konyvtarak->get('fiok_id');
     $data['flash'] = $this->session->flashdata('item');
     $data['view_file'] = "start";
     $this->load->module('templates');
@@ -423,6 +426,14 @@ function fetch_data_from_post(){
     $data['email'] = $this->input->post('email',TRUE);
     $data['pword'] = $this->input->post('pword',TRUE);
     $data['repeat_pword'] = $this->input->post('repeat_pword',TRUE);
+
+    $data['fiok_id'] = $this->input->post('fiok_konyvtar',TRUE);
+
+    $hirlevel = $this->input->post('hirlevel',TRUE);
+    if(!is_null($hirlevel)){
+        $data['hirlevel'] = 1;
+    }
+
     return $data;
 }
 

@@ -1,5 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-class Mdl_Konyvtarak extends CI_Model
+class Mdl_termek extends CI_Model
 {
 
 function __construct() {
@@ -7,7 +7,7 @@ parent::__construct();
 }
 
 function get_table() {
-    $table = "konyvtarak";
+    $table = "termek";
     return $table;
 }
 
@@ -28,7 +28,7 @@ function get_with_limit($limit, $offset, $order_by) {
 
 function get_where($id){
     $table = $this->get_table();
-    $this->db->where('fiok_id', $id);
+    $this->db->where('terem_id', $id);
     $query=$this->db->get($table);
     return $query;
 }
@@ -56,13 +56,13 @@ function _insert($data){
 
 function _update($id, $data){
     $table = $this->get_table();
-    $this->db->where('fiok_id', $id);
+    $this->db->where('terem_id', $id);
     $this->db->update($table, $data);
 }
 
 function _delete($id){
     $table = $this->get_table();
-    $this->db->where('fiok_id', $id);
+    $this->db->where('terem_id', $id);
     $this->db->delete($table);
 }
 
@@ -83,10 +83,10 @@ function count_all() {
 
 function get_max() {
     $table = $this->get_table();
-    $this->db->select_max('fiok_id');
+    $this->db->select_max('terem_id');
     $query = $this->db->get($table);
     $row=$query->row();
-    $id=$row->fiok_id;
+    $id=$row->terem_id;
     return $id;
 }
 

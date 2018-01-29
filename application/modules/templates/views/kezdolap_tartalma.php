@@ -19,7 +19,7 @@ echo Modules::run('homepage_blocks/_draw_blocks');
       </div>
       <div class="row">
         <div class="col-md-8 col-xs-12 col-sm-12">
-          <h1>&nbsp;Hírek és rendezvények</h1><br/>
+          <h1>Hírek és rendezvények</h1><br/>
           <?= Modules::run('hirek/_draw_news_and_events')/*_draw_feed_hp*/ ?>
         </div>        
         <div class="col-md-4"></div>

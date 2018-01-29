@@ -51,7 +51,7 @@ if(is_numeric($update_id)) { ?>
 							<div class="row" ><div class="form-group col-xs-12 col-md-10 col-lg-4 col-xl-3"> <label for="keresztnev">Keresztnév</label> <input name="keresztnev" value="<?=$keresztnev ?>" type="text" class="form-control" id="keresztnev"> </div></div>
 							<div class="row" ><div class="form-group col-xs-12 col-md-10 col-lg-4 col-xl-3"> <label for="felhasznalonev">Felhasználónév</label> <input name="felhasznalonev" value="<?=$felhasznalonev ?>" type="text" class="form-control" id="felhasznalonev"> </div></div>
 							<div class="row" ><div class="form-group col-xs-12 col-md-10 col-lg-4 col-xl-3"> <label for="email">Email</label> <input name="email" value="<?=$email ?>" type="text" class="form-control" id="email"> </div></div>
-							<div class="row" ><div class="form-group col-xs-12 col-md-10 col-lg-4 col-xl-3"> <label for="jelszo">Jelszó</label> <input name="jelszo" value="<?=$jelszo ?>" type="text" class="form-control" id="jelszo"> </div></div>
+							<!--div class="row" ><div class="form-group col-xs-12 col-md-10 col-lg-4 col-xl-3"> <label for="jelszo">Jelszó</label> <input name="jelszo" value="<?=$jelszo ?>" type="text" class="form-control" id="jelszo"> </div></div-->
 							<div class="row" ><div class="form-group col-xs-12 col-md-10 col-lg-4 col-xl-3"> <label for="olvasojegy">Olvasójegy</label> <input name="olvasojegy" value="<?=$olvasojegy ?>" type="text" class="form-control" id="olvasojegy"> </div></div>
 
 							<div class="row" >

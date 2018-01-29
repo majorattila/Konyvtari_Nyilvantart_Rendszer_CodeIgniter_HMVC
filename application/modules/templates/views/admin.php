@@ -68,7 +68,7 @@ require_once('sort_this_code.php');
 <style> 
   *{
     word-wrap:break-word;
-  } 
+  }
   body{    
     overflow-y: scroll;
   }  
@@ -95,6 +95,7 @@ require_once('sort_this_code.php');
   .content-wrapper{
     height: auto;
     margin-bottom: 10px;
+    /*margin-bottom: 250px;*/
     min-height: -webkit-fill-available !important;
 
     background-color: #ffffff;
@@ -564,12 +565,13 @@ require_once('sort_this_code.php');
           <ul class="treeview-menu">
            <li><a href="<?=base_url()?>katalogus/kereses"><i class="fa fa-search"></i> <span>Keresés</span></a></li>
            <li><a href="<?=base_url()?>bibliografiak/manage/20"><i class="fa fa-book"></i> <span>Bibliográfiák</span></a></li>
-             <li><a href="<?=base_url()?>konyvtarak/manage"><i class="fa fa-file-o"></i> <span>Könyvtárak</span></a></li>
-             <li><a href="<?=base_url()?>szerzok/manage"><i class="fa fa-file-o"></i> <span>Szerzők</span></a></li>
-             <li><a href="<?=base_url()?>nyelvek/manage"><i class="fa fa-file-o"></i> <span>Nyelvek</span></a></li>
-             <li><a href="<?=base_url()?>tipusok/manage"><i class="fa fa-file-o"></i> <span>Dokumentum típusok</span></a></li>
-             <li><a href="<?=base_url()?>gyujtemenyek/manage"><i class="fa fa-file-o"></i> <span>Gyűjtemények</span></a></li>
-             <li><a href="<?=base_url()?>kiadok/manage"><i class="fa fa-file-o"></i> <span>Kiadók</span></a></li>
+             <li><a href="<?=base_url()?>konyvtarak/manage/20"><i class="fa fa-file-o"></i> <span>Könyvtárak</span></a></li>
+             <li><a href="<?=base_url()?>termek/manage/20"><i class="fa fa-file-o"></i> <span>Termek</span></a></li>
+             <li><a href="<?=base_url()?>szerzok/manage/20"><i class="fa fa-file-o"></i> <span>Szerzők</span></a></li>
+             <li><a href="<?=base_url()?>nyelvek/manage/20"><i class="fa fa-file-o"></i> <span>Nyelvek</span></a></li>
+             <li><a href="<?=base_url()?>tipusok/manage/20"><i class="fa fa-file-o"></i> <span>Dokumentum típusok</span></a></li>
+             <li><a href="<?=base_url()?>gyujtemenyek/manage/20"><i class="fa fa-file-o"></i> <span>Gyűjtemények</span></a></li>
+             <li><a href="<?=base_url()?>kiadok/manage/20"><i class="fa fa-file-o"></i> <span>Kiadók</span></a></li>
 <?php /* ?>
              <li><a href="<?=base_url()?>https://adminlte.io/docs" class="disabled"><i class="fa fa-file-o"></i> <span>Kölcsönzői jogok</span></a></li>
              <li><a href="<?=base_url()?>https://adminlte.io/docs" class="disabled"><i class="fa fa-file-o"></i> <span>Könyvtárbeállítások</span></a></li>

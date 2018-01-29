@@ -7,7 +7,7 @@ if(isset($flash))
 }
 $create_oldal_url = base_url()."hirek/create";
 ?><p style="margin-top: 30px;">
-	<a href="<?php echo $create_oldal_url ?>"><button type="button" class="btn margin">Új hír létrehozása</button></a>
+	<a href="<?php echo $create_oldal_url ?>"><button type="button" class="btn btn-primary margin">Új hír létrehozása</button></a>
 	</p>
 
 <div class="row-fluid sortable">

@@ -10,7 +10,9 @@
 	<script src="<?=base_url()?>bower_components/bootstrap/dist/js/popper.js"></script>
 	<script src="<?=base_url()?>bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 </head>
-<body>	
+<body><br/>
+
+    <section class="container">
 	<table class="table table-striped table-bordered">
 	<?php if(!empty($leltari_szam)){ ?><tr><td>Leltári szám</td><td><?=$leltari_szam?></td></tr><?php } ?>
     <?php if(!empty($rszj)){ ?><tr><td>Rszj</td><td><?=$rszj?></td></tr><?php } ?>
@@ -51,13 +53,56 @@
     <?php if(!empty($kiado)){ ?><tr><td>Kiadó</td><td><?=$kiado?></td></tr><?php } ?>
     <?php if(!empty($cserear)){ ?><tr><td>Csereár</td><td><?=$cserear?></td></tr><?php } ?>
     <?php if(!empty($cserear_datuma) && $cserear_datuma != "0000-00-00"){ ?><tr><td>Csereár dátuma</td><td><?=$cserear_datuma?></td></tr><?php } ?>
+    <?php /* ?>
     <?php if(!empty($nem_kolcsonzesre)){ ?><tr><td>Nem kölcsönzésre</td><td><?=$nem_kolcsonzesre?></td></tr><?php } ?>
     <?php if(!empty($elveszett_elem)){ ?><tr><td>Eelveszett elem</td><td><?=$elveszett_elem?></td></tr><?php } ?>
+    <?php */ ?>
     <?php if(!empty($tartalekok)){ ?><tr><td>Tartalékok</td><td><?=$tartalekok?></td></tr><?php } ?>
     <?php if(!empty($melleklet_1)){ ?><tr><td>Melleklét 1</td><td><?=$melleklet_1?></td></tr><?php } ?>
     <?php if(!empty($melleklet_2)){ ?><tr><td>Melleklét 2</td><td><?=$melleklet_2?></td></tr><?php } ?>
     <?php if(!empty($melleklet_3)){ ?><tr><td>Melleklét 3</td><td><?=$melleklet_3?></td></tr><?php } ?>
     <?php if(!empty($url)){ ?><tr><td>URL</td><td><?=$url?></td></tr><?php } ?>
 	</table>
+
+    <?php /*foreach ($query->result() as $row) { die($row->datum); }*/?>
+
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Lelőhely</th>
+                <!--th>Jelzet</th-->
+                <th>Státusz</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php $i = 1; foreach ($query->result() as $row) { ?>
+            <tr>
+                <td><?= $i ?></td>
+                <td><?= empty($row->terem_neve)?"nincs":$row->nev." / ".$row->terem_neve ?></td>
+                <!--td><?= empty($row->csz)?"nincs":$row->csz ?></td-->
+                <td>
+                <?php 
+                if(empty($row->datum) || !empty($row->visszahozta)){
+                    if($row->nem_kolcsonzesre == "Y"){
+                        echo "Helyben olvasható";
+                    }else{
+                        echo "Kölcsönözhető";
+                    }
+                }else{
+                    echo "Nem kölcsönözhető";                    
+                } ?></td>
+            </tr>
+        <?php $i++; } ?>
+
+        <?php if($query->num_rows() == 0){
+        ?>
+        <tr>
+            <td colspan="3">Nem áll rendelkezésre</td>
+        </tr>
+        <?php } ?>
+        </tbody>
+    </table>
+</section>
 </body>
 </html>

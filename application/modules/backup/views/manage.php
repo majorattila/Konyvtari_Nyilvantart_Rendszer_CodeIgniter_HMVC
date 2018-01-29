@@ -35,7 +35,7 @@ $last_id = 1;
 							  <tr>
 							 	  <th>Dátum</th>
 								  <th>Fájl</th>
-								  <th class="col-xs-1">Műveletek</th>
+								  <th class="col-xs-12 col-sm-2 col-md-2 col-lg-2">Műveletek</th>
 							  </tr>
 						  </thead>   
 						  <tbody>
@@ -48,7 +48,7 @@ $last_id = 1;
 							<tr>
 								<td data-title="Dátum"><?= $row->datum ?></td>
 								<td data-title="Fájl"><?= base_url().'backups/'.$row->fajl_nev.'.sql' ?></td>								
-								<td data-title="Műveletek" class="center">
+								<td data-title="Műveletek" class="center col-xs-12 col-sm-2 col-md-2 col-lg-2">
 									<!--a class="btn btn-primary" href="<?= $edit_account_url ?>"-->
 										<button name="torles" data-id="<?= $row->id ?>" class="btn btn-primary"><i class="fa fa-fw fa-trash"></i></button>  
 									<!--/a-->

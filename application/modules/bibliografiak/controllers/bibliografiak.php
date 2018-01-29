@@ -668,6 +668,28 @@ function details()
     }
 
     $data = $this->fetch_data_from_db($book_id);
+    $data['query'] = $this->db->query("
+SELECT
+  biblioteka.termek.terem_neve,
+  biblioteka.kolcsonzesek.leltari_szam,
+  biblioteka.kolcsonzesek.datum,
+  biblioteka.konyvtarak.nev,
+  biblioteka.nyilvantartas.nem_kolcsonzesre,
+  biblioteka.kolcsonzesek.visszahozta
+FROM
+  biblioteka.nyilvantartas
+  INNER JOIN biblioteka.nyilvantartas_has_termek ON biblioteka.nyilvantartas.nyilvantartas_id =
+    biblioteka.nyilvantartas_has_termek.nyilvantartas_id
+  INNER JOIN biblioteka.termek ON biblioteka.nyilvantartas_has_termek.terem_id = biblioteka.termek.terem_id
+  INNER JOIN biblioteka.konyvtarak ON biblioteka.termek.fiok_id = biblioteka.konyvtarak.fiok_id
+  INNER JOIN biblioteka.bibliografiak ON biblioteka.bibliografiak.nyilvantartas_id =
+    biblioteka.nyilvantartas.nyilvantartas_id
+  INNER JOIN biblioteka.kolcsonzesek ON biblioteka.bibliografiak.leltari_szam = biblioteka.kolcsonzesek.leltari_szam
+  INNER JOIN biblioteka.kolcsonzesek_has_tagok ON biblioteka.kolcsonzesek_has_tagok.kolcsonzesek_id =
+    biblioteka.kolcsonzesek.id AND biblioteka.konyvtarak.fiok_id = biblioteka.kolcsonzesek_has_tagok.fiok_id
+  WHERE biblioteka.bibliografiak.leltari_szam = $book_id
+");
+    //die($this->db->last_query());
 
     $this->load->view('details', $data);
 }
@@ -945,7 +967,7 @@ function manage()
 
     $data['flash'] = $this->session->flashdata('item');
     $query = "SELECT * FROM  biblioteka.bibliografiak_view";
-    $data['result_number'] = $this->_custom_query($query)->num_rows();
+    $data['result_number'] = @$this->_custom_query($query)->num_rows();
     
     $mysql_query = $this->_generate_mysql_query($query, $oldal_szam, $limit);
     $data['query'] = $this->_custom_query($mysql_query);
@@ -987,6 +1009,76 @@ function datalist($table_name, $column_name)
     
 }
 
+function check_constrait_for_nyilvantartas($nyilvantartas_id)
+{
+
+/*
+    if($stuff_x->num_rows() == 0){
+
+        $mysql_query = "SELECT lelohely FROM biblioteka.nyilvantartas WHERE nyilvantartas_id = ?";
+        $isdhis = $this->_custom_query($mysql_query, array($nyilvantartas_id));
+        $uiuasd = $isdhis->row();
+        $lelohely_id = $uiuasd->lelohely;
+
+        $mysql_query = "DELETE FROM biblioteka.nyilvantartas_has_termek WHERE lelohely_id=?";
+        $this->db->query($mysql_query, array($lelohely_id));
+
+        $mysql_query = "SELECT terem_id FROM biblioteka.termek WHERE terem_neve LIKE '$lelohely' AND fiok_id = $lib_id";
+        $this->db->query($mysql_query, array($lib_id, $lelohely));
+        $terem_id = $this->db->insert_id();
+
+        $mysql_query = "SELECT max(lelohely) as max FROM biblioteka.nyilvantartas";
+        $isdhis = $this->_custom_query($mysql_query);
+        $uiuasd = $isdhis->row();
+        $lelohely_id = $uiuasd->max;
+
+        $mysql_query = "INSERT INTO biblioteka.nyilvantartas_has_termek (lelohely_id, terem_id) VALUES (?,?)";
+        $this->db->query($mysql_query,array($lelohely_id, $terem_id));
+    }
+*/
+
+    $this->site_security->_get_details_from_user();
+    $lib_id = $this->session->userdata('lib_id');
+    $lelohely = $this->input->post('lelohely', TRUE);
+    $mysql_query = "SELECT terem_id FROM biblioteka.termek WHERE terem_neve LIKE '$lelohely' AND fiok_id = $lib_id";
+    $stuff_x = $this->_custom_query($mysql_query);
+    //die($this->db->last_query());
+    $row_x = $stuff_x->row();
+    $terem_id = $row_x->terem_id;
+
+/*
+    $mysql_query = "SELECT lelohely FROM biblioteka.nyilvantartas WHERE nyilvantartas_id = ?";
+    $this->db->query($mysql_query, array($nyilvantartas_id, $terem_id));
+    $stuff_x = $this->_custom_query($mysql_query);
+    $row_x = $stuff_x->row();
+    $lelohely = $row_x->lelohely;
+*/
+
+    $mysql_query2 = "SELECT * FROM nyilvantartas_has_termek WHERE nyilvantartas_id = ? AND terem_id = ?";
+    $query = $this->db->query($mysql_query2,array($nyilvantartas_id, $terem_id));
+    //die($this->db->last_query());
+    if($query->num_rows() == 0){
+        $mysql_query2 = "SELECT * FROM nyilvantartas_has_termek WHERE nyilvantartas_id = ?";
+        $query = $this->db->query($mysql_query2,array($nyilvantartas_id));
+        if($query->num_rows() > 0){
+            $mysql_query3 = "UPDATE biblioteka.nyilvantartas_has_termek SET terem_id = ? WHERE nyilvantartas_id = ?";
+            $this->db->query($mysql_query3,array($terem_id, $nyilvantartas_id));
+        }
+        else
+        {
+            $mysql_query3 = "INSERT INTO biblioteka.nyilvantartas_has_termek (nyilvantartas_id, terem_id) VALUES (?,?)";
+            $this->db->query($mysql_query3,array($nyilvantartas_id, $terem_id));
+
+            //return $this->db->insert_id();
+        }
+        //die($this->db->last_query());
+    }
+    $stuff_x = $this->_custom_query($mysql_query);
+    $row_x = $stuff_x->row();
+    $id = $row_x->id;
+    return $id;
+}
+
 function check_constrait()
 {
     $nyelvek = $this->input->post('nyelvek', TRUE);
@@ -999,7 +1091,7 @@ function check_constrait()
     $mysql_query = "SELECT tipus_id FROM biblioteka.tipusok WHERE leiras LIKE '$tipusok'";
     $stuff_x = $this->_custom_query($mysql_query);
     $row_x = $stuff_x->row();
-    $data['tipus_id'] = $row_x->tipus_id;
+    $data['tipus_id'] = $row_x->tipus_id;    
 
     $kiadok = $this->input->post('kiadok', TRUE);
     $mysql_query = "SELECT kiado_id FROM biblioteka.kiadok WHERE kiado LIKE '$kiadok'";
@@ -1018,6 +1110,7 @@ function check_constrait()
 
 function create()
 {
+    $this->load->module('termek');
     $this->load->module('szerzok');
 
     $this->load->library('session');
@@ -1112,8 +1205,11 @@ function create()
                     WHERE biblioteka.nyilvantartas.nyilvantartas_id = ?
                     ";
                     $data = $this->fetch_data_form_post_to_nyilvantartas();
+                    if(!empty($data['cserear_datuma'])){
+                        $data['cserear_datuma'] = str_replace(". ", "-", $data['cserear_datuma']);
+                    }
 
-                    $data['cserear_datuma'] = str_replace(". ", "-", $data['cserear_datuma']);
+                    $data['lelohely'] = $this->check_constrait_for_nyilvantartas($nyilvantartas_id);
 
                     $this->db->query($mysql_query, array(
                         $data['rszj'], 
@@ -1195,7 +1291,11 @@ function create()
                 ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
                 $data = $this->fetch_data_form_post_to_nyilvantartas();
-                $data['cserear_datuma'] = str_replace(". ", "-", $data['cserear_datuma']);
+                if(!empty($data['cserear_datuma'])){
+                    $data['cserear_datuma'] = str_replace(". ", "-", $data['cserear_datuma']);
+                }
+                
+                $data['lelohely'] = $this->check_constrait_for_nyilvantartas($nyilvantartas_id);
 
                 $this->db->query($mysql_query, array(
                     $data['rszj'], 
@@ -1284,6 +1384,9 @@ function create()
     {
         $data['auto_cutter'] = '';
     }
+
+    $lib_id = $this->session->userdata('lib_id');
+    $data['query'] = $this->termek->get_where_custom('fiok_id',$lib_id);
 
     $data['get_max'] = $this->get_max()+1;
     $data['update_id'] = $update_id;
@@ -1460,6 +1563,7 @@ function fetch_data_form_post_to_kiado()
 
 function fetch_data_from_db($update_id)
 {
+    $this->load->module('termek');
 
     if(!is_numeric($update_id))
     {
@@ -1472,6 +1576,7 @@ function fetch_data_from_db($update_id)
     $query = $this->_custom_query($mysql_query);
 
     foreach ($query->result() as $row) {
+        $nyilvantartas_id = $row->nyilvantartas_id;
         $data['leltari_szam'] = $row->leltari_szam;
         $data['rszj'] = $row->rszj;
         $data['mrj'] = $row->mrj;
@@ -1522,6 +1627,18 @@ function fetch_data_from_db($update_id)
         $data['url'] = $row->url;
 
         $data['borito'] = $row->borito;
+    }
+
+    if(isset($nyilvantartas_id)){
+        $query = $this->db->query("SELECT * FROM biblioteka.nyilvantartas_has_termek INNER JOIN biblioteka.termek ON(termek.terem_id = nyilvantartas_has_termek.terem_id) WHERE nyilvantartas_id = ?",array($nyilvantartas_id));
+
+        if($query->num_rows() > 0){
+            foreach ($query->result() as $row) {
+                $data['lelohely'] = $row->terem_neve;
+            }
+        }else{
+            $data['lelohely'] = "";
+        }
     }
 
     if(!isset($data))

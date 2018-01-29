@@ -1,5 +1,5 @@
 <?php
-class Backup extends MX_Controller 
+class Termek extends MX_Controller 
 {
 
 function __construct() {
@@ -38,143 +38,58 @@ function get_target_pagination_base_url(){
     return $target_base_url;
 }
 
-function new_file_name($length)
+function delete($update_id)
 {
-    $this->load->module('site_security');
-    echo $this->site_security->generate_random_string($length);
-}
+    if(!is_numeric($update_id))
+    {
+        redirect('site_security/not_allowed');
+    }
 
-private function get_mysqli() { 
-    $db = (array)get_instance()->db;
-    return mysqli_connect('localhost', $db['username'], $db['password']);
-}
-
-function ajax_api($action = "insert")
-{
+    $this->load->library('session');
     $this->load->module('site_security');
     $this->site_security->_is_admin();
-    $this->site_security->_get_details_from_user();
-    $id = $this->input->post('item', TRUE);
-    if(!is_numeric($id) && $action == "delete")
+
+    $submit = $this->input->post('submit', TRUE);
+    if($submit=="Cancel")
     {
-        die('Non-numeric variable!');
+        redirect(base_url().'termek/create/'.$update_id);
     }
-    else
+    elseif($submit=="Yes - Delete Collection")
     {
-        $drive = substr($_SERVER['DOCUMENT_ROOT'],0,1);
+        $this->_delete($update_id);
+    } 
 
-        if($action == "insert")
-        {        
-            $data = $this->fetch_data_form_post();
-            if(!empty($data['fajl_nev'])){
-                /*
-                date_default_timezone_set('Europe/Budapest');
-                $data['datum'] = date('Y-m-d H:i:s');
-                */
-                $this->_insert($data);
+    $flash_msg = "A teremt sikeresen eltávolította.";
+    $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
+    $this->session->set_flashdata('item', $value);   
 
-                exec("\"".$drive.":\\biblioteka-x64\\mariadb\\bin\\mysqldump.exe\" -h 127.0.0.1 -u root biblioteka > database/".$data['fajl_nev'].".sql");
-            }
-        }
-        else if($action == "delete" && !is_null($id))
-        {
-            $query = $this->get_where($id);
-            $file_name = "";
+    redirect(base_url().'termek/manage');
+}
 
-            foreach ($query->result() as $row) {
-                $file_name = $row->fajl_nev;            
-            }
-            $path = "database/".$file_name.".sql";
-            $this->_delete($id);
-
-            if (file_exists($path)) {
-                unlink($path);
-            }
-        }
+function deleteconf($update_id)
+{
+    if(!is_numeric($update_id))
+    {
+        redirect('site_security/not_allowed');
     }
-/*
-    else if($action == "use"){
-        /+
-        $string = "";
-        $query = $this->db->query("SELECT GROUP_CONCAT(Concat('TRUNCATE TABLE ',table_schema,'.',TABLE_NAME) SEPARATOR ';') AS print FROM INFORMATION_SCHEMA.TABLES where table_schema in ('biblioteka') AND table_type LIKE 'BASE TABLE'");
 
-        foreach ($query->result() as $row) {
-            $string = $row->print;
-        };
+    $this->load->library('session');
+    $this->load->module('site_security');
+    $this->site_security->_is_admin();
 
-        $array = split(";", $string);
-        foreach ($array as $key => $value) {
-            //if (strpos($value, "view") !== false) {
-                $query = $this->db->query($value);
-            //}
-        }
-        
-        exec("\"".$drive.":\\biblioteka-x64\\mariadb\\bin\\mysqldump.exe\" -u root biblioteka < \"G:/biblioteka-x64/apache/htdocs/biblioteka/database/5tFxGg9gDP5F.sql\"");
-        +/
-        $conn = $this->get_mysqli();
+    $data['headline'] = "Terem törlése";
 
-        $sql = '
-        DROP DATABASE biblioteka;
-        CREATE SCHEMA biblioteka;
-        USE biblioteka;
-        ';
-/+
-        $this->db->query("DROP DATABASE biblioteka");
-        $this->db->query("CREATE SCHEMA biblioteka");
-        $this->db->query("USE biblioteka");
-+/
-        $lines = file('database/5tFxGg9gDP5F.sql'); 
-        foreach ($lines as $line)
-        {
-            $sql .= $line."\n";
-        }
-
-        //echo $sql;
-
-        if ($conn->multi_query($sql) === TRUE) {
-            echo "New records created successfully";
-        } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
-        }
-/+
-        // Set line to collect lines that wrap
-        $templine = '';
-
-        // Read in entire file
-        $lines = file('database/5tFxGg9gDP5F.sql'); 
-
-        // Loop through each line
-        foreach ($lines as $line)
-        {
-        // Skip it if it's a comment
-        if (substr($line, 0, 2) == '--' || $line == '')
-        continue;
-
-        // Add this line to the current templine we are creating
-        $templine .= $line;
-
-        // If it has a semicolon at the end, it's the end of the query so can process this templine
-        if (substr(trim($line), -1, 1) == ';')
-        {        
-        // Perform the query
-        $this->db->query($templine);
-
-        // Reset temp variable to empty
-        $templine = '';
-        }
-        }
-/+
-    }
-*/
-
+    $data['update_id'] = $update_id;
+    $data['flash'] = $this->session->flashdata('item');
+    $data['view_file'] = "deleteconf";
+    $this->load->module('templates');
+    $this->templates->admin_template($data);
 }
 
 function fetch_data_form_post()
 {
-    $data['fiok_id'] = $this->input->post('fiok_id', TRUE);
-    $data['szemelyzet_id'] = $this->input->post('szemelyzet_id', TRUE);
-    $data['datum'] = $this->input->post('datum', TRUE);
-    $data['fajl_nev'] = $this->input->post('fajl_nev', TRUE);
+    $data['fiok_id'] = $this->session->userdata('lib_id');
+    $data['terem_neve'] = $this->input->post('terem_neve', TRUE);
     return $data;
 
 }
@@ -190,10 +105,9 @@ function fetch_data_from_db($update_id)
     $query = $this->get_where($update_id);
     foreach($query->result() as $row)
     {
+        $data['terem_id'] = $row->terem_id;
         $data['fiok_id'] = $row->fiok_id;
-        $data['szemelyzet_id'] = $row->szemelyzet_id;
-        $data['datum'] = $row->datum;
-        $data['fajl_nev'] = $row->fajl_nev;
+        $data['terem_neve'] = $row->terem_neve;
     }
 
     if(!isset($data))
@@ -203,15 +117,62 @@ function fetch_data_from_db($update_id)
 
     return $data;
 }
+
 function create()
 {
     $this->load->library('session');
     $this->load->module('site_security');
     $this->site_security->_is_admin();
 
+    $update_id = $this->uri->segment(3);
+    $submit = $this->input->post('submit', TRUE);
+
+    if($submit=="Cancel"){
+        redirect('termek/manage/20');
+    }
+    else if($submit=="Submit")
+    {
+        //process the form
+        $this->config->set_item('language', 'hungarian');
+        $this->load->library('form_validation');        
+        $this->form_validation->set_rules('terem_neve', 'Terem Neve', 'required');
+
+        if($this->form_validation->run() == TRUE)
+        {
+            //get the variables
+            $data = $this->fetch_data_form_post();
+            $name = $data['fiok_id'];
+
+            if(is_numeric($update_id))
+            {
+                //update the item details
+                $this->_update($update_id, $data);
+                $flash_msg = "Az elemet sikeresen módosította.";
+                $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
+                $this->session->set_flashdata('item', $value);
+                redirect('termek/create/'.$update_id);
+            }
+            else
+            {
+                //insert a new item
+                $this->_insert($data);
+                $update_id = $this->get_max(); // get te ID of the new accounts                
+                $flash_msg = "Az elemet sikeresn hozzáadta.";
+                $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
+                $this->session->set_flashdata('item', $value);
+                redirect('termek/create/'.$update_id);
+            }
+        }
+    }
+
+    
     if((is_numeric($update_id)) && ($submit!="Submit"))
     {
         $data = $this->fetch_data_from_db($update_id);
+        if($data == "")
+        {
+            $data = $this->fetch_data_form_post();
+        }
     }
     else
     {
@@ -220,11 +181,11 @@ function create()
 
     if(!is_numeric($update_id))
     {
-        $data['headline'] = "Új mentés";
+        $data['headline'] = "Új terem hozzáadása";
     }
     else
     {
-        $data['headline'] = "Módosítás";
+        $data['headline'] = "Terem módosítása";
     }
 
     $data['update_id'] = $update_id;
@@ -252,18 +213,12 @@ function manage()
 
     $limit = TRUE;
 
-
-    $query ="SELECT * FROM biblioteka.backup ORDER BY datum";
+    $lib_id = $this->session->userdata('lib_id');
+    $query ="SELECT * FROM biblioteka.termek WHERE fiok_id = $lib_id ORDER BY terem_neve";
     $data['result_number'] = $this->_custom_query($query)->num_rows();
 
     $mysql_query = $this->_generate_mysql_query($query, $oldal_szam, $limit);
     $data['query'] = $this->_custom_query($mysql_query);
-
-    $data['fiok_id'] = $this->session->userdata('lib_id');
-    $data['szemelyzet_id'] = $this->session->userdata('user_id');
-
-    date_default_timezone_set('Europe/Budapest');
-    $data['datum'] = date('Y-m-d H:i:s');
 
     $pagination_data['template'] = 'public_bootstrap';
     $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
@@ -283,8 +238,8 @@ function manage()
 
 function get($order_by)
 {
-    $this->load->model('mdl_backup');
-    $query = $this->mdl_backup->get($order_by);
+    $this->load->model('mdl_termek');
+    $query = $this->mdl_termek->get($order_by);
     return $query;
 }
 
@@ -294,8 +249,8 @@ function get_with_limit($limit, $offset, $order_by)
         die('Non-numeric variable!');
     }
 
-    $this->load->model('mdl_backup');
-    $query = $this->mdl_backup->get_with_limit($limit, $offset, $order_by);
+    $this->load->model('mdl_termek');
+    $query = $this->mdl_termek->get_with_limit($limit, $offset, $order_by);
     return $query;
 }
 
@@ -305,22 +260,29 @@ function get_where($id)
         die('Non-numeric variable!');
     }
 
-    $this->load->model('mdl_backup');
-    $query = $this->mdl_backup->get_where($id);
+    $this->load->model('mdl_termek');
+    $query = $this->mdl_termek->get_where($id);
     return $query;
 }
 
 function get_where_custom($col, $value) 
 {
-    $this->load->model('mdl_backup');
-    $query = $this->mdl_backup->get_where_custom($col, $value);
+    $this->load->model('mdl_termek');
+    $query = $this->mdl_termek->get_where_custom($col, $value);
+    return $query;
+}
+
+function get_with_double_condition($col1, $value1, $col2, $value2) 
+{
+    $this->load->model('mdl_termek');
+    $query = $this->mdl_termek->get_with_double_condition($col1, $value1, $col2, $value2);
     return $query;
 }
 
 function _insert($data)
 {
-    $this->load->model('mdl_backup');
-    $this->mdl_backup->_insert($data);
+    $this->load->model('mdl_termek');
+    $this->mdl_termek->_insert($data);
 }
 
 function _update($id, $data)
@@ -329,8 +291,8 @@ function _update($id, $data)
         die('Non-numeric variable!');
     }
 
-    $this->load->model('mdl_backup');
-    $this->mdl_backup->_update($id, $data);
+    $this->load->model('mdl_termek');
+    $this->mdl_termek->_update($id, $data);
 }
 
 function _delete($id)
@@ -339,35 +301,35 @@ function _delete($id)
         die('Non-numeric variable!');
     }
 
-    $this->load->model('mdl_backup');
-    $this->mdl_backup->_delete($id);
+    $this->load->model('mdl_termek');
+    $this->mdl_termek->_delete($id);
 }
 
 function count_where($column, $value) 
 {
-    $this->load->model('mdl_backup');
-    $count = $this->mdl_backup->count_where($column, $value);
+    $this->load->model('mdl_termek');
+    $count = $this->mdl_termek->count_where($column, $value);
     return $count;
 }
 
 function get_max() 
 {
-    $this->load->model('mdl_backup');
-    $max_id = $this->mdl_backup->get_max();
+    $this->load->model('mdl_termek');
+    $max_id = $this->mdl_termek->get_max();
     return $max_id;
 }
 
 function _custom_query($mysql_query) 
 {
-    $this->load->model('mdl_backup');
-    $query = $this->mdl_backup->_custom_query($mysql_query);
+    $this->load->model('mdl_termek');
+    $query = $this->mdl_termek->_custom_query($mysql_query);
     return $query;
 }
 
 
 function autogen()
 {
-    $mysql_query = "SHOW COLUMNS FROM backup";
+    $mysql_query = "SHOW COLUMNS FROM termek";
     $query = $this->_custom_query($mysql_query);
 
     

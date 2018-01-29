@@ -102,7 +102,7 @@
 $form_location = base_url().'fiok/submit';
 ?>
 <br/>
-<div id="reg_panel" class="col-sm-5">
+<div id="reg_panel" class="col-xs-12 col-sm-11 col-md-9 col-lg-7 col-xl-5">
 <div class="panel panel-ocean">
   <div class="panel-heading">INGYENES REGISZTRÁCIÓ</div>
   <div class="panel-body">
@@ -118,39 +118,86 @@ echo validation_errors("<p style='color:red'>","</p>");
 
 <!-- Text input-->
 <div class="form-group">
-  <label class="control-label" for="vezeteknev"><span class="lightgrey">Vezetéknév</span></label>  
-  <input id="vezeteknev" name="vezeteknev" value="<?=$vezeteknev?>" type="text" class="form-control input-md" required="">
+  <label class="control-label" for="vezeteknev"><span class="lightgrey">Vezetéknév</span> <span class="required"></span></label>  
+  <input id="vezeteknev" name="vezeteknev" value="<?=$vezeteknev?>" type="text" class="form-control input-md" required>
 </div>
 
 <!-- Text input-->
 <div class="form-group">
-  <label class="control-label" for="keresztnev"><span class="lightgrey">Keresztnév</span></label>  
-  <input id="keresztnev" name="keresztnev" value="<?=$keresztnev?>" type="text" class="form-control input-md" required="">
+  <label class="control-label" for="keresztnev"><span class="lightgrey">Keresztnév</span> <span class="required"></span></label>  
+  <input id="keresztnev" name="keresztnev" value="<?=$keresztnev?>" type="text" class="form-control input-md" required>
 </div>
 
 <!-- Text input-->
 <div class="form-group">
-  <label class="control-label" for="username1"><span class="lightgrey">Felhasználónév</span></label>  
-  <input id="username1" name="username1" value="<?=$username1?>" type="text" class="form-control input-md" required="">
+  <label class="control-label" for="username1"><span class="lightgrey">Felhasználónév</span> <span class="required"></span></label>  
+  <input id="username1" name="username1" value="<?=$username1?>" type="text" class="form-control input-md" required minlength="7">
 </div>
 
 <!-- Text input-->
 <div class="form-group">
-  <label class="control-label" for="email"><span class="lightgrey">E-mail</span></label>  
-  <input id="email" name="email" value="<?=$email?>" type="text" class="form-control input-md">
+  <label class="control-label" for="email"><span class="lightgrey">E-mail</span> <span class="required"></span></label>  
+  <input id="email" name="email" value="<?=$email?>" type="email" class="form-control input-md" required>
 </div>
 
 <!-- Text input-->
 <div class="form-group">
-  <label class="control-label" for="pword"><span class="lightgrey">Jelszó</span></label>  
-  <input id="pword" name="pword" value="<?=$pword?>" type="password" class="form-control input-md">
+  <label class="control-label" for="pword"><span class="lightgrey">Jelszó</span> <span class="required"></span></label>  
+  <input id="pword" name="pword" value="<?=$pword?>" type="password" class="form-control input-md" required minlength="7">
 </div>
 
 <!-- Text input-->
 <div class="form-group">
-  <label class="control-label" for="repeat_pword"><span class="lightgrey">Jelszó Ismétlése</span></label>  
-  <input id="repeat_pword" name="repeat_pword" value="<?=$repeat_pword?>" type="password" class="form-control input-md">
-</div><br/>
+  <label class="control-label" for="repeat_pword"><span class="lightgrey">Jelszó Ismétlése</span> <span class="required"></span></label>  
+  <input id="repeat_pword" name="repeat_pword" value="<?=$repeat_pword?>" type="password" class="form-control input-md" required>
+</div>
+
+<?php 
+$accept = $this->input->post('accept',TRUE);
+$fk_nev = "Központi Könyvtár";
+
+foreach ($query->result() as $row) { 
+  if($fiok_id == $row->fiok_id){
+    $fk_nev = $row->nev;
+  }
+}
+?>
+
+<!-- Dropdown -->
+<div class="form-group">
+  <label class="control-label" for="fiok_konyvtar"><span class="lightgrey">Fiók Könyvtár</span></label>  
+  <div class="dropdown">
+    <button style="width: 210px; min-width: max-content;" id="fiok_konyvtar" class="dropdown-toggle form-control" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <span id="dropdownfield"><?= $fk_nev ?></span>
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+      <?php       
+      foreach ($query->result() as $row) { 
+      ?>
+        <li><a data-value="<?= $row->fiok_id ?>"><?= $row->nev ?></a></li>
+      <?php } ?>
+    </ul>
+    <input name="fiok_konyvtar" type="hidden" value="<?= $fiok_id ?>"/>
+  </div>
+</div>
+
+<div class="reg_form_box">
+
+<!-- Checkbox -->
+<div class="checkbox">
+  <label><input name="hirlevel" type="checkbox" value="1" <?= !isset($hirlevel)?"checked":($hirlevel==0)?"":"checked"?>>Feliratkozás Hírlevélre</label>
+</div>
+
+<!-- Checkbox -->
+<div class="checkbox">
+  <label><input type="checkbox" value="1" required style="
+    height: 100%;" <?= !isset($accept)?"":($accept!=1)?"":"checked"?>>Elfogadom a feltételeket <span class="required"></span></label>
+</div>
+
+</div>
+
+<!--p>FONTOS: A későbbiekben is lehtősége van lemondani a feliratkozását a "fiók beállítások" alatt. A feliratkozás csak akkor lesz érvényes, amikor vissza igazolja a regisztrációt.</p--><br/>
 
 
 <!-- Button -->
@@ -164,3 +211,13 @@ echo validation_errors("<p style='color:red'>","</p>");
 </div>
 </div>
 </div>
+
+<script>
+$(document).on('click', '.dropdown-menu li a', function() {
+  text = $(this).text();
+  data = $(this).data("value");
+  $('#dropdownfield').text(text);
+  $('#dropdownfield').attr('width', 'max-content');
+  $("input[name='fiok_konyvtar']").val(data);
+});
+</script>
