@@ -43,7 +43,7 @@
     </div>
     <div class="row">
 
-        <section class="col-md-6  connectedSortable ui-sortable">
+        <section class="col-md-6">
 			<?php
 			/*echo Modules::run("diagram_konyvek/_draw_chart");*/
 			/*echo Modules::run("diagram_tagok/_draw_chart");*/
@@ -51,20 +51,20 @@
 			/*echo Modules::run("diagram_tartozasok/_draw_chart");*/
 			?>
 		</section>
-		<section class="col-md-6  connectedSortable ui-sortable">
+		<section class="col-md-6">
 			<?php 
 			echo Modules::run("diagram_nezettseg/_draw_chart");
 			?>
 		</section>
         <!-- /.col (RIGHT) -->
 
-        <section class="col-lg-7 connectedSortable ui-sortable">
+        <section class="col-lg-7">
         	<?php 
 			echo Modules::run("widgets/_draw_quick_email");
 			?>
         </section>
 
-        <section class="col-lg-5 connectedSortable ui-sortable">
+        <section class="hidden-xs col-lg-5">
         	<?php 
 			echo Modules::run("widgets/_draw_calendar");
 			?>

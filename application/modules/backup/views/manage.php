@@ -80,7 +80,7 @@ $last_id = 1;
 			</div>
 
 <?php
-//Ez itt a könyv kiadók ablak
+//Ez itt az adatbázis mentés ablaka
 
   $fields = array(
     array('label' => 'hidden' ,'name' => 'fiok_id', 'type' => 'hidden', 'value' => $fiok_id),
@@ -89,7 +89,7 @@ $last_id = 1;
     array('label' => 'hidden' ,'name' => 'fajl_nev', 'type' => 'hidden', 'value' => '')
   );
   $ajax_url = base_url().$first_segment."/ajax_api";
-  $message = "Az új kiadót sikeresen hozzáadta!";
+  $message = "Sikeres adatbázis mentés!";
   $custom_script = 
   "
   var random_name;

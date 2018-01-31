@@ -463,8 +463,102 @@ function create_z3950()
     $this->templates->admin_template($data);
 }
 
+/*
+function get_cimek()
+{
+    $this->load->model('mdl_yaz');
+
+    $cim = $this->input->get('cim',TRUE);
+    $ccl_query = "title = $cim";
+    $szerver = "oszk";
+
+    $mysql_query = "SELECT * FROM biblioteka.z3950 WHERE nev LIKE ?";
+    $server_data = $this->db->query($mysql_query, array($szerver));
+
+    $row = $server_data->row();
+    $host = $row->host;
+    $port = $row->port;
+    $szerver = $row->adatbazis;
+    $formatum = "marc";
+
+    $arr = array();
+
+    $parsedResult = $this->mdl_yaz->fetch_data_from_library($host.":".$port."/".$szerver, $formatum, $ccl_query);
+
+    $arr = array();
+
+    if(isset($parsedResult)){
+        foreach($parsedResult as $row){
+            if(!empty($row) && isset($row['titel']) && !empty($row['titel']) && !empty($row) ){ 
+                array_push($arr, array('cim' => iconv(mb_detect_encoding($row['titel'], mb_detect_order(), true), "UTF-8", $row['titel'])));
+            }
+        }
+    }
+
+    $cimek = str_replace(array('"'),array('\''),json_encode($arr));    
+
+    echo "'cimek' : $cimek";
+}
+*/
+
+
+function gyors_honosito()
+{
+    $this->load->module('site_security');
+    $this->site_security->_is_admin();
+
+    $this->load->model('mdl_yaz');
+
+    $cim = $this->input->get('cim',TRUE);
+    $ccl_query = "title = $cim";
+    $szerver = "oszk";
+
+    $mysql_query = "SELECT * FROM biblioteka.z3950 WHERE nev LIKE ?";
+    $server_data = $this->db->query($mysql_query, array($szerver));
+
+    $row = $server_data->row();
+    $host = $row->host;
+    $port = $row->port;
+    $szerver = $row->adatbazis;
+    $formatum = "marc";
+
+    $parsedResult = $this->mdl_yaz->fetch_data_from_library($host.":".$port."/".$szerver, $formatum, $ccl_query);
+
+    $arr = array();
+
+    if(isset($parsedResult)){
+
+    foreach($parsedResult as $row){
+
+    if(!empty($row) && !empty($row['titel'])){ 
+
+    //language,isbn,issn,author,titel,edition,pub_date,extent,series,editor
+    array_push($arr, array("cim" => $this->json_string_encode((isset($row['titel'])?iconv(mb_detect_encoding($row['titel'], mb_detect_order(), true), "UTF-8", $row['titel']):'')),"szerzok" => $this->json_string_encode((isset($row['author'])?iconv(mb_detect_encoding($row['author'], mb_detect_order(), true), "UTF-8", $row['author']):'')),"datum" => $this->json_string_encode((isset($row['pub_date'])?iconv(mb_detect_encoding($row['pub_date'], mb_detect_order(), true), "UTF-8", $row['pub_date']):'')),"isbn" => $this->json_string_encode((isset($row['isbn'])?iconv(mb_detect_encoding($row['isbn'], mb_detect_order(), true), "UTF-8", $row['isbn']):'')),"nyelvek" => $this->json_string_encode((isset($row['language'])?iconv(mb_detect_encoding($row['language'], mb_detect_order(), true), "UTF-8", $row['language']):'')),"nemzetkozi_azonosito" => $this->json_string_encode((isset($row['national_no'])?iconv(mb_detect_encoding($row['national_no'], mb_detect_order(), true), "UTF-8", $row['national_no']):'')),"tipusok" => $this->json_string_encode((isset($row['genre'])?iconv(mb_detect_encoding($row['genre'], mb_detect_order(), true), "UTF-8", $row['genre']):'')),"eto" => $this->json_string_encode((isset($row['eto'])?iconv(mb_detect_encoding($row['eto'], mb_detect_order(), true), "UTF-8", $row['eto']):'')),"kiadok" => $this->json_string_encode((isset($row['publisher'])?iconv(mb_detect_encoding($row['publisher'], mb_detect_order(), true), "UTF-8", $row['publisher']):'')))
+); 
+    }
+    }
+    }
+    $konyv_adatok = str_replace('"','\'',json_encode($arr));    
+
+    echo $konyv_adatok;
+}
+
+function json_string_encode( $str ) {
+   $this->load->module('site_security');
+   $this->site_security->_is_admin();
+
+   $from = array('\'');    // Array of values to replace
+   $to = array('\\"');    // Array of values to replace with
+
+   // Replace the string passed
+   return str_replace( $from, $to, $str );
+}
+
 function check_honositas()
 {
+    $this->load->module('site_security');
+    $this->site_security->_is_admin();
+
     if (isset($_COOKIE['honositas_check']) && !empty($_COOKIE['honositas_check']))
     {
         echo $_COOKIE['honositas_check'];
@@ -479,6 +573,9 @@ function check_honositas()
 
 function honositas_kereso()
 {
+    $this->load->module('site_security');
+    $this->site_security->_is_admin();
+
     $this->load->model('mdl_yaz');
 
     $submit = $this->input->post('submit', TRUE);
@@ -587,7 +684,7 @@ function honositas_kereso()
         $row = $server_data->row();
         $szerver = $row->adatbazis;    
 
-        //echo $ccl_query;    
+        //echo $ccl_query;die();
 
         $formatum = mysqli_real_escape_string($this->get_mysqli(), $formatum);
 
@@ -827,7 +924,7 @@ function insert_szerzo($nev)
     $this->load->module('site_security');
     $this->site_security->_is_admin();
     $mysql_query = "INSERT INTO biblioteka.szerzok (nev) VALUES (?)";
-    $this->db->query($mysql_query, array($nev));
+    $this->db->query($mysql_query, array(urldecode($nev)));
 }
 
 function delete_szerzo($nev)

@@ -137,7 +137,7 @@ if(is_numeric($update_id)) { ?>
 		<?php
 
 		if($kep=="") {?>
-		<a href="<?= base_url() ?>hirek/upload_image/<?= $update_id ?>"><button type="button" class="btn margin">Kép feltöltése</button></a>
+		<a href="<?= base_url() ?>hirek/upload_image/<?= $update_id ?>"><button type="button" class="btn btn-secondary margin">Kép feltöltése</button></a>
 		<?php
 		}else{ ?>
 		<a href="<?= base_url() ?>hirek/delete_image/<?= $update_id ?>"><button type="button" class="btn btn-danger margin">Kép törlése</button></a>

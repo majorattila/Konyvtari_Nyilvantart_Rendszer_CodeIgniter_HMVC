@@ -173,6 +173,7 @@ function fetch_data_from_kolcsonzesek_db($update_id)
     {
         $data['leltari_szam'] = $row->leltari_szam;
         $data['datum'] = $row->datum;
+        $data['visszahozta'] = $row->visszahozta;
     }
 
     if(!isset($data))
@@ -187,6 +188,7 @@ function fetch_data_from_kolcsonzesek_post()
 {
     $data['leltari_szam'] = $this->input->post('leltari_szam', TRUE);
     $data['datum'] = $this->input->post('datum', TRUE);
+    $data['visszahozta'] = $this->input->post('visszahozta', TRUE);
     return $data;
 }
 
@@ -238,8 +240,8 @@ function _kolcsonzesek_update($user_id, $update_id, $data)
     $this->load->module('site_security');
     $this->site_security->_is_admin();
     
-    $mysql_query = "UPDATE biblioteka.kolcsonzesek SET leltari_szam = ?, datum = ? WHERE id = ?";
-    $this->db->query($mysql_query ,array($data['leltari_szam'], $data['datum'], $update_id));
+    $mysql_query = "UPDATE biblioteka.kolcsonzesek SET leltari_szam = ?, datum = ?, visszahozta = ? WHERE id = ?";
+    $this->db->query($mysql_query ,array($data['leltari_szam'], $data['datum'], $data['visszahozta'], $update_id));
 }
 
 /*
@@ -337,7 +339,18 @@ function kolcsonzes_create()
         {
             //get the variables
             $data = $this->fetch_data_from_kolcsonzesek_post();
-            $data['datum'] = str_replace(". ", "-", $data['datum']);
+            
+            //$data['datum'] = str_replace(". ", "-", $data['datum']);
+
+            if(!empty($data['datum'])){
+                $data['datum'] = str_replace(". ", "-", $data['datum']);
+            }
+
+            if(!empty($data['visszahozta'])){
+                $data['visszahozta'] = str_replace(". ", "-", $data['visszahozta']);
+            }else{
+                $data['visszahozta'] = null;
+            }
 
             if(is_numeric($update_id))
             {
@@ -412,7 +425,7 @@ function kolcsonzesek($update_id)
 
     $limit = TRUE;
 
-    $query = "SELECT kolcsonzesek_has_tagok.kolcsonzesek_id, tagok_adatai.vezeteknev, tagok_adatai.keresztnev, bibliografiak.cim, kolcsonzesek.datum FROM biblioteka.kolcsonzesek_has_tagok INNER JOIN biblioteka.kolcsonzesek ON (biblioteka.kolcsonzesek.id = biblioteka.kolcsonzesek_has_tagok.kolcsonzesek_id) INNER JOIN biblioteka.bibliografiak ON (biblioteka.bibliografiak.leltari_szam = biblioteka.kolcsonzesek.leltari_szam) INNER JOIN biblioteka.tagok ON(biblioteka.tagok.id = biblioteka.kolcsonzesek_has_tagok.tagok_id)  INNER JOIN biblioteka.tagok_adatai ON(biblioteka.tagok_adatai.id = biblioteka.tagok.tagok_adatai_id) WHERE biblioteka.kolcsonzesek_has_tagok.tagok_id = $update_id";
+    $query = "SELECT kolcsonzesek_has_tagok.kolcsonzesek_id, tagok_adatai.vezeteknev, tagok_adatai.keresztnev, bibliografiak.cim, kolcsonzesek.datum, kolcsonzesek.visszahozta FROM biblioteka.kolcsonzesek_has_tagok INNER JOIN biblioteka.kolcsonzesek ON (biblioteka.kolcsonzesek.id = biblioteka.kolcsonzesek_has_tagok.kolcsonzesek_id) INNER JOIN biblioteka.bibliografiak ON (biblioteka.bibliografiak.leltari_szam = biblioteka.kolcsonzesek.leltari_szam) INNER JOIN biblioteka.tagok ON(biblioteka.tagok.id = biblioteka.kolcsonzesek_has_tagok.tagok_id)  INNER JOIN biblioteka.tagok_adatai ON(biblioteka.tagok_adatai.id = biblioteka.tagok.tagok_adatai_id) WHERE biblioteka.kolcsonzesek_has_tagok.tagok_id = $update_id";
     $data['result_number'] = $this->_custom_query($query)->num_rows();
 
     $mysql_query = $this->_generate_mysql_query($query, $oldal_szam, $limit);

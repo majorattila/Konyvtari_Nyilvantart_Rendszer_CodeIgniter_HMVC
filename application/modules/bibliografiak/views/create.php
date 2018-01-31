@@ -181,7 +181,8 @@ $form_location = base_url()."bibliografiak/create/".$update_id;
     btn metro-button mtr-orange mtr-round margin | btn btn-secondary margin
     btn metro-button mtr-green mtr-round margin | btn btn-success margin
     btn metro-button mtr-red mtr-round margin | btn btn-danger margin
-    btn metro-button mtr-indigo mtr-round margin | btn margin
+    btn metro-button mtr-indigo mtr-round margin | btn btn-secondary margin
+    btn metro-button mtr-round margin | btn btn-secondary margin
   -->
   <!--div>
     <button class="btn metro-button mtr-tiny">mtr-tiny</button>
@@ -255,7 +256,8 @@ $form_location = base_url()."bibliografiak/create/".$update_id;
         <a onclick="auto_lsz();" href="javascript:void(0);" class="pn-ProductNav_Link" aria-selected="false">Automatikus lsz</a>
         <a onclick="resetform();" href="javascript:void(0);" class="pn-ProductNav_Link" aria-selected="false">Mezők törlése</a>
         <a <?= !empty($leltari_szam)?"onClick=\"newwindow = window.open('".base_url()."katalogus_cedula/view/".$leltari_szam."', '_blank', 'resizable=yes, scrollbars=yes, titlebar=yes, width=600, height=400, top=10, left=10');\"":""?> href="javascript:void(0);" class="pn-ProductNav_Link" aria-selected="false">Kat. cédula</a>
-        <a onClick="newwindow = window.open('<?= $honositas ?>', '_blank', 'resizable=yes, scrollbars=yes, titlebar=yes, width=600, height=400, top=10, left=10');" href="javascript:void(0);" class="pn-ProductNav_Link" aria-selected="false">Honosítás</a>
+        <a onClick="newwindow = window.open('<?= $honositas ?>', '_blank', 'resizable=yes, scrollbars=yes, titlebar=yes, width=829, height=553, top=10, left=10');" href="javascript:void(0);" class="pn-ProductNav_Link" aria-selected="false">Honosítás</a> <!-- 600 / 400-->
+        <a href="javascript:void(0);" onclick="check()" class="pn-ProductNav_Link" aria-selected="false">Lekérés</a>
         <?php if(!isset($update_id) && !empty($update_id)){ ?>
         <a href="<?=base_url()?>bibliografiak/borito_feltoltes/<?=$update_id?>" class="pn-ProductNav_Link" aria-selected="false">Borító feltöltése</a>
         <?php } ?>
@@ -324,8 +326,11 @@ $form_location = base_url()."bibliografiak/create/".$update_id;
     <div class="row">
       <div class="form-group col-xs-12 col-sm-4">
         <label for="cim">cím:</label>
-        <input name="cim" value="<?=$cim?>" type="text" class="form-control" id="cim"/>
+        <input onkeyup="gyors_honosito()" name="cim" value="<?=$cim?>" list="cimek" type="text" class="form-control" id="cim" autocomplete="off" />
+        <datalist id="cimek">          
+        </datalist>
       </div>
+      <textarea type="textarea" name="json_data" style="display:none !important"></textarea>
       <div class="form-group col-xs-12 col-sm-4">
         <label for="egyebcimek">egyébcímek:</label>
         <input name="egyebcimek" value="<?=$egyebcimek?>" maxlength="255" type="text" class="form-control" id="egyebcimek"/>
@@ -837,6 +842,63 @@ function check(){
         $.each(obj, function( key, value ) {
           $("#bibliografiak input[name='"+key+"']").val(value);
         });
+        //alert(data);
+     }
+  });
+ }
+
+
+$(document).ready(function(){
+  $(document).on('focusout','#cim',function(){
+    //alert();
+    
+    var value1 = $(this).val();
+    /*
+    var data = $('#cimek :contains('+value+')').data('json');    
+    */
+    var data = $('textarea[name="json_data"').text();
+    var arr = data.replace(/\'/g,'\"');
+    var obj = JSON.parse(arr);
+    //alert(obj);
+    /*
+    $.each(obj, function( key, value ) {
+      $("#bibliografiak input[name='"+key+"']").val(value);
+    });
+    */
+    $.each(obj, function( k, val ) {
+      var talalat = false;
+      $.each(val, function( key, value ) {
+        //$("#bibliografiak input[name='"+key+"']").val(value);
+        if(value == value1 || talalat){
+          $("#bibliografiak input[name='"+key+"']").val(value);
+          talalat = true;          
+        }
+      });
+    });
+  });
+});
+
+function gyors_honosito(){
+  var cim = $('#cim').val();
+   $.get('<?=base_url()?>bibliografiak/gyors_honosito?cim='+cim, function(data) {
+     if( data != "" ) {
+      var arr = data.replace(/\'/g,'\"');
+      var obj = JSON.parse(arr);
+      var array = "";
+      var i = 0;
+      //alert(obj);
+        $.each(obj, function( k, val ) {
+        $.each(val, function( key, value ) {
+          //$("#bibliografiak input[name='"+key+"']").val(value);
+          if(key == 'cim'){
+            $('textarea[name="json_data"').text(JSON.stringify(obj[i]));
+            array += "<option>"+value+"</option>";
+          }
+        });
+        i++;
+        });
+        $('textarea[name="json_data"').text(JSON.stringify(obj));
+        $("datalist#cimek").html(array);
         //alert(data);
      }
   });

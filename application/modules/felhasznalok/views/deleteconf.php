@@ -33,7 +33,7 @@
 
 			<div class="control-group" style="height:200px;">
 				<button type="submit" name="submit" value="Yes - Delete Account" class="btn btn-danger margin" >Igen - Fiók Eltávolítása</button>
-				<button type="submit" name="submit" value="Cancel" class="btn margin">Mégse</button>
+				<button type="submit" name="submit" value="Cancel" class="btn btn-secondary margin">Mégse</button>
 			</div>    
 
 		  </fieldset>

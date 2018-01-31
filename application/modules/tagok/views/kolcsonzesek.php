@@ -28,6 +28,7 @@ $link = base_url()."tagok/kolcsonzes_create/$update_id";
 								<th>Kölcsönző</th>
 								<th>Könyv</th>
 								<th>Dátum</th>
+								<th>Visszahozta</th>
 								<th class="col-xs-1">Műveletek</th>
 							  </tr>
 						  </thead>   
@@ -38,11 +39,12 @@ $link = base_url()."tagok/kolcsonzes_create/$update_id";
 						  	$edit_url = base_url()."tagok/kolcsonzes_create/".$first_segment.'/'.$row->kolcsonzesek_id;
 						  ?>
 							<tr>
-								<td><?=$row->vezeteknev." ".$row->keresztnev?></td>
-								<td><?=$row->cim?></td>
-								<td><?=$row->datum?></td>
+								<td data-title="Kölcsönző"><?=$row->vezeteknev." ".$row->keresztnev?></td>
+								<td data-title="Könyv"><?=$row->cim?></td>
+								<td data-title="Dátum"><?=$row->datum?></td>
+								<td data-title="Visszahozta"><?=empty($row->visszahozta)?"-":$row->visszahozta?></td>
 				
-								<td class="center">
+								<td data-title="Műveletek" class="center">
 									<a class="btn btn-primary" href="<?= $edit_url ?>">
 										<i class="fa fa-fw fa-edit"></i>  
 									</a>

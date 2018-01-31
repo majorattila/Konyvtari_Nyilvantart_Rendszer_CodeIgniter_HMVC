@@ -113,7 +113,7 @@ function get_browser_name()
 }
 
 function _click_counter(){
-    $this->load->module('bongeszo_es_ipcim_lista');
+    $this->load->module('latogatok');
     $this->load->module('diagram_nezettseg');
 
     //get number of "latogatok"
@@ -129,7 +129,7 @@ function _click_counter(){
     $longitude = $this->get_longitude();
     $latitude = $this->get_latitude();
 
-    $query = $this->bongeszo_es_ipcim_lista->get_where_custom_with_triple_condition("ip",$ip,"longitude",$longitude,"latitude",$latitude);
+    $query = $this->latogatok->get_where_custom_with_triple_condition("ip",$ip,"longitude",$longitude,"latitude",$latitude);
     
     //if the currant user is new, we will increase the number of the visitors
     if($query->num_rows() == 0)
@@ -179,8 +179,8 @@ function _check_browser()
     $longitude = $this->get_longitude();
     $latitude = $this->get_latitude();
 
-    $this->load->module("bongeszo_es_ipcim_lista");
-    $data = $this->bongeszo_es_ipcim_lista->get_where_custom_with_triple_condition("ip",$ip,"longitude",$longitude,"latitude",$latitude);
+    $this->load->module("latogatok");
+    $data = $this->latogatok->get_where_custom_with_triple_condition("ip",$ip,"longitude",$longitude,"latitude",$latitude);
 
     $browser_data["ip"] = $ip;
     $browser_data["bongeszo"] = $browser;
@@ -203,12 +203,12 @@ function _check_browser()
 
         if($bool)
         {
-            $this->bongeszo_es_ipcim_lista->_insert($browser_data);            
+            $this->latogatok->_insert($browser_data);            
         }
     }
     else
     {
-        $this->bongeszo_es_ipcim_lista->_insert($browser_data);
+        $this->latogatok->_insert($browser_data);
     } 
 }
 

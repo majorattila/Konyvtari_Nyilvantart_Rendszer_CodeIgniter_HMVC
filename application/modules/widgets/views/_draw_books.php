@@ -7,5 +7,5 @@
 <div class="icon">
   <i class="ion ion-stats-bars"></i>
 </div>
-<a href="#" class="small-box-footer">Több info <i class="fa fa-arrow-circle-right"></i></a>
+<a href="<?=base_url()?>bibliografiak/manage/20" class="small-box-footer">Több info <i class="fa fa-arrow-circle-right"></i></a>
 </div>

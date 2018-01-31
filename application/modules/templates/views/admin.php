@@ -186,7 +186,7 @@ require_once('sort_this_code.php');
   td, 
   tr { 
     display: block !important; 
-  }
+  } 
  
   /* Hide table headers (but not display: none !important;, for accessibility) */
   thead tr { 
@@ -224,6 +224,36 @@ require_once('sort_this_code.php');
   Label the data
   */
   tbody td:before { content: attr(data-title) !important; }
+
+/*
+  #calendar table *{
+  display: initial !important;
+  position: initial !important;
+  border: none !important;
+  width: initial !important;
+  padding-left: initial !important;
+
+  border: none !important;
+  border-bottom: 0 !important; 
+  position: initial; !important;
+  padding-left: 0 !important; 
+  white-space: normal !important;
+  text-align:initial !important;
+  }
+
+  #calendar table{ display: table !important;}
+  #calendar thead{ display: table-header-group !important;}
+  #calendar tfoot{ display: table-footer-group !important;}
+  #calendar tbody{ display: table-column-group !important;}
+  #calendar tr{ display: table-row !important;}
+
+  #calendar tbody td:before {    
+  padding: 0 !important;
+  content: none !important;
+  width: initial !important;
+  }
+*/
+
 }
   
 </style>
@@ -535,7 +565,7 @@ require_once('sort_this_code.php');
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="<?=base_url()?>https://adminlte.io/docs" class="disabled"><i class="fa fa-sign-out"></i> <span>Kijelentkezés</span></a></li>
+            <li><a href="<?=base_url()?>fiok/logout"><i class="fa fa-sign-out"></i> <span>Kijelentkezés</span></a></li>
             <li><a href="<?=base_url()?>https://adminlte.io/docs" class="disabled"><i class="fa fa-book"></i> <span>Feltételek</span></a></li>
             <li><a href="<?=base_url()?>https://adminlte.io/docs" class="disabled"><i class="fa fa-question-circle"></i> <span>Segítség</span></a></li>
           </ul>

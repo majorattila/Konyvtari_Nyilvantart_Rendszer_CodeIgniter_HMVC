@@ -66,7 +66,8 @@ $first_segment = $this->uri->segment(1);
 				    </div>
 
 					<!--div class="row"><div class="form-group col-xs-12 col-md-10 col-lg-4 col-xl-3"> <label for="leltari_szam">Leltári szám</label> <input name="leltari_szam" value="<?=$leltari_szam ?>" type="text" class="form-control" id="leltari_szam" maxlength="13"> </div></div-->
-					<div class="row"><div class="form-group col-xs-12 col-md-10 col-lg-4 col-xl-3"> <label for="datum">Dátum</label> <input name="datum" value="<?=$datum ?>" type="date" class="form-control" id="datum"> </div></div><br/>
+					<div class="row"><div class="form-group col-xs-12 col-md-10 col-lg-4 col-xl-3"> <label for="datum">Dátum</label> <input name="datum" value="<?=$datum ?>" type="date" class="form-control" id="datum"> </div></div>
+					<div class="row"><div class="form-group col-xs-12 col-md-10 col-lg-4 col-xl-3"> <label for="visszahozta">Visszahozta</label> <input name="visszahozta" value="<?=$visszahozta ?>" type="date" class="form-control" id="visszahozta"> </div></div><br/>
 
 				<div class="form-actions">
 				  <button type="submit" class="btn btn-success margin" name="submit" value="Submit">Mentés</button>

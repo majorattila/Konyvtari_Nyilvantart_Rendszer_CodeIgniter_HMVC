@@ -1,12 +1,12 @@
-<div class="box box-solid bg-green-gradient">
-	<div class="box-header ui-sortable-handle" style="cursor: move;">
+<div id="calendar_widget" class="box box-solid bg-green-gradient">
+	<div class="box-header">
 	  <i class="fa fa-calendar"></i>
 
 	  <h3 class="box-title">Calendar</h3>
 	  <!-- tools box -->
 	  <div class="pull-right box-tools">
 	    <!-- button with a dropdown -->
-	    <div class="btn-group">
+	    <!--div class="btn-group">
 	      <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
 	        <i class="fa fa-bars"></i></button>
 	      <ul class="dropdown-menu pull-right" role="menu">
@@ -15,7 +15,7 @@
 	        <li class="divider"></li>
 	        <li><a href="#">View calendar</a></li>
 	      </ul>
-	    </div>
+	    </div-->
 	    <button type="button" class="btn btn-success btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
 	    </button>
 	    <button type="button" class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i>
@@ -29,6 +29,7 @@
 	  <div id="calendar" style="width: 100%"><div class="datepicker datepicker-inline"></div>
 	</div>
 	<!-- /.box-body -->
+	<?php /* ?>
 	<div class="box-footer text-black">
 	  <div class="row">
 	    <div class="col-sm-6">
@@ -71,4 +72,11 @@
 	  </div>
 	  <!-- /.row -->
 	</div>
+	<?php */ ?>
 </div>
+
+<!--script>
+	$(document).ready(function(){
+	$("#calendar_widget td:contains('<?= date('d') ?>')").addClass('active day');
+	});
+</script->

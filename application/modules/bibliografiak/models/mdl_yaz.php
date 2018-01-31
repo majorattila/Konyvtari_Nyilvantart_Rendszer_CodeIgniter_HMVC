@@ -38,7 +38,7 @@ class Mdl_yaz extends CI_Model
 		parent::__construct();
 	}
 
-	function fetch_data_from_library($server, $syntax, $ccl_query)
+	function fetch_data_from_library($server, $syntax, $ccl_query, $offset=0, $limit=20)
 	{
 		//CONNECT
 
@@ -190,7 +190,7 @@ class Mdl_yaz extends CI_Model
 
 		        $total_records = array();
 
-		        for ($i=0; $i < 20; $i++) { 
+		        for ($i=$offset; $i < $limit; $i++) { 
 
 			        $result = yaz_record($session, $i, "string");
 #			        print("<pre>".$result."</pre>");
