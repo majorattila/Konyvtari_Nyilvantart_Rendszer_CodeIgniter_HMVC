@@ -7,9 +7,12 @@ $second_segment = $this->uri->segment(2);
 <html>
 <head>
 
-<title>Bibliotéka</title>
+<title>KossuthKönyvtár<?=isset($oldal_cim)?' | '.$oldal_cim:''?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <!-- Tell the browser to be responsive to screen width -->
+<meta name="description" content="<?=isset($oldal_leiras)?$oldal_leiras:''?>">
+<meta name="keywords" content="<?=isset($oldal_kulcsszavak)?$oldal_kulcsszavak:''?>">
+<meta name="author" content="John Doe">
 <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   
 <link rel="icon" href="<?= base_url() ?>dist/img/llama_ico.png">
@@ -26,162 +29,32 @@ $second_segment = $this->uri->segment(2);
 <!--link href="https://fonts.googleapis.com/css?family=Expletus+Sans" rel="stylesheet"-->
 <!--link href="https://fonts.googleapis.com/css?family=Fugaz+One" rel="stylesheet"-->
 
+<link rel="stylesheet" href="<?=base_url()?>dist/css/public.css">
 <style>
-.dropdown-menu li a{
-  cursor: pointer;
-}
-.required{
-  font-size: 15pt;
-  color: #007cff;
-}
-.required:after{
-  content: "*";
-}
-.reg_form_box{
-  border: 1px solid #cccccc;
-  margin-top: 25px !important;
-  padding: 9px;
-}
-footer{
-position:relative !important;
-float:left;
-}
-@media only screen and (max-width: 768px) {
-  /*
-  .container{
-    padding:1px;
-    min-height:auto !important;
-  }
-  */
-  body{
-    background-color: #f5f6fb;
-    overflow-x: hidden;
-    background-image: none !important;
-  }
-  h1{
-    font-size:20pt;
-    margin-left:10px;
-  }
-  #reg_panel{
-    /*top: -41px;*/
-    padding: 1px;
-    width:-webkit-fill-available;
-    margin-left:-16px !important;
-    margin-right: -17px !important;
-  }
-  /*
-  .panel-body{
-    padding:1px;
-  }
-  */
-  .dropdown-toggle{
-    width: 100% !important;
-  }
-  .dropdown-menu{
-    width: -webkit-fill-available;
-  }
-  footer{
-    float:none;
-    margin-top: 0 !important;
-    border-top: 1px solid #b5b5b5;    
-    background-color: white;
-    height: 25px;    
-  }
-  footer p{
-    line-height: 37px;
-  }
-}
-/*
   @font-face {
-  font-family: "PT Serif Caption";
-  font-style: normal;
-  font-weight: 400;
-  src: local("Cambria"), local("PT Serif Caption"), local("PTSerif-Caption"), url(https://themes.googleusercontent.com/static/fonts/ptserifcaption/v6/7xkFOeTxxO1GMC1suOUYWWhBabBbEjGd1iRmpyoZukE.woff) format('woff');
-}
-@font-face {
-  font-family: "Open Sans Bold";
+  font-family: Montserrat-Medium;
   font-style: normal;
   font-weight: 700;
-  src: local("Segoe UI Bold"), local("Open Sans Bold"), local("OpenSans-Bold"), url(https://themes.googleusercontent.com/static/fonts/opensans/v8/k3k702ZOKiLJc3WVjuplzJ1r3JsPcQLi8jytr04NNhU.woff) format('woff');
-}
-*/
-@font-face {
-  font-family: "Open Sans";
-  font-style: normal;
-  font-weight: 400;
-  src: local("Segoe UI"), local("Open Sans"), local("OpenSans"), url(https://themes.googleusercontent.com/static/fonts/opensans/v8/K88pR3goAWT7BTt32Z01mz8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+  src: url("<?=base_url()?>dist/fonts/otf/Montserrat-Medium.otf") format("otf"), url("<?=base_url()?>dist/fonts/ttf/Montserrat-Medium.ttf") format("ttf"), url("<?=base_url()?>dist/fonts/webfonts/Montserrat-Medium.woff") format("woff"), url("<?=base_url()?>dist/fonts/webfonts/Montserrat-Medium.woff2") format("otf"), url() format('otf');
 }
 @font-face {
-  font-family: "Open Sans Light";
+  font-family: Montserrat-Regular;
   font-style: normal;
-  font-weight: 300;
-  src: local("Segoe UI Light"), local("Open Sans Light"), local("OpenSans-Light"), url(https://themes.googleusercontent.com/static/fonts/opensans/v8/DXI1ORHCpsQm3Vp6mXoaTZ1r3JsPcQLi8jytr04NNhU.woff) format('woff');
+  font-weight: 700;
+  src: url("<?=base_url()?>dist/fonts/otf/Montserrat-Regular.otf") format("otf"), url("<?=base_url()?>dist/fonts/ttf/Montserrat-Regular.ttf") format("ttf"), url("<?=base_url()?>dist/fonts/webfonts/Montserrat-Regular.woff") format("woff"), url("<?=base_url()?>dist/fonts/webfonts/Montserrat-Regular.woff2") format("otf"), url() format('otf');
 }
-nav{
-  border: 0px !important;
-  border-radius: 0px !important;
-  background-color: #1ba1e2 !important; /*#8BC34A*/
-}
-nav a{
-    color: #fff !important;
-    font-family: 'Open Sans Light';
-}
-nav .dropdown-menu>li>a{  
-  line-height: 35px;
-}
-.navbar-nav>li>a {
-  line-height: 30px !important;
-}
-.navbar-brand {
-  line-height: 30px !important;
-  height: auto !important;
-}
-nav a:hover{
-  background-color:#00AAFD !important;
-}
-nav button{
-  background-color:#fff !important;
-}
-.navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover {
-    color: #555;
-    background-color: #00AAFD !important;
-}
-footer{
-  /*
-  position: absolute;
-  top: 96%;
-  */
-  margin-top:100px;
-  text-align: center;
-}
-.pink{
-    background-color: #ff0081 !important;
-    font-weight: bold;
-    font-size: 16pt;
-    color: #fff !important;
-}
-.clickable-row{
-  cursor:pointer;
-}
-.navbar li {
-    margin: 0 0 0 0 !important;
-}
-
-
-
-.btn-link:focus, a:focus,
-.btn-link:active:focus, a:active:focus{
-    outline:none;
-}
-
-.btn-link:focus, a:focus{
-    text-decoration:none;
-}
-.btn-link:hover, a:hover{
-    text-decoration:underline;
+@media (min-width: 800px){
+  body{    
+    height: 100%;
+    /*background: linear-gradient(to bottom right, #7f7f7f 0%, #2b2b2b 100%);*/
+    background-image: url('<?=base_url()?>dist/img/background/main_background.jpg');  
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+  }  
 }
 </style>
-
 </head>
 <body>
 
@@ -189,8 +62,13 @@ footer{
   echo Modules::run('navbar/draw_navbar_to_top');
 ?>
 
-<div class="container" style="min-height: 750px;">
-
+<!--div class="container" style="min-height: 750px;"-->
+<div class="container" style="
+    min-height: 750px; /*750px*/
+    padding-top: 20px;
+    padding-right: 20px;
+    padding-left: 20px;
+  ">
 <?php
 
   /*
@@ -201,7 +79,7 @@ footer{
 
 
   if(isset($oldal_tartalom)){
-    echo nl2br($oldal_tartalom);
+    echo $oldal_tartalom; //nl2br
 
     if(!isset($oldal_url)) {
       $oldal_url = 'homepage';
@@ -209,6 +87,8 @@ footer{
 
     if($oldal_url==""){
       require_once('kezdolap_tartalma.php');
+    }else if($oldal_url=="rolunk"){      
+      require_once('rolunk.php');
     }else{
       //load up contact form
       echo Modules::run('contactus/_draw_form');
@@ -217,11 +97,13 @@ footer{
     $this->load->view($view_module.'/'.$view_file);
   }
 ?>
-
 </div>
-<footer>
-  <p>&nbsp;&nbsp;&nbsp;Copyright &copy; 2018 Created By Major Attila</p>
+
+
+<footer class="container">
+  <p><span class="hidden-xs">&nbsp;&nbsp;&nbsp;Copyright © 2018 </span>Created By Major Attila</p>
 </footer>
+
 
 <!-- jQuery 3 -->
 <script src="<?=base_url()?>bower_components/jquery/dist/jquery.min.js"></script>
@@ -236,6 +118,43 @@ footer{
     var new_oldal_url = $(this).data('url');
     window.location = new_oldal_url;
   });
+
+  $(document).ready(function(){
+    $(".container:has(#reg_panel)").css({
+    'background-color' : '#FFFFFF',
+    'background-image' : 'url(<?=base_url()?>dist/img/background/danger-pattern.png)',
+    'background-repeat' : 'repeat-x',
+    'background-attachment' : 'fixed',
+    'background-position' : 'top left'
+    });
+  });
+
+/*
+(function ($) {
+  "use strict";
+  $('.column100').on('mouseover',function(){
+    var table1 = $(this).parent().parent().parent();
+    var table2 = $(this).parent().parent();
+    var verTable = $(table1).data('vertable')+"";
+    var column = $(this).data('column') + ""; 
+
+    $(table2).find("."+column).addClass('hov-column-'+ verTable);
+    $(table1).find(".row100.head ."+column).addClass('hov-column-head-'+ verTable);
+  });
+
+  $('.column100').on('mouseout',function(){
+    var table1 = $(this).parent().parent().parent();
+    var table2 = $(this).parent().parent();
+    var verTable = $(table1).data('vertable')+"";
+    var column = $(this).data('column') + ""; 
+
+    $(table2).find("."+column).removeClass('hov-column-'+ verTable);
+    $(table1).find(".row100.head ."+column).removeClass('hov-column-head-'+ verTable);
+  });
+    
+
+})(jQuery);
+*/
 </script>
 
 </body>

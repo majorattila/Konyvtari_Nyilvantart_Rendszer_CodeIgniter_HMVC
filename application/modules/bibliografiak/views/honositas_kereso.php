@@ -1,3 +1,6 @@
+<?php 
+$this->load->module('bibliografiak');
+?>
 <!DOCTYPE html>
 <html lang="hun">
 <head>
@@ -51,7 +54,12 @@
  <?php 	
  	if(!empty($row) && !empty($row['titel'])){ 
 	 	//language,isbn,issn,author,titel,edition,pub_date,extent,series,editor
+	 	/*
 	 	$arr = array("cim" => (isset($row['titel'])?iconv(mb_detect_encoding($row['titel'], mb_detect_order(), true), "UTF-8", $row['titel']):''), "szerzok" => (isset($row['author'])?iconv(mb_detect_encoding($row['author'], mb_detect_order(), true), "UTF-8", $row['author']):''), "datum" => (isset($row['pub_date'])?iconv(mb_detect_encoding($row['pub_date'], mb_detect_order(), true), "UTF-8", $row['pub_date']):''), "isbn" => (isset($row['isbn'])?iconv(mb_detect_encoding($row['isbn'], mb_detect_order(), true), "UTF-8", $row['isbn']):''), "nyelvek" => (isset($row['language'])?iconv(mb_detect_encoding($row['language'], mb_detect_order(), true), "UTF-8", $row['language']):''), "nemzetkozi_azonosito" => (isset($row['national_no'])?iconv(mb_detect_encoding($row['national_no'], mb_detect_order(), true), "UTF-8", $row['national_no']):''), "tipusok" => (isset($row['genre'])?iconv(mb_detect_encoding($row['genre'], mb_detect_order(), true), "UTF-8", $row['genre']):''), "eto" => (isset($row['eto'])?iconv(mb_detect_encoding($row['eto'], mb_detect_order(), true), "UTF-8", $row['eto']):''), "kiadok" => (isset($row['publisher'])?iconv(mb_detect_encoding($row['publisher'], mb_detect_order(), true), "UTF-8", $row['publisher']):'')); 
+	 	*/		 	
+		$arr =  array("cim" => $this->bibliografiak->json_string_encode((isset($row['titel'])?iconv(mb_detect_encoding($row['titel'], mb_detect_order(), true), "UTF-8", $row['titel']):'')),"szerzok" => $this->bibliografiak->json_string_encode((isset($row['author'])?iconv(mb_detect_encoding($row['author'], mb_detect_order(), true), "UTF-8", $row['author']):'')),"megjelenes" => $this->bibliografiak->json_string_encode((isset($row['pub_date'])?iconv(mb_detect_encoding($row['pub_date'], mb_detect_order(), true), "UTF-8", $row['pub_date']):'')), "terjedelem" => $this->bibliografiak->json_string_encode((isset($row['extent'])?iconv(mb_detect_encoding($row['extent'], mb_detect_order(), true), "UTF-8",$row['extent']):'')), "datum" => date('Y. m. d'), "dok_stat" => 'n',"beszerz_mod" => 'v',"kotes" => $this->bibliografiak->json_string_encode((isset($row['quality_note'])?iconv(mb_detect_encoding($row['quality_note'], mb_detect_order(), true), "UTF-8",$row['quality_note']):'')), "targyszavak" => $this->bibliografiak->json_string_encode((isset($row['author'])?iconv(mb_detect_encoding($row['author'], mb_detect_order(), true), "UTF-8", $row['author']):'')).';'.$this->bibliografiak->json_string_encode((isset($row['titel'])?iconv(mb_detect_encoding($row['titel'], mb_detect_order(), true), "UTF-8", $row['titel']):'')),"peldany_megj" => $this->bibliografiak->json_string_encode((isset($row['diss_note'])?iconv(mb_detect_encoding($row['diss_note'], mb_detect_order(), true), "UTF-8",$row['diss_note']):'')), "feltuntetett_ar" => $this->bibliografiak->json_string_encode((isset($row['trade_price'])?iconv(mb_detect_encoding($row['trade_price'], mb_detect_order(), true), "UTF-8",$row['trade_price']):'')), "isbn" => $this->bibliografiak->json_string_encode((isset($row['isbn'])?iconv(mb_detect_encoding($row['isbn'], mb_detect_order(), true), "UTF-8", $row['isbn']):'')),"nyelvek" => $this->bibliografiak->json_string_encode((isset($row['language'])?iconv(mb_detect_encoding($row['language'], mb_detect_order(), true), "UTF-8", $row['language']):'')),"nemzetkozi_azonosito" => $this->bibliografiak->json_string_encode((isset($row['national_no'])?iconv(mb_detect_encoding($row['national_no'], mb_detect_order(), true), "UTF-8", $row['national_no']):'')),"gyujtemenyek" => $this->bibliografiak->json_string_encode((isset($row['genre'])?iconv(mb_detect_encoding($row['genre'], mb_detect_order(), true), "UTF-8", $row['genre']):'')),"eto" => $this->bibliografiak->json_string_encode((isset($row['eto'])?iconv(mb_detect_encoding($row['eto'], mb_detect_order(), true), "UTF-8", $row['eto']):'')),"kiadok" => $this->bibliografiak->json_string_encode((isset($row['publisher'])?iconv(mb_detect_encoding($row['publisher'], mb_detect_order(), true), "UTF-8", $row['publisher']):''))
+		); 
+
 	 	$data = str_replace('"','\'',json_encode($arr));
  ?>
 <tr class="clickable-row" data-source="<?=$row['data']?>" data-array="<?=$data?>">
@@ -70,6 +78,7 @@
 <div class="col-xs-6">
 	<a id="export" class="btn btn-lg btn-primary" href="javascript:void(0);" disabled="disabled">Tétel export</a>
 	<button type="button" onclick="self.close()" class="btn btn-lg">Mégse</button><br/><br/>
+
 	<pre class="content" style="height: 500px;">
 		
 	</pre>

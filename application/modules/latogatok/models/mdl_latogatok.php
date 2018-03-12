@@ -40,11 +40,12 @@ function get_where_custom($col, $value) {
     return $query;
 }
 
-function get_where_custom_with_triple_condition($col1, $value1, $col2, $value2, $col3, $value3) {
+function get_where_custom_with_four_condition($col1, $value1, $col2, $value2, $col3, $value3, $col4, $value4) {
     $table = $this->get_table();
     $this->db->where($col1, $value1);
     $this->db->where($col2, $value2);
     $this->db->where($col3, $value3);
+    $this->db->where($col4, $value4);
     $query=$this->db->get($table);
     return $query;
 }

@@ -5,14 +5,13 @@ class Mail_service extends MX_Controller
 function __construct() {
 parent::__construct();
 }
-
 function config()
 {
     $config['protocol'] = 'smtp';
     $config['smtp_host'] = 'ssl://smtp.gmail.com';
     $config['smtp_port'] = '465';
     $config['smtp_user'] = 'attilamajor1997@gmail.com';
-    $config['smtp_pass'] = 'QTSVTFGgyB7';  //sender's password
+    $config['smtp_pass'] = 'ryEPNfgj01ooQ7zy';  //sender's password
     $config['mailtype'] = 'html';
     $config['charset'] = 'utf-8'; //iso-8859-1
     $config['wordwrap'] = 'TRUE';
@@ -20,19 +19,36 @@ function config()
     return $config;  
 }
 
-function send_email()
+function send_email_for_everyone()
+{
+    $this->load->module('hirlevelek');
+    $query = $this->hirlevelek->get_where_custom('aktiv','Y');
+
+    foreach ($query->result() as $row) {
+        $this->send_email($row->email);
+    }
+
+    $this->load->module('felhasznalok');
+    $query = $this->felhasznalok->get_where_custom('statusz','aktiv');
+
+    foreach ($query->result() as $row) {
+        $this->send_email($row->email);
+    }
+}
+
+function send_email($email = null)
 {
     $config = $this->config();
     $this->load->library('email', $config);
 
     $this->email->initialize($config);
 
-    $emailfrom = $this->session->userdata('email');
-    $emailto = $this->input->post('emailto', TRUE);
+    $emailfrom = 'attilamajor1997@gmail.com'; //$this->session->userdata('email');
+    $emailto = empty($email)?$this->input->post('emailto', TRUE):$email;
     $subject = $this->input->post('subject', TRUE);
     $message = $this->input->post('message', TRUE);
 
-    $this->email->from($emailfrom, 'HACKER');
+    $this->email->from($emailfrom, 'KossuthKönyvtár');
     $this->email->to($emailto); 
 
     $this->email->subject($subject);
@@ -66,7 +82,7 @@ function reg_mail($email,$code)
     <html>
     ";
 
-    $this->email->from($emailfrom, 'robot');
+    $this->email->from($emailfrom, 'KossuthKönyvtár');
     $this->email->to($emailto); 
 
     $this->email->subject($subject);
@@ -78,6 +94,24 @@ function reg_mail($email,$code)
 
     //$this->load->view('email_view');
 
+}
+
+function send_custom($emailto, $subject, $message)
+{
+    $config = $this->config();
+    $this->load->library('email', $config);
+
+    $this->email->initialize($config);
+
+    $emailfrom = "reg17@sys.com";
+
+    $this->email->from($emailfrom, 'KossuthKönyvtár');
+    $this->email->to($emailto); 
+
+    $this->email->subject($subject);
+    $this->email->message($message);  
+
+    $this->email->send();
 }
 
 }

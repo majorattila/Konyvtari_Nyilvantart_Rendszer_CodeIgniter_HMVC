@@ -716,8 +716,22 @@ function manage()
 
     $limit = TRUE;
 
+    $keres = $this->site_security->prevent_injection($this->input->get('keres',TRUE));
+    $rendez = $this->input->get('rendez',TRUE);
 
-    $query ="SELECT * FROM biblioteka.tagok_view ORDER BY tagsag_kezdete";
+    if(!empty($rendez) && in_array($rendez, array('nev','olvasojegy', 'vezeteknev', 'keresztnev', 'lakcim', 'email', 'mettol_ervenyes', 'meddig_ervenyes'))){
+        $order_by = $rendez;
+    }else{
+        $order_by = 'vezeteknev';
+    }
+
+    $where = empty($keres)?"":"WHERE lower(nev) LIKE lower('%$keres%') OR lower(olvasojegy) LIKE lower('%$keres%') OR lower(vezeteknev) LIKE lower('%$keres%') OR lower(keresztnev) LIKE lower('%$keres%') OR lower(lakcim) LIKE lower('%$keres%') OR lower(email) LIKE lower('%$keres%') OR lower(mettol_ervenyes) LIKE lower('%$keres%') OR lower(meddig_ervenyes) LIKE lower('%$keres%')";
+        
+    $query ="SELECT * FROM biblioteka.tagok_view $where ORDER BY $order_by";
+
+    $data['rendez'] = $rendez;
+    $data['keres'] = $keres;
+
     $data['result_number'] = $this->_custom_query($query)->num_rows();
 
     $mysql_query = $this->_generate_mysql_query($query, $oldal_szam, $limit);
@@ -827,67 +841,6 @@ function _custom_query($mysql_query)
     $this->load->model('mdl_Tagok');
     $query = $this->mdl_Tagok->_custom_query($mysql_query);
     return $query;
-}
-
-
-function autogen()
-{
-    $mysql_query = "SHOW COLUMNS FROM tagok_view";
-    $query = $this->_custom_query($mysql_query);
-
-    
-    foreach ($query->result() as $row) {
-        $column_name = $row->Field;
-        //echo $column_name."<br>";
-        if($column_name != "id")
-        {
-            //echo $column_name."<br>";
-            echo '$data[\''.$column_name.'\'] = $this->input->post(\''.$column_name.'\', TRUE);<br>';
-        }
-    }
-
-    echo "<hr>";
-
-    foreach ($query->result() as $row) {
-        $column_name = $row->Field;
-        //echo $column_name."<br>";
-        if($column_name != "id")
-        {
-            //echo $column_name."<br>";
-            //echo '$data[\''.$column_name.'\'] = $this->input->post(\''.$column_name.'\', TRUE);<br>';
-            echo '$data[\''.$column_name.'\'] = $row->'.$column_name.';<br>';
-        }
-    }
-
-    echo "<hr>";
-
-
-    foreach ($query->result() as $row) {
-        $column_name = $row->Field;
-        //echo $column_name."<br>";
-        if($column_name != "id")
-        {
-
-$var = '<div class="control-group">
-  <label class="control-label" for="typeahead">'.ucfirst($column_name).'</label>
-  <div class="controls">
-    <input type="text" class="span6" name="'.$column_name.'" value="<?=$'.$column_name.' ?>">
-  </div>
-</div>';
-
-$var = '<div class="row"><div class="form-group col-xs-3">
-<label for="'.$column_name.'">'.ucfirst($column_name).'</label>
-<input name="'.$column_name.'" value="<?=$'.$column_name.' ?>" type="text" class="form-control" id="'.$column_name.'">
-</div></div>';
-
-echo htmlentities($var);
-
-echo "<br>";
-
-        }
-    }
-
-
 }
 
 }

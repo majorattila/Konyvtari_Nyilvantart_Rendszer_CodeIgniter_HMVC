@@ -11,6 +11,23 @@ function get_table() {
     return $table;
 }
 
+function _truncate(){
+    $table = $this->get_table();
+    $this->_set_foreign_key_check_off();
+    $this->db->truncate($table);
+    $this->db->truncate("nyilvantartas");
+    $this->_set_foreign_key_check_on();
+}
+
+function _set_foreign_key_check_off(){
+    $this->_custom_query("SET FOREIGN_KEY_CHECKS = 0");    
+}
+
+function _set_foreign_key_check_on(){
+    $this->_custom_query("SET FOREIGN_KEY_CHECKS = 1"); 
+}
+
+
 function get($order_by){
     $table = $this->get_table();
     $this->db->order_by($order_by);

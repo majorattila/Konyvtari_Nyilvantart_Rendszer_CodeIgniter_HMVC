@@ -26,7 +26,7 @@ require_once('sort_this_code.php');
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="<?=base_url()?>dist/css/skins/_all-skins.min.css">
   <!-- Morris chart -->
-  <link rel="stylesheet" href="<?=base_url()?>bower_components/morris.js/morris.css">  
+  <!--link rel="stylesheet" href="<?=base_url()?>bower_components/morris.js/morris.css"-->  
   <!-- jvectormap -->
   <link rel="stylesheet" href="<?=base_url()?>bower_components/jvectormap/jquery-jvectormap.css">
   <!-- Date Picker -->
@@ -65,13 +65,56 @@ require_once('sort_this_code.php');
   <link rel="stylesheet" href="<?=base_url()?>https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 -->
 
-<style> 
+<style>
+  /*
+  .form_fix{
+    height:34px !important;
+  }
+  */
+  
+  .tooltip-inner {
+    color: #000;
+    background-color: #D7CB10;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align:left;
+    max-width: 350px;
+    /* If max-width does not work, try using width instead */
+    width: 350px; 
+  }
+  .dotted_underline:hover{    
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
+  cursor: default;
+  }
+  .required_field{
+  font-weight: bold;
+  background-color: #efbaba;
+  }
+  .required{
+  font-size: 15pt;
+  color: #007cff;
+  }
+  .required:after{
+  content: "*";
+  }
+
+  .btn_rendez{
+    width:81.25px !important;
+  }
+  .btn-secondary{
+    color: #000;
+  }
   *{
     word-wrap:break-word;
   }
   body{    
     overflow-y: scroll;
+    margin-bottom:-199px;
   }  
+  html, body{    
+    height:-webkit-fill-available !important;
+  }
   .affix {
       position: static;
       width: 100%;
@@ -215,7 +258,7 @@ require_once('sort_this_code.php');
     left: 6px !important;
     width: 45% !important; 
     padding-right: 10px !important; 
-    white-space: nowrap !important;
+    white-space: break-word !important; /*nowrap*/
     text-align:left !important;
     font-weight: bold !important;
   }
@@ -264,7 +307,7 @@ require_once('sort_this_code.php');
 
   <header class="main-header">
     <!-- Logo -->
-    <a href="<?=base_url()?>index2.html" class="logo">
+    <a href="<?=base_url()?>/dashboard/home" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>L</b>2</span>
       <!-- logo for regular state and mobile devices -->
@@ -279,6 +322,7 @@ require_once('sort_this_code.php');
 
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
+          <?php /* ?>
           <!-- Messages: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -289,7 +333,7 @@ require_once('sort_this_code.php');
               <li class="header">You have 4 messages</li>
               <li>
                 <!-- inner menu: contains the actual data -->
-                <ul class="menu">
+                <ul class="menu">                  
                   <li><!-- start message -->
                     <a href="#">
                       <div class="pull-left">
@@ -398,7 +442,7 @@ require_once('sort_this_code.php');
               <li class="footer"><a href="#">View all</a></li>
             </ul>
           </li>
-          <!-- Tasks: style can be found in dropdown.less -->
+          <!-- Tasks: style can be found in dropdown.less -->          
           <li class="dropdown tasks-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <i class="fa fa-flag-o"></i>
@@ -476,6 +520,7 @@ require_once('sort_this_code.php');
               </li>
             </ul>
           </li>
+          <?php */ ?>
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -493,7 +538,7 @@ require_once('sort_this_code.php');
                 </p>
               </li>
               <!-- Menu Body -->
-              <li class="user-body">
+              <!--li class="user-body">
                 <div class="row">
                   <div class="col-xs-4 text-center">
                     <a href="#">Előzmények</a>
@@ -504,16 +549,27 @@ require_once('sort_this_code.php');
                   <div class="col-xs-4 text-center">
                     <a href="#">Friends</a>
                   </div>
+                </div-->
+
+                <li class="user-body">
+                <div class="row">
+                  <div class="col-xs-6 text-center">
+                    <a href="<?= base_url() ?>bibliografiak/hosszabbit">Kölcsönzések</a>
+                  </div>
+                  <div class="col-xs-6 text-center">
+                    <a href="<?= base_url() ?>bibliografiak/view/kosar_tartalma">Előfoglalások</a>
+                  </div>
                 </div>
+
                 <!-- /.row -->
               </li>
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="<?=base_url()?>fiok/profil" class="btn btn-default btn-flat">Profile</a>
+                  <a href="<?=base_url()?>fiok/profil/admin" class="btn btn-default btn-flat">Profil</a>
                 </div>
                 <div class="pull-right">
-                  <a href="<?=base_url()?>fiok/logout" class="btn btn-default btn-flat">Sign out</a>
+                  <a href="<?=base_url()?>fiok/logout" class="btn btn-default btn-flat">Kilépés</a>
                 </div>
               </li>
             </ul>
@@ -541,11 +597,12 @@ require_once('sort_this_code.php');
         </div>
         <div class="pull-left info">
           <p><?= $lastname." ".$firstname ?></p>
-          <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+          <p class="small"><i><?= $username ?></i></p>
+          <!--a href="#"><i class="fa fa-circle text-success"></i> Online</a-->
         </div>
-      </div>
+      </div><br/>
       <!-- search form -->
-      <form action="#" method="get" class="sidebar-form">
+      <!--form action="#" method="get" class="sidebar-form">
         <div class="input-group">
           <input type="text" name="q" class="form-control" placeholder="Search...">
           <span class="input-group-btn">
@@ -553,7 +610,7 @@ require_once('sort_this_code.php');
                 </button>
               </span>
         </div>
-      </form>
+      </form-->
       <!-- /.search form -->
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
@@ -566,8 +623,8 @@ require_once('sort_this_code.php');
           </a>
           <ul class="treeview-menu">
             <li><a href="<?=base_url()?>fiok/logout"><i class="fa fa-sign-out"></i> <span>Kijelentkezés</span></a></li>
-            <li><a href="<?=base_url()?>https://adminlte.io/docs" class="disabled"><i class="fa fa-book"></i> <span>Feltételek</span></a></li>
-            <li><a href="<?=base_url()?>https://adminlte.io/docs" class="disabled"><i class="fa fa-question-circle"></i> <span>Segítség</span></a></li>
+            <li><a href="<?=base_url()?>feltetelek" target="_blank"><i class="fa fa-book"></i> <span>Feltételek</span></a></li>
+            <!--li><a href="<?=base_url()?>https://adminlte.io/docs" class="disabled"><i class="fa fa-question-circle"></i> <span>Segítség</span></a></li-->
           </ul>
         </li>
         <li class="treeview">
@@ -579,8 +636,8 @@ require_once('sort_this_code.php');
           </a>
           <ul class="treeview-menu">
             <li><a href="<?=base_url()?>dashboard/home"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
-            <li><a href="<?=base_url()?>https://adminlte.io/docs" class="disabled"><i class="fa fa-search"></i> <span>Tagkereső</span></a></li>
-            <li><a href="<?=base_url()?>https://adminlte.io/docs" class="disabled"><i class="fa fa-check-circle"></i> <span>Becsekkolás</span></a></li>
+            <!--li><a href="<?=base_url()?>https://adminlte.io/docs" class="disabled"><i class="fa fa-search"></i> <span>Tagkereső</span></a></li>
+            <li><a href="<?=base_url()?>https://adminlte.io/docs" class="disabled"><i class="fa fa-check-circle"></i> <span>Becsekkolás</span></a></li-->
             <li><a href="<?=base_url()?>tagok/manage/20"><i class="fa fa-user-plus"></i> <span>Könyvtári tagok</span></a></li>
             <li><a href="<?=base_url()?>felhasznalok/manage/20"><i class="fa fa-user-plus"></i> <span>Felhasználók</span></a></li>
           </ul>
@@ -593,22 +650,37 @@ require_once('sort_this_code.php');
             </span>
           </a>
           <ul class="treeview-menu">
-           <li><a href="<?=base_url()?>katalogus/kereses"><i class="fa fa-search"></i> <span>Keresés</span></a></li>
+           <li><a href="<?=base_url()?>bibliografiak/admin_search"><i class="fa fa-search"></i> <span>Keresés</span></a></li>
            <li><a href="<?=base_url()?>bibliografiak/manage/20"><i class="fa fa-book"></i> <span>Bibliográfiák</span></a></li>
-             <li><a href="<?=base_url()?>konyvtarak/manage/20"><i class="fa fa-file-o"></i> <span>Könyvtárak</span></a></li>
-             <li><a href="<?=base_url()?>termek/manage/20"><i class="fa fa-file-o"></i> <span>Termek</span></a></li>
-             <li><a href="<?=base_url()?>szerzok/manage/20"><i class="fa fa-file-o"></i> <span>Szerzők</span></a></li>
-             <li><a href="<?=base_url()?>nyelvek/manage/20"><i class="fa fa-file-o"></i> <span>Nyelvek</span></a></li>
-             <li><a href="<?=base_url()?>tipusok/manage/20"><i class="fa fa-file-o"></i> <span>Dokumentum típusok</span></a></li>
-             <li><a href="<?=base_url()?>gyujtemenyek/manage/20"><i class="fa fa-file-o"></i> <span>Gyűjtemények</span></a></li>
-             <li><a href="<?=base_url()?>kiadok/manage/20"><i class="fa fa-file-o"></i> <span>Kiadók</span></a></li>
+             <li><a href="<?=base_url()?>konyvtarak/manage/20"><i class="fa fa-bank"></i> <span>Könyvtárak</span></a></li> 
+             <li><a href="<?=base_url()?>z3950/manage/20"><i class="fa fa-database"></i> <span>z3950</span></a></li>             
 <?php /* ?>
              <li><a href="<?=base_url()?>https://adminlte.io/docs" class="disabled"><i class="fa fa-file-o"></i> <span>Kölcsönzői jogok</span></a></li>
              <li><a href="<?=base_url()?>https://adminlte.io/docs" class="disabled"><i class="fa fa-file-o"></i> <span>Könyvtárbeállítások</span></a></li>
 <?php */ ?>
           </ul>
         </li>
+
         <li class="treeview">
+          <a href="#">
+            <i class="fa fa-list-alt"></i> <span>RÉSZLET ADATOK</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li><a href="<?=base_url()?>termek/manage/20"><i class="fa fa-pencil"></i> <span>Termek</span></a></li>
+             <li><a href="<?=base_url()?>szerzok/manage/20"><i class="fa fa-pencil"></i> <span>Szerzők</span></a></li>
+             <li><a href="<?=base_url()?>kiadok/manage/20"><i class="fa fa-pencil"></i> <span>Kiadók</span></a></li>
+             <li><a href="<?=base_url()?>nyelvek/manage/20"><i class="fa fa-pencil"></i> <span>Nyelvek</span></a></li>
+             <li><a href="<?=base_url()?>tipusok/manage/20"><i class="fa fa-pencil"></i> <span>Típusok</span></a></li>
+             <li><a href="<?=base_url()?>gyujtemenyek/manage/20"><i class="fa fa-pencil"></i> <span>Gyűjtemények</span></a></li>
+          </ul>
+        </li>
+
+
+
+        <!--li class="treeview">
           <a href="#">
             <i class="fa fa-key"></i> <span>ADMIN</span>
             <span class="pull-right-container">
@@ -616,12 +688,13 @@ require_once('sort_this_code.php');
             </span>
           </a>
           <ul class="treeview-menu">
-             <li><a href="<?=base_url()?>backup/manage/20"><i class="fa fa-file-o"></i> <span>Backup</span></a></li>
+             <li><a href="<?=base_url()?>backup/manage/20"><i class="fa fa-undo"></i> <span>Backup</span></a></li>
              <li><a href="<?=base_url()?>https://adminlte.io/docs" class="disabled"><i class="fa fa-file-o"></i> <span>Összegzés</span></a></li>
              <li><a href="<?=base_url()?>https://adminlte.io/docs" class="disabled"><i class="fa fa-file-o"></i> <span>Személyzet</span></a></li>             
           </ul>
-        </li>
-        <li class="treeview">
+        </li-->
+
+        <!--li class="treeview">
           <a href="#">
             <i class="fa fa-book"></i> <span>JELENTÉSEK</span>
             <span class="pull-right-container">
@@ -631,7 +704,7 @@ require_once('sort_this_code.php');
           <ul class="treeview-menu">
             <li><a href="<?=base_url()?>https://adminlte.io/docs" class="disabled"><i class="fa fa-file-o"></i> <span>Jelentési lista</span></a></li>
           </ul>
-        </li>
+        </li-->
         <li class="treeview">
           <a href="#">
             <i class="fa fa-globe"></i> <span>OLDALAK</span>
@@ -640,9 +713,9 @@ require_once('sort_this_code.php');
             </span>
           </a>
           <ul class="treeview-menu">
+            <li><a href="<?=base_url()?>backup/manage/20"><i class="fa fa-undo"></i> <span>Backup</span></a></li>
             <li><a href="<?=base_url()?>hirek/manage"><i class="fa fa-newspaper-o"></i> <span>Hírek</span></a></li>
-            <li><a href="<?=base_url()?>https://adminlte.io/docs" class="disabled"><i class="fa fa-share-square"></i> <span>Hírlevél</span></a></li>
-            <li><a href="<?=base_url()?>navbar/manage"><i class="fa fa-file-o"></i> <span>Menüpontok</span></a></li>
+            <li><a href="<?=base_url()?>hirlevelek/korlevel"><i class="fa fa-share-square"></i> <span>Hírlevél</span></a></li>
             <li><a href="<?=base_url()?>weboldalak/manage/20"><i class="fa fa-wrench"></i> <span>Oldalkezelés (cms)</span></a></li>
           </ul>
         </li>
@@ -888,8 +961,8 @@ require_once('sort_this_code.php');
 <!-- Bootstrap 3.3.7 -->
 <script src="<?=base_url()?>bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- Morris.js charts -->
-<script src="<?=base_url()?>bower_components/raphael/raphael.min.js"></script>
-<script src="<?=base_url()?>bower_components/morris.js/morris.min.js"></script>
+<!--script src="<?=base_url()?>bower_components/raphael/raphael.min.js"></script-->
+<!--script src="<?=base_url()?>bower_components/morris.js/morris.min.js"></script-->
 <!-- ChartJS -->
 <script src="<?=base_url()?>bower_components/Chart.js/Chart.js"></script>
 <!-- Sparkline -->
@@ -913,9 +986,38 @@ require_once('sort_this_code.php');
 <!-- AdminLTE App -->
 <script src="<?=base_url()?>dist/js/adminlte.min.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="<?=base_url()?>dist/js/pages/dashboard.js"></script>
+<!--script src="<?=base_url()?>dist/js/pages/dashboard.js"></script-->
 <!-- AdminLTE for demo purposes -->
 <script src="<?=base_url()?>dist/js/demo.js"></script>
+
+<script>
+  $(document).ready(function(){
+    $('.pagination a').click(function(){
+      var url = $(this).attr('href');
+      var keres = $("input[name='keres']").val();
+      var rendez = $("#rendez option:selected").val();
+      var add_keres = 'keres='+keres;
+      var add_rendez = 'rendez='+rendez;
+      var add_variables = "";
+
+      /*
+      if(add_keres!='keres=' && add_rendez!='rendez='){
+        add_variables += '?'+add_keres+'&'+add_rendez;
+      }else if(add_keres!='keres='){
+        add_variables += '?'+add_keres;
+      }else if(add_rendez!='rendez='){
+        add_variables += '?'+add_rendez;
+      }
+      */
+
+      if(<?= (isset($_GET['keres'])||isset($_GET['rendez']))?"true":"false" ?>){
+        add_variables += '?'+add_keres+'&'+add_rendez
+      }
+
+      $(this).attr('href',url+add_variables);
+    });
+  });
+</script>
 
 </body>
 </html>

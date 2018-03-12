@@ -32,7 +32,7 @@ function admin_template($data)
 
     $profile_img = $this->session->userdata('profile_img');
 
-    if(empty(trim($profile_img)))
+    if(trim($profile_img)=="")
     {
         $profile_img = "man-3.png";
     }

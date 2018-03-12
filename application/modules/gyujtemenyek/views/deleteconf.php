@@ -9,7 +9,7 @@
 	}
 	?>
 
-<div class="row sortable">
+<div class="sortable">
 	<div class="box box-default">
 		<div class="box-header with-border" data-original-title>
 			<h3 class="box-title"><span class="fa fa-fw fa-trash"></span> Törlés Megerősítése</h3>

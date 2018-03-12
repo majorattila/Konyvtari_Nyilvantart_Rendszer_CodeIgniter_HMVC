@@ -16,34 +16,124 @@ $this->db->query("SET collation_server = utf8_hungarian_ci");
 */
 }
 
+function show_in_pdf(){
+    $title = $this->input->post("title", TRUE);
+    $content = $this->input->post("content", TRUE);
+
+    $this->load->module("dompdf");
+    $this->dompdf->create_pdf("<h1>".$title."</h1><br/>".urldecode($content), true, $title, $title);
+}
+
+function print_max_id(){
+    $temp = 0;
+    $query = $this->db->query("SELECT max(k_id) as k_id FROM biblioteka.hirek_kategoria");
+    foreach ($query->result() as $row) {
+        $temp = $row->k_id;
+    }
+    echo $temp;
+}
+
+function insert_with_ajax($param)
+{
+    if($param == "add_new_cat")
+    {
+        $k_neve = $this->input->post('k_neve', TRUE);
+        $k_url = $this->input->post('k_url', TRUE);
+        $k_id = $this->input->post('k_id', TRUE);
+        $check = $this->db->query("SELECT * FROM biblioteka.hirek_kategoria WHERE k_id LIKE ?", array($k_id));
+        echo $this->db->last_query();
+        $check_id = 0;
+        if(!($check->num_rows()>0)){
+            $this->db->query("INSERT INTO biblioteka.hirek_kategoria (k_neve, k_url) VALUES (?,?)",array($k_neve, $k_url));
+            echo $this->db->last_query();
+        }else{
+            foreach ($check->result() as $row) {
+                $check_id = $row->k_id;
+            }
+            $this->db->query("UPDATE biblioteka.hirek_kategoria SET k_neve = ?, k_url = ? WHERE k_id = ?",array($k_neve, $k_url,$check_id));
+            echo $this->db->last_query();
+        }
+    }else if($param == "del_cat"){
+        //die(var_dump($_POST));
+        $k_neve = $this->input->post('kategoriak', TRUE);
+        $this->db->query("DELETE FROM biblioteka.hirek_kategoria WHERE k_neve LIKE ? or k_neve LIKE ?", array(urldecode($k_neve), urlencode(urldecode($k_neve))));
+        echo $this->db->last_query();
+    }
+}
+
 function kategoriak()
 {
-    $third_bit = trim($this->uri->segment(3));
-    $fourth_bit = trim($this->uri->segment(4));
+/*
+    $third_bit = $this->uri->segment(3);
+    $third_bit = empty($third_bit)?5:$third_bit;
+    $fourth_bit = $this->uri->segment(4);
+    $fourth_bit = empty($fourth_bit)?0:$fourth_bit;
+*/
+
+    $fifth_bit = $this->uri->segment(5);
+    $sixth_bit = $this->uri->segment(6);
+
+    $data = $this->news_and_events_with_pagination($fifth_bit, $sixth_bit);
+    
+    $data['view_file'] = "index";
+    $this->load->module('templates');
+    $this->templates->public_template($data);
+}
+
+function news_and_events_with_pagination($fifth_bit=null, $sixth_bit=null)
+{
+    $this->load->module('custom_pagination');
 
     //get the news
-    $query = $this->get_join_with_double_condition('k_neve',urldecode($third_bit),'oldal_url',urldecode($fourth_bit));
+    $query = $this->get_join_with_double_condition('k_neve',urldecode($fifth_bit),'oldal_url',urldecode($sixth_bit));
     $num_rows = $query->num_rows();
 
     //get the categories
-    if($num_rows==0 && !empty($third_bit) && empty($fourth_bit)){
-        $query = $this->get_join_with_condition('k_neve',$third_bit);       
+    if($num_rows==0 && !empty($fifth_bit) && empty($sixth_bit)){
+        $query = $this->get_join_with_condition('k_neve',$fifth_bit);       
     }
 
-    $check_the_category = $this->check_the_category($third_bit);
+    $check_the_category = $this->check_the_category($fifth_bit);
 
-    if($check_the_category==0 && empty($fourth_bit))
+    if($check_the_category==0 && empty($sixth_bit))
     {
         $data['category_list'] = true;
     }
 
-    $check_the_currant_news = $this->check_the_currant_news($fourth_bit);
+    $check_the_currant_news = $this->check_the_currant_news($sixth_bit);
     $data["type"] = $check_the_currant_news>0;
+
+
+
+    $oldal_szam = $this->uri->segment(3);
+    $limit = TRUE;
+
+    $this->get_join_with_condition('k_url', empty($fifth_bit)?'%':$fifth_bit);
+
+    $query = $this->db->last_query();
+    $data['result_number'] = @$this->_custom_query($query)->num_rows();
+
+    $pagination_data['template'] = 'public_bootstrap';
+    $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
+    $pagination_data['total_rows'] = $data['result_number'];
+    $pagination_data['offset_segment'] = 4;
+    $pagination_data['limit'] = 10;
+
+    $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
+
+    $pagination_data['offset'] = $this->get_offset();
+    $data['showing_statement'] = $this->custom_pagination->get_showing_statement($pagination_data);
+   
+
     
     $data['query'] = $query;
-    $data['view_file'] = "index";
-    $this->load->module('templates');
-    $this->templates->public_template($data);
+    return $data;
+}
+
+function _draw_news_and_events_with_pagination()
+{
+    $data = $this->news_and_events_with_pagination("%");
+    $this->load->view("news_with_paginator", $data);
 }
 
 function datalist($table_name, $column_name)
@@ -71,11 +161,11 @@ function query_cat()
     return $this->_custom_query($mysql_query);
 }
 
-function _draw_current_news_category($url)
+function _draw_current_news_category($url, $limit = 5, $offset = 0)
 {
     $this->load->helper('text');
-    $data['query'] = $this->get_join_with_condition('k_url', $url);
-    $this->load->view('feed_hp', $data);
+    $data['query'] = $this->get_join_with_condition_and_limit('k_url', $url, $limit, $offset);
+    $this->load->view('detailed_news', $data);
 }
 
 function check_the_currant_news($second_segment)
@@ -87,7 +177,7 @@ function check_the_currant_news($second_segment)
 function check_the_category($url)
 {
     $this->set_table('hirek_kategoria');
-    $query = $this->get_where_custom('k_url', $url);
+    $query = $this->get_where_custom('k_url', urldecode($url));
 
     $this->set_table('hirek');
     return $query->num_rows();
@@ -95,17 +185,28 @@ function check_the_category($url)
 
 function _draw_news_and_events()
 {    
-    $data['query'] = $this->get_join_with_limit(30,4);
+    $data['query'] = $this->get_join_with_limit(5,4);
+    $this->load->view('feed_hp', $data);
+}
+
+function _draw_lib_news_and_events(){
+    $nev = $this->uri->segment(3);
+    $data['query'] = $this->get_join_with_condition_and_limit("nev",urldecode($nev),5,0);
+    $this->load->view('feed_hp', $data);
+}
+
+function _draw_about_us(){
+    $data['query'] = $this->get_join_with_condition_and_limit("k_neve","rólunk",5,0);
     $this->load->view('feed_hp', $data);
 }
 
 function _draw_carousel(){
-    $data['query'] = $this->get_join_with_limit(5,0);
+    $data['query'] = $this->get_join_with_condition_and_limit('kep','%',4,0);
     $this->load->view('carousel', $data);
 }
 
 function _draw_feed_hp(){
-    $data['query'] = $this->get_join_with_limit(4,0);
+    $data['query'] = $this->get_join_with_condition_and_limit('kep','%',4,0);
     $this->load->view('feed_hp', $data);
 }
 
@@ -365,7 +466,7 @@ function create()
             $data['oldal_url'] = $this->bibliografiak->generate_url_from_utf8($data['oldal_cim']);
             //convert datepicker into a unix timestamp
             $data['publikalas_datuma'] = str_replace('. ', '-', $data['publikalas_datuma']);
-            $data['publikalas_datuma'] = $this->timedate->make_timestamp_from_datepicker_us($data['publikalas_datuma']);
+            $data['publikalas_datuma'] = $this->timedate->make_timestamp_from_datepicker_hu($data['publikalas_datuma']);
 
             $mysql_query = "SELECT k_id FROM biblioteka.hirek_kategoria WHERE k_neve LIKE CONCAT('%',?,'%')";
             $query = $this->db->query($mysql_query, array($data['kategoria']));
@@ -396,6 +497,8 @@ function create()
             }
             else
             {
+                $data['fiok_id'] = $this->session->userdata('lib_id');
+                
                 //insert a page item
                 $this->_insert($data);
                 $update_id = $this->get_max();
@@ -432,7 +535,8 @@ function create()
         $data['publikalas_datuma'] = $this->timedate->get_nice_date($data['publikalas_datuma'], 'datepicker_hu');
     }
 
-    $data['oldal_url'] = urldecode(url_title($data['oldal_cim']));
+    $data['query_categories'] = $this->query_cat();
+    $data['oldal_url'] = url_title($data['oldal_cim']);
     $data['update_id'] = $update_id;
     $data['flash'] = $this->session->flashdata('item');
     $data['view_file'] = "create";
@@ -482,7 +586,7 @@ function fetch_data_from_db($update_id)
 
     return $data;
 }
-
+/*
 function manage()
 {
     $this->load->module('site_security');
@@ -493,6 +597,96 @@ function manage()
     $data['query'] = $this->get_join();
 
     //$data['view_module'] = "hirek";
+    $data['view_file'] = "manage";
+    $this->load->module('templates');
+    $this->templates->admin_template($data);
+}
+*/
+
+
+
+function get_offset(){
+    $offset = $this->uri->segment(4);
+    if(!is_numeric($offset)){
+        $offset = 0;
+    }
+    return $offset;
+}
+
+function get_limit(){
+    $limit = 20;
+    return $limit;
+}
+
+function get_target_pagination_base_url(){
+    $first_bit = $this->uri->segment(1);
+    $second_bit = $this->uri->segment(2);
+    $third_bit = $this->uri->segment(3);
+    $target_base_url = base_url().$first_bit.'/'.$second_bit.'/'.$third_bit;
+    return $target_base_url;
+}
+
+function _generate_mysql_query($mysql_query, $oldal_szam, $limit){
+
+    if($limit == TRUE){
+        $limit = $this->get_limit();
+        $offset = $this->get_offset();
+        $mysql_query .= " limit ".$offset.", ".$limit;
+    }
+
+    return $mysql_query;
+}
+
+function manage()
+{
+    $this->load->module('custom_pagination');
+    $this->load->module('site_security');
+    $this->site_security->_is_admin();
+
+    $data['flash'] = $this->session->flashdata('item');
+
+
+    $oldal_szam = $this->uri->segment(3);
+    if(is_null($oldal_szam) || !is_numeric($oldal_szam))
+    {
+        $oldal_szam = $this->get_limit();
+    }
+
+    $limit = TRUE;
+
+    $keres = $this->site_security->prevent_injection($this->input->get('keres',TRUE));
+    $rendez = $this->input->get('rendez',TRUE);
+
+    $fiok_id = $this->session->userdata('lib_id');
+
+    if(!empty($rendez) && in_array($rendez, array('publikalas_datuma', 'szerzo', 'oldal_url', 'oldal_cim'))){
+        $order_by = $rendez;
+    }else{
+        $order_by = 'publikalas_datuma desc';
+    }
+    
+    $where = empty($keres)?"":"WHERE lower(publikalas_datuma) LIKE lower('%$keres%') OR lower(szerzo) LIKE lower('%$keres%') OR lower(oldal_url) LIKE lower('%$keres%') OR lower(oldal_cim) LIKE lower('%$keres%') and fiok_id = $fiok_id";
+
+    $query ="SELECT * FROM biblioteka.hirek INNER JOIN hirek_kategoria ON hirek_kategoria.k_id = hirek.k_id $where ORDER BY $order_by";
+    $data['result_number'] = $this->_custom_query($query)->num_rows();
+
+    $mysql_query = $this->_generate_mysql_query($query, $oldal_szam, $limit);
+    $data['query'] = $this->_custom_query($mysql_query);
+
+    $data['rendez'] = $rendez;
+    $data['keres'] = $keres;
+
+    $pagination_data['template'] = 'public_bootstrap';
+    $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
+    $pagination_data['total_rows'] = $data['result_number'];
+    $pagination_data['offset_segment'] = 4;
+    $pagination_data['limit'] = $this->get_limit();
+
+    $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
+
+    $pagination_data['offset'] = $this->get_offset();
+    $data['showing_statement'] = $this->custom_pagination->get_showing_statement($pagination_data);
+
     $data['view_file'] = "manage";
     $this->load->module('templates');
     $this->templates->admin_template($data);
@@ -592,6 +786,13 @@ function get_join_with_condition($col, $val)
 {
     $this->load->model('mdl_hirek');
     $query = $this->mdl_hirek->get_join_with_condition($col, $val);
+    return $query;
+}
+
+function get_join_with_condition_and_limit($col, $val, $limit, $offset)
+{
+    $this->load->model('mdl_hirek');
+    $query = $this->mdl_hirek->get_join_with_condition_and_limit($col, $val, $limit, $offset);
     return $query;
 }
 

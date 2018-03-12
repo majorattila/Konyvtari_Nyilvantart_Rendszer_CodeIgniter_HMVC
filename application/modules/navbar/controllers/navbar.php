@@ -6,39 +6,6 @@ function __construct() {
 parent::__construct();
 }
 
-function sort()
-{
-    $this->load->module('site_security');
-    $this->site_security->_is_admin(); 
-
-    $number = $this->input->post('number', TRUE);
-    for ($i=1; $i <= $number; $i++) { 
-        $update_id = $_POST['order'.$i];
-        $data['prioritas'] = $i;
-        $this->_update($update_id, $data);
-    }
-}
-
-function manage()
-{
-    $this->load->module('site_security');
-    $this->site_security->_is_admin(); 
-
-    $szulo_kategoria_id = $this->uri->segment(3);
-    if(!is_numeric($szulo_kategoria_id))
-    {
-        $szulo_kategoria_id = 0;
-    }
-    $data['sort_this'] = TRUE;
-    $data['szulo_kategoria_id'] = $szulo_kategoria_id;
-    $data['flash'] = $this->session->flashdata('item');
-    $data['query'] = $this->get_where_custom('szulo_kategoria_id', $szulo_kategoria_id);
-    $data['view_file'] = "manage";
-    $this->load->module('templates');
-    $this->templates->admin_template($data);
-}
-
-
 function _alkategoriak_szama($update_id)
 {
     //return the number of sub categories, belonging to THIS category
@@ -100,7 +67,7 @@ function draw_navbar_to_top()
     $data['username'] = $this->session->userdata('username');
     $profile_img = $this->session->userdata('profile_img');
 
-    if(empty(trim($profile_img)))
+    if(trim($profile_img)=="")
     {
         $profile_img = "man-3.png";
     }

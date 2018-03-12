@@ -34,6 +34,7 @@ echo form_open_multipart('hirek/do_upload/'.$update_id, $attributes);
 ?>
 
 <h3 style="margin-top: 24px;">Válasszon ki egy fájlt a számítógépéről, majd nyomja meg a "Feltöltés" gombot.</h3>
+<p style="color:red; ">Az ajánlott képméret <b>771x433 px</b> - más képméret esetében pixel hibák léphetnek fel a weboldalban.</p>
 
   <fieldset>
 

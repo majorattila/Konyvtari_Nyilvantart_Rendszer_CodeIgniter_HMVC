@@ -51,114 +51,114 @@ class Mdl_yaz extends CI_Model
 		// Mapping CCL keywords to Bib-1-Attributes (allows convenient query formulation)
 
 		//Használati attributumok (1)
-		$fields = array(
-					"personal_name" => "1=1",
-					"corporate_name" => "1=2",
-					"conference_name" => "1=3",
+	$fields = array(
+	//				"personal_name" => "1=1",
+	//				"corporate_name" => "1=2",
+	//				"conference_name" => "1=3",
 	/*kell*/		"title" => "1=4",
-					"title_series" => "1=5",
-					"title_uniform" => "1=6",
+	//				"title_series" => "1=5",
+	//				"title_uniform" => "1=6",
 	/*kell*/		"isbn" => "1=7",
-					"issn" => "1=8",
-					"lC_card_number" => "1=9",
-					"bnb_card_no" => "1=10",
-					"bgf_number" => "1=11",
-					"local_number" => "1=12",
+	//				"issn" => "1=8",
+	//				"lC_card_number" => "1=9",
+	//				"bnb_card_no" => "1=10",
+	//				"bgf_number" => "1=11",
+	//				"local_number" => "1=12",
 	/*kell*/		"dewey_classification" => "1=13",
-					"udc_classification" => "1=14",
-					"bliss_classification" => "1=15",
-					"lC_call_number" => "1=16",
-					"nlm_call_number" => "1=17",
-					"nal_call_number" => "1=18",
-					"mos_call_number" => "1=19",
-					"local_classification" => "1=20",
+	//				"udc_classification" => "1=14",
+	//				"bliss_classification" => "1=15",
+	//				"lC_call_number" => "1=16",
+	//				"nlm_call_number" => "1=17",
+	//				"nal_call_number" => "1=18",
+	//				"mos_call_number" => "1=19",
+	//				"local_classification" => "1=20",
 	/*kell*/		"subject_heading" => "1=21",
-					"subject_rameau" => "1=22",
-					"bdi_index_subject" => "1=23",
-					"inspec_subject" => "1=24",
-					"mesh_subject" => "1=25",
-					"pa_subject" => "1=26",
-					"lc_subject_heading" => "1=27",
-					"rvm_subject_heading" => "1=28",
-					"local_subject_index" => "1=29",
-					"date" => "1=30",
+	//				"subject_rameau" => "1=22",
+	//				"bdi_index_subject" => "1=23",
+	//				"inspec_subject" => "1=24",
+	//				"mesh_subject" => "1=25",
+	//				"pa_subject" => "1=26",
+	//				"lc_subject_heading" => "1=27",
+	//				"rvm_subject_heading" => "1=28",
+	//				"local_subject_index" => "1=29",
+	//				"date" => "1=30",
 	/*kell*/		"date_of_publication" => "1=31",
-					"date_of_acquisition" => "1=32",
-					"title_key" => "1=33",
-					"title_collective" => "1=34",
-					"title_parallel" => "1=35",
-					"title_cover" => "1=36",
-					"title_added_title_page" => "1=37",
-					"title_caption" => "1=38",
-					"title_running" => "1=39",
-					"title_spine" => "1=40",
-					"title_other_variant" => "1=41",
-					"title_former" => "1=42",
-					"title_abbreviated" => "1=43",
-					"title_expanded" => "1=44",
-					"subject_precis" => "1=45",
-					"subject_rswk" => "1=46",
-					"subject_subdivision" => "1=47",
-					"no_natl_biblio" => "1=48",
-					"no_legal_deposit" => "1=49",
-					"no_govt_pub" => "1=50",
-					"no_music_publisher" => "1=51",
-					"number_db" => "1=52",
-					"number_local_call" => "1=53",
-					"code__language" => "1=54",
-					"code__geographic_area" => "1=55",
-					"code__institution" => "1=56",
-					"name_and_title *" => "1=57",
-					"name_geographic" => "1=58",
-					"place_publication" => "1=59",
-					"coden" => "1=60",
-					"microform_generation" => "1=61",
-					"abstract" => "1=62",
-					"note" => "1=63",
-					"author_title" => "1=1000",
-					"record_type" => "1=1001",
-					"name" => "1=1002",
-					"author" => "1=1003",
+	//				"date_of_acquisition" => "1=32",
+	//				"title_key" => "1=33",
+	//				"title_collective" => "1=34",
+	//				"title_parallel" => "1=35",
+	//				"title_cover" => "1=36",
+	//				"title_added_title_page" => "1=37",
+	//				"title_caption" => "1=38",
+	//				"title_running" => "1=39",
+	//				"title_spine" => "1=40",
+	//				"title_other_variant" => "1=41",
+	//				"title_former" => "1=42",
+	//				"title_abbreviated" => "1=43",
+	//				"title_expanded" => "1=44",
+	//				"subject_precis" => "1=45",
+	//				"subject_rswk" => "1=46",
+	//				"subject_subdivision" => "1=47",
+	//				"no_natl_biblio" => "1=48",
+	//				"no_legal_deposit" => "1=49",
+	//				"no_govt_pub" => "1=50",
+	//				"no_music_publisher" => "1=51",
+	//				"number_db" => "1=52",
+	//				"number_local_call" => "1=53",
+	//				"code__language" => "1=54",
+	//				"code__geographic_area" => "1=55",
+	//				"code__institution" => "1=56",
+	//				"name_and_title *" => "1=57",
+	//				"name_geographic" => "1=58",
+	//				"place_publication" => "1=59",
+	//				"coden" => "1=60",
+	//				"microform_generation" => "1=61",
+	//				"abstract" => "1=62",
+	//				"note" => "1=63",
+	//				"author_title" => "1=1000",
+	//				"record_type" => "1=1001",
+	//				"name" => "1=1002",
+	//				"author" => "1=1003",
 	/*kell*/		"author_name_personal" => "1=1004",
-					"author_name_corporate" => "1=1005",
-					"author_name_conference" => "1=1006",
-					"identifier__standard" => "1=1007",
-					"subject__lC_children's" => "1=1008",
-					"subject_name__personal" => "1=1009",
-					"body_of_text" => "1=1010",
-					"date_time_added_to_db" => "1=1011",
-					"date_time_last_modified" => "1=1012",
-					"authority_format_id" => "1=1013",
-					"concept_text" => "1=1014",
-					"concept_reference" => "1=1015",
-					"any" => "1=1016",
-					"server_choice" => "1=1017",
+	//				"author_name_corporate" => "1=1005",
+	//				"author_name_conference" => "1=1006",
+	//				"identifier__standard" => "1=1007",
+	//				"subject__lC_children's" => "1=1008",
+	//				"subject_name__personal" => "1=1009",
+	//				"body_of_text" => "1=1010",
+	//				"date_time_added_to_db" => "1=1011",
+	//				"date_time_last_modified" => "1=1012",
+	//				"authority_format_id" => "1=1013",
+	//				"concept_text" => "1=1014",
+	//				"concept_reference" => "1=1015",
+	//				"any" => "1=1016",
+	//				"server_choice" => "1=1017",
 	/*kell*/		"publisher" => "1=1018",
-					"record_source" => "1=1019",
-					"editor" => "1=1020",
-					"bib_level" => "1=1021",
-					"geographic_class" => "1=1022",
-					"indexed_by" => "1=1023",
-					"map_scale" => "1=1024",
-					"music_key" => "1=1025",
-					"related_periodical" => "1=1026",
-					"report_number" => "1=1027",
-					"stock_number" => "1=1028",
-					"thematic_number" => "1=1030",
-					"material_type" => "1=1031",
-					"doc_id" => "1=1032",
-					"host_item" => "1=1033",
-	/*kell*/		"content_type" => "1=1034",
-					"anywhere" => "1=1035",
-					"author_title_subject" => "1=1036");
+	//				"record_source" => "1=1019",
+	//				"editor" => "1=1020",
+	//				"bib_level" => "1=1021",
+	//				"geographic_class" => "1=1022",
+	//				"indexed_by" => "1=1023",
+	//				"map_scale" => "1=1024",
+	//				"music_key" => "1=1025",
+	//				"related_periodical" => "1=1026",
+	//				"report_number" => "1=1027",
+	//				"stock_number" => "1=1028",
+	//				"thematic_number" => "1=1030",
+	//				"material_type" => "1=1031",
+	//				"doc_id" => "1=1032",
+	//				"host_item" => "1=1033",
+	/*kell*/		"content_type" => "1=1034");
+	//				"anywhere" => "1=1035",
+	//				"author_title_subject" => "1=1036");
 
 
 		// establish connection and store session identifier,
 		// credentials are an optional second parameter in format "<user>/<passwd>"
-		$session = yaz_connect($server);
+		$session = yaz_connect($server, array('charset' => 'UTF-8'));
 		// check whether an error occurred
 		if (yaz_error($session) != ""){
-		    die("Error: " . yaz_error($session));
+		    die("[{}]");//die("Error: " . yaz_error($session));
 		}
 		// configure desired result syntax (must be specified in Target Profile)
 		yaz_syntax($session, $syntax);
@@ -169,7 +169,7 @@ class Mdl_yaz extends CI_Model
 #		$ccl_query = "(wpe = Liggesmeyer) and (wpe = Peter)";
 		// let YAZ parse the query and check for error
 		if (!yaz_ccl_parse($session, $ccl_query, $ccl_result)){
-		        die("The query could not be parsed.");
+		        die("[{}]");//die("The query could not be parsed.");
 		} else{
 		    // fetch RPN result from the parser
 		    $rpn = $ccl_result["rpn"];
@@ -178,7 +178,7 @@ class Mdl_yaz extends CI_Model
 		    // wait blocks until the query is done
 		    yaz_wait();
 		    if (yaz_error($session) != ""){
-		        die("Error: " . yaz_error($session));
+		        die("[{}]");//die("Error: " . yaz_error($session));
 		    }
 		    // yaz_hits returns the amount of found records
 		    if (yaz_hits($session) > 0){
@@ -192,7 +192,7 @@ class Mdl_yaz extends CI_Model
 
 		        for ($i=$offset; $i < $limit; $i++) { 
 
-			        $result = yaz_record($session, $i, "string");
+			        $result = yaz_record($session, $i, "string; charset=hunmarc,UTF-8");
 #			        print("<pre>".$result."</pre>");
 #			        echo "<br><br>";
 			        // the parsing functions will be introduced later
@@ -216,8 +216,8 @@ class Mdl_yaz extends CI_Model
 				}
 				return $total_records;
 
-		    } else
-		        echo "No records found.";
+		    } //else
+		        //echo "No records found.";
 		}		
 	}
 
@@ -274,7 +274,7 @@ class Mdl_yaz extends CI_Model
 	    $ret['data'] = $record;
 	    // there was a case where angle brackets interfered
 	    $record = str_replace(array("<", ">"), array("",""), $record);
-	    $record = utf8_decode($record);
+	    $record = $record;
 	    // split the returned fields at their separation character (newline)
 	    $record = explode("\n",$record);
 	    //examine each line for wanted information (see USMARC spec for details)
@@ -302,8 +302,10 @@ class Mdl_yaz extends CI_Model
 	                         $ext_b = $this->get_subfield_value($parts,"b");
 	                         $ret["extent"] .= ($ext_b != "") ? (" : " . $ext_b) : "";
 	                         break;
+	            case "365" : $ret["trade_price"] = $this->get_subfield_value($parts,"a"); break;
 	            case "490" : $ret["series"] = $this->get_subfield_value($parts,"a"); break;
 	            case "502" : $ret["diss_note"] = $this->get_subfield_value($parts,"a"); break;
+	            case "514" : $ret["quality_note"] = $this->get_subfield_value($parts,"z"); break;
 	            case "655" : $ret["genre"] = $this->get_subfield_value($parts,"a"); break;
 	            case "700" : $ret["editor"] = $this->get_subfield_value($parts,"a"); break;
 	        }
@@ -330,25 +332,38 @@ class Mdl_yaz extends CI_Model
 
 
 //saját adatok
-
 //cím,egyéb címek,szerzők,kiemelt rendszavak,egyéb rendszavak,testületi szerző,kiadás jelzés,lelőhely,dok stat,megjelenés,terjedelem,sorozat,közös megj.,példány megj.,ISBN,Kötés,gyári szám,nemzetközi azonosító,feltüntett ár,tárgyszavak,eto,tárgyi mutató,közös sec adatok,saj spec adat,csz
-
 /*
 001 - Control Number
+	(Ellenőrzési szám)
 003 - Control Number Identifier
+	(Ellenőrzési szám azonosító)
 005 - Date and Time of Latest Transaction
+	(A legutóbbi tranzakció dátuma és ideje)
 006 - Fixed-Length Data Elements - Additional Material Characteristics
+	(Rögzített hosszúságú adat elemek - Járulékos Karakter Anyagok)
 007 - Physical Description Fixed Field
+	(Fizikai Részletek Rögzített Mező)
 008 - Fixed-Length Data Elements
-010 - Library of Congress Control Number (NR) 
+	(Rögzített Hosszúságú Adat Elemek)
+010 - Library of Congress Control Number (NR)
+	(A Kongresszusi Könyvtár Ellenőrző Száma (NR)) 
 013 - Patent Control Information (R) 
-015 - National Bibliography Number (R) 
-016 - National Bibliographic Agency Control Number (R) 
+	(Szabadalom Ellenőrző Szám (R))
+015 - National Bibliography Number (R)
+	(Nemzeti Bibliográfiai szám(R)) 
+016 - National Bibliographic Agency Control Number (R)
+	(Nemzeti Bibliográfiai Ügynökség Ellenőrző szám(R)) 
 017 - Copyright or Legal Deposit Number (R) 
+	(Szerzői jog vagy Jogi utalvány száma(R))
 018 - Copyright Article-Fee Code (NR) 
-020 - International Standard Book Number (R) 
-022 - International Standard Serial Number (R) 
+	(Szerzői jogcím-díj kód (NR))
+020 - International Standard Book Number (R)
+	(Nemzetközi Szabványkönyv (R)) 
+022 - International Standard Serial Number (R)
+	(Nemzetközi szabványos sorozatszám (R)) 
 024 - Other Standard Identifier (R) 
+	(Egyéb szabványazonosító (R))
 025 - Overseas Acquisition Number (R) 
 026 - Fingerprint Identifier (R) 
 027 - Standard Technical Report Number (R) 

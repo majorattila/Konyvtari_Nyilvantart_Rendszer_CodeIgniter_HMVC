@@ -19,7 +19,7 @@
                   <input type="text" class="form-control" name="subject" placeholder="Subject">
                 </div>
                 <div>
-                  <textarea name="message" class="textarea" style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid rgb(221, 221, 221); padding: 10px;" placeholder="Message"></textarea>
+                  <textarea name="message" class="textarea" style="width: 100%; height: 125px; font-size: 14px; line-height: 18px; border: 1px solid rgb(221, 221, 221); padding: 10px; resize:vertical;" placeholder="Message"></textarea>
 
                 </div>
               </div>

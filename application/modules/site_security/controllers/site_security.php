@@ -7,8 +7,24 @@ private $jsondata;
 function __construct() {
 parent::__construct();
 
-    $freegeoipjson = file_get_contents("http://freegeoip.net/json/");
+    //check the guest personal data
+    if(! $freegeoipjson = @file_get_contents("http://freegeoip.net/json/")){
+
+        //This thing will prevent the error messages
+        $freegeoipjson = '{"ip" : "80.98.25.62","country_code" : "HU","country_name" : "Hungary","region_code" : "BU","region_name" : "Budapest","city" : "Budapest","zip_code" : "1012","time_zone" : "Europe/Budapest","latitude" : 47.5,"longitude" : 19.0833,"metro_code" : 0 }';
+    }
+    
     $this->jsondata = json_decode($freegeoipjson);
+}
+
+private function get_mysqli() { 
+    $db = (array)get_instance()->db;
+    return mysqli_connect('localhost', $db['username'], $db['password'], $db['database']);
+}
+
+function prevent_injection($param)
+{
+    return mysqli_real_escape_string($this->get_mysqli(), $param);
 }
 
 function _get_user_id()
@@ -74,14 +90,20 @@ function _is_admin()
     }else{
         redirect('site_security/not_allowed');
     }
-
-
-    if($is_admin!=TRUE)
-    {
-        redirect('site_security/not_allowed');
-    }
     
-    return true;
+}
+
+function _get_user_type()
+{
+    $is_admin = $this->session->userdata('is_admin');
+    $user_id = $this->_get_user_id();
+    if($is_admin==1){
+        return "admin";
+    }else if(is_numeric($user_id)){
+        return "user";
+    }else{
+        return "guest";
+    }
 }
 
 function not_allowed()
@@ -128,8 +150,9 @@ function _click_counter(){
     $ip = $this->get_ip();
     $longitude = $this->get_longitude();
     $latitude = $this->get_latitude();
+    $browser = $this->get_browser_name();
 
-    $query = $this->latogatok->get_where_custom_with_triple_condition("ip",$ip,"longitude",$longitude,"latitude",$latitude);
+    $query = $this->latogatok->get_where_custom_with_four_condition("ip",$ip,"longitude",$longitude,"latitude",$latitude, "bongeszo", $browser);
     
     //if the currant user is new, we will increase the number of the visitors
     if($query->num_rows() == 0)
@@ -180,7 +203,7 @@ function _check_browser()
     $latitude = $this->get_latitude();
 
     $this->load->module("latogatok");
-    $data = $this->latogatok->get_where_custom_with_triple_condition("ip",$ip,"longitude",$longitude,"latitude",$latitude);
+    $data = $this->latogatok->get_where_custom_with_four_condition("ip",$ip,"longitude",$longitude,"latitude",$latitude, "bongeszo", $browser);
 
     $browser_data["ip"] = $ip;
     $browser_data["bongeszo"] = $browser;
@@ -190,21 +213,25 @@ function _check_browser()
     $browser_data["latitude"] = $latitude;    
 
     if($data->num_rows() > 0)
-    {
+    {        
         $bool = false;
 
         foreach ($data->result() as $row) 
         {
             if($row->bongeszo != $browser)
             {
+                /*
                 $bool = true;
+                */
+                die($row->bongeszo . ' - ' . $browser);
             }
         }
-
+        
         if($bool)
         {
             $this->latogatok->_insert($browser_data);            
         }
+        
     }
     else
     {

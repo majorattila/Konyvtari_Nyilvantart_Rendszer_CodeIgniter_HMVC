@@ -58,8 +58,8 @@ if(is_numeric($update_id)) { ?>
 								<div class="form-group col-xs-2">
 									<label for="jogosultsag">Jogosultság</label>
 									<select name="jogosultsag" class="form-control" id="jogosultsag">
-										<option>admin</option>
-										<option>user</option>
+										<option <?=$jogosultsag == "admin"?"selected":""?>>admin</option>
+										<option <?=$jogosultsag == "user"?"selected":""?>>user</option>
 									</select>
 								</div>
 							</div>
@@ -68,8 +68,8 @@ if(is_numeric($update_id)) { ?>
 					        	<div class="form-group col-xs-2">
 					        		<label for="statusz">Státusz</label>
 					        		<select name="statusz" class="form-control" id="statusz">
-					        			<option>aktiv</option>
-					        			<option>inaktiv</option>
+					        			<option <?=$statusz == "aktiv"?"selected":""?>>aktiv</option>
+					        			<option <?=$statusz == "inaktiv"?"selected":""?>>inaktiv</option>
 					        		</select>
 					        	</div>
 					        </div><br/>

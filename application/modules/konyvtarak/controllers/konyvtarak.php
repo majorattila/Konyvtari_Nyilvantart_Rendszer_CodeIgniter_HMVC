@@ -6,6 +6,21 @@ function __construct() {
 parent::__construct();
 }
 
+function kirendeltseg()
+{    
+    $third_bit = trim($this->uri->segment(3));
+
+    $query = $this->get_where_custom('nev',urldecode($third_bit));
+    $query_cat = $this->get('nev');
+    $num_rows = $query->num_rows();
+
+    $data['query'] = $query;
+    $data['query_cat'] = $query_cat;
+    $data['view_file'] = "office";
+    $this->load->module('templates');
+    $this->templates->public_template($data);
+}
+
 function _generate_mysql_query($mysql_query, $oldal_szam, $limit){
 
     if($limit == TRUE){
@@ -54,9 +69,10 @@ function delete($update_id)
     {
         redirect(base_url().'konyvtarak/create/'.$update_id);
     }
-    elseif($submit=="Yes - Delete Collection")
+    else if($submit=="Yes - Delete Collection")
     {
         $this->_delete($update_id);
+        //die($this->db->last_query());
     } 
 
     $flash_msg = "A könyvtárat sikeresen eltávolította.";
@@ -152,9 +168,12 @@ function create()
     {
         //process the form
         $this->config->set_item('language', 'hungarian');
-        $this->load->library('form_validation');        
-        $this->form_validation->set_rules('konyvtar', 'Könyvtár', 'required');
-        $this->form_validation->set_rules('hely', 'Hely', 'required');
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('foigazgato', 'Főigazgató', 'required');
+        $this->form_validation->set_rules('iranyitoszam', 'Irányítószám', 'required');
+        $this->form_validation->set_rules('varos', 'Város', 'required');
+        $this->form_validation->set_rules('kerulet', 'Kerület', 'required');
+        $this->form_validation->set_rules('cim', 'Cím', 'required');
 
         if($this->form_validation->run() == TRUE)
         {
@@ -233,11 +252,25 @@ function manage()
     $limit = TRUE;
 
 
-    $query ="SELECT * FROM biblioteka.konyvtarak ORDER BY nev";
+    $keres = $this->site_security->prevent_injection($this->input->get('keres',TRUE));
+    $rendez = $this->input->get('rendez',TRUE);
+
+    if(!empty($rendez) && in_array($rendez, array('nev','iranyitoszam','varos','kerulet','cim'))){
+        $order_by = $rendez;
+    }else{
+        $order_by = 'nev';
+    }
+
+    $where = empty($keres)?"":"WHERE lower(nev) LIKE lower('%$keres%') OR lower(iranyitoszam) LIKE lower('%$keres%') OR lower(varos) LIKE lower('%$keres%') OR lower(kerulet) LIKE lower('%$keres%') OR lower(cim) LIKE lower('%$keres%')";
+
+    $query ="SELECT * FROM biblioteka.konyvtarak $where ORDER BY $order_by";
     $data['result_number'] = $this->_custom_query($query)->num_rows();
 
     $mysql_query = $this->_generate_mysql_query($query, $oldal_szam, $limit);
     $data['query'] = $this->_custom_query($mysql_query);
+
+    $data['rendez'] = $rendez;
+    $data['keres'] = $keres;
 
     $pagination_data['template'] = 'public_bootstrap';
     $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
@@ -253,6 +286,23 @@ function manage()
     $data['view_file'] = "manage";
     $this->load->module('templates');
     $this->templates->admin_template($data);
+}
+/*
+function truncate(){
+    $this->load->module('site_security');
+    $this->site_security->_is_admin();
+    
+    $this->_truncate();
+    redirect(base_url().'konyvtarak/manage/20/');
+}
+*/
+function truncate(){
+    $this->load->module('site_security');
+    $this->load->model('mdl_Konyvtarak');
+
+    if($this->site_security->_get_user_type() == "admin"){
+        $this->mdl_Konyvtarak->_truncate();
+    }
 }
 
 function get($order_by)
@@ -343,67 +393,6 @@ function _custom_query($mysql_query)
     $this->load->model('mdl_Konyvtarak');
     $query = $this->mdl_Konyvtarak->_custom_query($mysql_query);
     return $query;
-}
-
-
-function autogen()
-{
-    $mysql_query = "SHOW COLUMNS FROM Konyvtarak";
-    $query = $this->_custom_query($mysql_query);
-
-    
-    foreach ($query->result() as $row) {
-        $column_name = $row->Field;
-        //echo $column_name."<br>";
-        if($column_name != "id")
-        {
-            //echo $column_name."<br>";
-            echo '$data[\''.$column_name.'\'] = $this->input->post(\''.$column_name.'\', TRUE);<br>';
-        }
-    }
-
-    echo "<hr>";
-
-    foreach ($query->result() as $row) {
-        $column_name = $row->Field;
-        //echo $column_name."<br>";
-        if($column_name != "id")
-        {
-            //echo $column_name."<br>";
-            //echo '$data[\''.$column_name.'\'] = $this->input->post(\''.$column_name.'\', TRUE);<br>';
-            echo '$data[\''.$column_name.'\'] = $row->'.$column_name.';<br>';
-        }
-    }
-
-    echo "<hr>";
-
-
-    foreach ($query->result() as $row) {
-        $column_name = $row->Field;
-        //echo $column_name."<br>";
-        if($column_name != "id")
-        {
-
-$var = '<div class="control-group">
-  <label class="control-label" for="typeahead">'.ucfirst($column_name).'</label>
-  <div class="controls">
-    <input type="text" class="span6" name="'.$column_name.'" value="<?=$'.$column_name.' ?>">
-  </div>
-</div>';
-
-$var = '<div class="row"><div class="form-group col-xs-3">
-<label for="'.$column_name.'">'.ucfirst($column_name).'</label>
-<input name="'.$column_name.'" value="<?=$'.$column_name.' ?>" type="text" class="form-control" id="'.$column_name.'">
-</div></div>';
-
-echo htmlentities($var);
-
-echo "<br>";
-
-        }
-    }
-
-
 }
 
 }

@@ -27,12 +27,14 @@ if ($mysqlImport->hadErrors){
 }
 */
 
+//die(explode("database",dirname(__FILE__))[0].'application\\modules\\site_settings\\controllers\\site_settings.php');
+
 $drive = substr($_SERVER['DOCUMENT_ROOT'],0,1);
 $item = $_POST['item'];
 if(!empty($item)){
 $myfile = fopen("MyBatch.bat", "w") or die("Unable to open file!");
-$txt = 'mysql -e "drop database biblioteka; create database biblioteka;" -u root
-mysql -u root biblioteka < "'.$drive.':/biblioteka-x64/apache/htdocs/biblioteka/database/'.$item.'.sql"
+$txt = 'mysql -e "drop database biblioteka; create database biblioteka;" -h 127.0.0.1 --port 3404 -u root; 
+mysql -h 127.0.0.1 --port 3404 -u root biblioteka < "'.dirname(__FILE__).'/'.$item.'.sql"
 ';
 fwrite($myfile, $txt);
 fclose($myfile);

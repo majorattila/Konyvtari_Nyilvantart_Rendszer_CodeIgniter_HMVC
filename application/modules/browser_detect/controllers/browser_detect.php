@@ -8,7 +8,7 @@ private $_version;
 private $_platform;
 
 private $_basic_browser = array (
-   'Trident\/7.0' => 'Internet Explorer 11',
+'Trident\/7.0' => 'Internet Explorer 11',
 'Beamrise' => 'Beamrise',
 'Opera' => 'Opera',
 'OPR' => 'Opera',
@@ -46,21 +46,21 @@ private $_basic_browser = array (
 'UCBrowser' => 'UCBrowser',
 'Kindle' => 'Kindle',
 'wOSBrowser' => 'wOSBrowser',
- 'Epiphany' => 'Epiphany', 
+'Epiphany' => 'Epiphany', 
 'SeaMonkey' => 'SeaMonkey',
 'Avant Browser' => 'Avant Browser',
 'Firefox' => 'Firefox',
 'Chrome' => 'Google Chrome',
 'MSIE' => 'Internet Explorer',
 'Internet Explorer' => 'Internet Explorer',
- 'Safari' => 'Safari',
+'Safari' => 'Safari',
 'Mozilla' => 'Mozilla'  
 );
 
- private $_basic_platform = array(
-    'windows' => 'Windows', 
- 'iPad' => 'iPad', 
-  'iPod' => 'iPod', 
+private $_basic_platform = array(
+'windows' => 'Windows', 
+'iPad' => 'iPad', 
+'iPod' => 'iPod', 
 'iPhone' => 'iPhone', 
  'mac' => 'Apple', 
 'android' => 'Android', 

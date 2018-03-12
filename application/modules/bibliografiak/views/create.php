@@ -183,6 +183,7 @@ $form_location = base_url()."bibliografiak/create/".$update_id;
     btn metro-button mtr-red mtr-round margin | btn btn-danger margin
     btn metro-button mtr-indigo mtr-round margin | btn btn-secondary margin
     btn metro-button mtr-round margin | btn btn-secondary margin
+    btn metro-button mtr-steel mtr-round margin | btn btn-secondary margin
   -->
   <!--div>
     <button class="btn metro-button mtr-tiny">mtr-tiny</button>
@@ -219,7 +220,17 @@ $form_location = base_url()."bibliografiak/create/".$update_id;
 
 
 
-  <h1><?=$headline?></h1><br/>
+  <h1><?=$headline?> <span style="display: inline; font-size: 12pt; float: right;"> <i>gyors katalogizáló: </i>
+  <select name="fast_cat">
+  <?php
+  $i = 0;
+  $cat = $this->db->query("SELECT nev FROM z3950");
+  foreach ($cat->result() as $row) { ?>
+  <option <? $i==0?'selected':'' ?><?= $row->nev?></option>
+  <?php $i++; } ?>
+  </select>
+  </span>
+  </h1><br/>
   <div id="error_msg"></div>
   <?php /* ?>
   <div class="action_buttons">
@@ -255,16 +266,19 @@ $form_location = base_url()."bibliografiak/create/".$update_id;
         <button type="submit" name="submit" value="Submit" class="pn-ProductNav_Link" aria-selected="false">Rögzít</button>
         <a onclick="auto_lsz();" href="javascript:void(0);" class="pn-ProductNav_Link" aria-selected="false">Automatikus lsz</a>
         <a onclick="resetform();" href="javascript:void(0);" class="pn-ProductNav_Link" aria-selected="false">Mezők törlése</a>
-        <a <?= !empty($leltari_szam)?"onClick=\"newwindow = window.open('".base_url()."katalogus_cedula/view/".$leltari_szam."', '_blank', 'resizable=yes, scrollbars=yes, titlebar=yes, width=600, height=400, top=10, left=10');\"":""?> href="javascript:void(0);" class="pn-ProductNav_Link" aria-selected="false">Kat. cédula</a>
+        <!--a <?= !empty($leltari_szam)?"onClick=\"newwindow = window.open('".base_url()."katalogus_cedula/view/".$leltari_szam."', '_blank', 'resizable=yes, scrollbars=yes, titlebar=yes, width=600, height=400, top=10, left=10');\"":""?> href="javascript:void(0);" class="pn-ProductNav_Link" aria-selected="false">Kat. cédula</a-->
         <a onClick="newwindow = window.open('<?= $honositas ?>', '_blank', 'resizable=yes, scrollbars=yes, titlebar=yes, width=829, height=553, top=10, left=10');" href="javascript:void(0);" class="pn-ProductNav_Link" aria-selected="false">Honosítás</a> <!-- 600 / 400-->
-        <a href="javascript:void(0);" onclick="check()" class="pn-ProductNav_Link" aria-selected="false">Lekérés</a>
+        <a href="javascript:void(0);" onclick="check()" class="pn-ProductNav_Link" aria-selected="false"><i class="glyphicon glyphicon-download-alt"></i>&nbsp;Lekérés</a>
         <?php if(!isset($update_id) && !empty($update_id)){ ?>
         <a href="<?=base_url()?>bibliografiak/borito_feltoltes/<?=$update_id?>" class="pn-ProductNav_Link" aria-selected="false">Borító feltöltése</a>
         <?php } ?>
-        <a <?=!empty($update_id)&&is_numeric($update_id)?"href=\"".base_url()."bibliografiak/deleteconf/".$update_id."\"":"href=\"javascript:void(0);\""?> class="pn-ProductNav_Link" aria-selected="false">Törlés</a>
 
-        <a href="<?=base_url()?>szerzok/manage/20" target="_blank" class="pn-ProductNav_Link" aria-selected="false">Szerzők</a>
-        <a href="<?=base_url()?>konyvtarak/manage/20" target="_blank" class="pn-ProductNav_Link" aria-selected="false">könyvtárak</a>
+        <?php if(!is_null($this->uri->segment(3))){ ?>
+        <a <?=!empty($update_id)&&is_numeric($update_id)?"href=\"".base_url()."bibliografiak/deleteconf/".$update_id."\"":"href=\"javascript:void(0);\""?> class="pn-ProductNav_Link" aria-selected="false">Törlés</a>
+        <?php } ?>
+
+        <!--a href="<?=base_url()?>szerzok/manage/20" target="_blank" class="pn-ProductNav_Link" aria-selected="false">Szerzők</a>
+        <a href="<?=base_url()?>konyvtarak/manage/20" target="_blank" class="pn-ProductNav_Link" aria-selected="false">könyvtárak</a-->
         <button type="button" name="nyelv_details" class="pn-ProductNav_Link" aria-selected="false">Nyelvek</button>
         <button type="button" name="tipus_details" class="pn-ProductNav_Link" aria-selected="false">Típusok</button>
         <button type="button" name="gyujtemeny_details" class="pn-ProductNav_Link" aria-selected="false">gyűjtemények</button>
@@ -305,40 +319,43 @@ $form_location = base_url()."bibliografiak/create/".$update_id;
   </div>
   <div class="box-body">
     <div class="row">
+      <?php if(!isset($leltari_szam) || isset($leltari_szam) && $leltari_szam==''){
+        $leltari_szam = file_get_contents(base_url().'bibliografiak/get_inventory_number_with_ajax');
+      } ?>
       <div class="form-group col-xs-12 col-sm-3">
-        <label for="leltari_szam">Leltári szám:</label>
-        <input name="leltari_szam" value="<?=$leltari_szam?>" maxlength="11" type="text" class="form-control" id="leltari_szam" value="<?=$get_max?>">
+        <label class="dotted_underline" for="leltari_szam" data-toggle="tooltip" data-placement="top" title="A leltári szám megadása kötelező. A továbbiakban a rendszer majd ennek a számnak az alapján fog hivatkozni az állományra.">Leltári szám:</label><i class="helper"></i>
+        <input name="leltari_szam" value="<?=$leltari_szam?>" maxlength="11" type="text" class="form-control required_field" id="leltari_szam">
       </div>
       <div class="form-group col-xs-12 col-sm-3">
-        <label for="rszj">Rszj:</label>
+        <label class="dotted_underline" for="rszj" data-toggle="tooltip" data-placement="top" title="„Rszj”A könyvek tartalmi besorolásához használt szám, A könyvtárak által leggyakrabban használt rendszer az ETO alapján készült „Raktározási táblázatok”. A Cutter számot nem itt, hanem a „csz” mezőben kell megadni. A két mező együttesen határozza meg a szabad polcon a dokumentum helyét.">Rszj:</label>
         <input name="rszj" value="<?=$rszj?>" type="text" maxlength = "3" class="form-control" id="rszj">
       </div>
       <div class="form-group col-xs-12 col-sm-3">
-        <label for="mrj">Mrj:</label>
+        <label class="dotted_underline" for="mrj" data-toggle="tooltip" data-placement="top" title="Kevés könyvtár használja. Ezek a könyvtárak általában méret és beérkezési sorrend szerint raktárban tárolják a dokumentumokat, a jelzetet ez alapján adják ki.">Mrj:</label>
         <input name="mrj" value="<?=$mrj?>" maxlength="11" type="text" class="form-control" id="mrj">
       </div>
       <div class="form-group col-xs-12 col-sm-3">
-        <label for="vonalkod">vonalkód:</label>
+        <label class="dotted_underline" for="vonalkod" data-toggle="tooltip" data-placement="top" title="A dokumentum vonalkódja lehet a leltári szám, de attól el is térhet. A kölcsönzők esetében az olvasójegyen lévő vonalkód kötelezően a törzsszám legyen. Így kölcsönzéskor mind az olvasó mind a dokumentum vonalkóddal azonosítható. Vonalkódos rendszer bevezetése esetén a szerzőkkel érdemes előzetesen egyeztetni. Amennyiben a könyvtár a vonalkódokat az adatok számítógépre vitele közben, vagy utána vezeti be, a dokumentumok vonalkódozása nem jelent többlet feladatot, mert a kölcsönzéskor a vonalkód azonnal hozzárendelhető a dokumentumhoz a nélkül, hogy a dokumentum módosítása menübe kellene menni!">vonalkód:</label>
         <input name="vonalkod" value="<?=$vonalkod!=0?$vonalkod:''?>" maxlength="13" type="text" class="form-control" id="vonalkod">
       </div>
     </div>
 
     <div class="row">
       <div class="form-group col-xs-12 col-sm-4">
-        <label for="cim">cím:</label>
-        <input onkeyup="gyors_honosito()" name="cim" value="<?=$cim?>" list="cimek" type="text" class="form-control" id="cim" autocomplete="off" />
+        <label class="dotted_underline" for="cim" data-toggle="tooltip" data-placement="top" title="Az adatok bevitele csak ezen a beviteli mezőn keresztül törénhet. Sok más rendszer esetében megszokás adni a könyvek főcímét, alcímét és egyéb címeit, de ebben a mezőben csak a könyvv főcíme adható meg. Mivel itt csak egyetlen adatot lehetséges eltárolni, ezért formaiag nem szükséges, hogy ezt bármilyen formában jelöljük.">cím:</label>
+        <input onkeyup="gyors_honosito()" name="cim" value="<?=$cim?>" list="cimek" type="text" class="form-control required_field" id="cim" autocomplete="off" />
         <datalist id="cimek">          
         </datalist>
       </div>
       <textarea type="textarea" name="json_data" style="display:none !important"></textarea>
       <div class="form-group col-xs-12 col-sm-4">
-        <label for="egyebcimek">egyébcímek:</label>
+        <label class="dotted_underline" for="egyebcimek" data-toggle="tooltip" data-placement="top" title="Itt lehet megadni az összes olyan címet, ami eltér a könyv főcímétől.">egyébcímek:</label>
         <input name="egyebcimek" value="<?=$egyebcimek?>" maxlength="255" type="text" class="form-control" id="egyebcimek"/>
       </div>
       <div class="form-group col-xs-12 col-sm-4">
-        <label for="szerzo">szerzők:</label>
+        <label class="dotted_underline" for="szerzo" data-toggle="tooltip" data-placement="top" title="Közvetlen adatbevitel esetén a beírt adatokat az ISBN szabványnak megfelelőn kell bevinni. (Pl.: írta Kiss Péter, Torzsa Mihály ; rajzolta Borsos Miklós ; bev. Kocsis Péter, Juhász Pál.) A cím és a szerzők között lévő / jelet nem kell megadni a címleírásban. A több szerző több művét közlő könyv esetén a szabványtól el kell térni. A címadatokban a főcímeket ; el kell elválasztani, a szerzőknél a különböző művek szerzőinek elválasztásához javasoljuk a : alkalmazását. pl.: Köszönet a kulcsokért ; Pygmalion veresége / Benkő Attila : Sebestyén András.">szerzők:</label>
         <div class="input-group col-xs-12 col-sm-12">
-          <input name="szerzok" list="szerzok" id="szerzo" class="form-control" autocomplete="off" value="<?=$szerzok?>">
+          <input name="szerzok" list="szerzok" id="szerzo" class="form-control required_field" autocomplete="off" value="<?=$szerzok?>">
             <!--span class="input-group-btn hidden-xs hidden-sm">
             <button onclick="_delete_szerzo()" class="btn btn-twitter btn-flat" type="button"><span class="fa fa-fw fa-times"></span></button>
             <button onclick="_insert_szerzo()" class="btn btn-dropbox btn-flat" type="button"><span class="fa fa-fw fa-check"></span></button>
@@ -364,26 +381,26 @@ $form_location = base_url()."bibliografiak/create/".$update_id;
 
     <div class="row">
       <div class="form-group col-xs-12 col-sm-4">
-        <label for="kiemelt_rendszavak">kiemelt rendszavak:</label>
+        <label class="dotted_underline" for="kiemelt_rendszavak" data-toggle="tooltip" data-placement="top" title="A mezőt a cím és a szerző alapjány automatikusan kiegészíti a rendszer. Mivel az automatikus rendszó kitöltés lehet hibás, ezeket kézzel kell javítani.">kiemelt rendszavak:</label>
         <input name="kiemelt_rendszavak" value="<?=$kiemelt_rendszavak?>" maxlength="500" type="text" class="form-control" id="kiemelt_rendszavak"/>
       </div>
       <div class="form-group col-xs-12 col-sm-4">
-        <label for="egyeb_rendszavak">egyéb rendszavak:</label>
+        <label class="dotted_underline" for="egyeb_rendszavak" data-toggle="tooltip" data-placement="top" title="Egyyéb rendszó megadása csak itt lehetséges. Mivel az automatikus rendszó kitöltés lehet hibás, ezeket kézzel kell javítani.">egyéb rendszavak:</label>
         <input name="egyeb_rendszavak" value="<?=$egyeb_rendszavak?>" maxlength="500" type="text" type="text" class="form-control" id="egyeb_rendszavak"/>
       </div>
       <div class="form-group col-xs-12 col-sm-4">
-        <label for="testuleti_szerzo">testületi szerző:</label>
+        <label class="dotted_underline" for="testuleti_szerzo" data-toggle="tooltip" data-placement="top" title="A testületeket a * karakter választja el egymástól. Számuk tetszőleges lehet. A rendezvények adatait a közös speciális adatoknál kell megadni. (k.spec.: mezőben!)">testületi szerző:</label>
         <input name="testuleti_szerzo" value="<?=$testuleti_szerzo?>" maxlength="500" type="text" class="form-control" id="testuleti_szerzo">
       </div>
     </div>
 
     <div class="row">
       <div class="form-group col-xs-12 col-sm-6">
-        <label for="kiadasjelzes">Kiadásjelzés:</label>
+        <label class="dotted_underline" for="kiadasjelzes" data-toggle="tooltip" data-placement="top" title="Szerkezete: kiadásjelzés / kiadásra vonatkozó szerzőségi közlés. Csak a minden kétséget kizáróan az adott kiadásra vonatkozó szerzőségi adatot szabad itt felsorolni. példa: 3. bőv. kiad. / szerk. Gallé Tibor">Kiadásjelzés:</label>
         <input name="kiadasjelzes" value="<?=$kiadasjelzes?>" maxlength="100" type="text" class="form-control" id="kiadasjelzes">
       </div>
       <div class="form-group col-xs-12 col-sm-4">
-        <label for="lelohelyek">lelőhely:</label>
+        <label class="dotted_underline" for="lelohelyek" data-toggle="tooltip" data-placement="top" title="A dokumentumok könyvtáron belüli lelőhelyét, vagy fiókkönyvtárak esetén letéti helyét lehet megadni. Amennyiben a megadott lelőhely még nem szerepel a lelőhely listában a program megkérdezi, felvegye-e?. Ld. még letétek kezelése">lelőhely:</label>
         <input name="lelohely" value="<?=$lelohely?>" maxlength="300" type="text" class="form-control" id="lelohelyek" list="lelohely" autocomplete="off">
         <datalist id="lelohely">
           <?php foreach($query->result() as $row){ ?>
@@ -392,111 +409,111 @@ $form_location = base_url()."bibliografiak/create/".$update_id;
         </datalist>
       </div>
       <div class="form-group col-xs-12 col-sm-2">
-        <label for="dok_stat">dok stat:</label>
+        <label class="dotted_underline" for="dok_stat" data-toggle="tooltip" data-placement="top" title="Értéke „n” vagy „e” Az „n” jelentése, hogy a rekord nem végleges, valamennyi adata módosítható. Ez az alapértelmezett. Az „e” előfeldolgozott tétel átmeneti állapotnak tekintendő. Előfeldolgozott dokumentumot is meg lehet többszörözni. Az előfeldolgozott tételek megtöbbszörözésekor a saját tételekhez hasonlóan alakul ki a forráspéldány-további példányok közötti kapcsolat.">dok stat:</label>
         <input name="dok_stat" value="<?=$dok_stat!=0?$dok_stat:''?>" maxlength="100" type="text" class="form-control" id="dok_stat">
       </div>
     </div>
 
     <div class="row">
       <div class="form-group col-xs-12 col-sm-3">
-        <label for="megjelenes">megjelenés:</label>
+        <label class="dotted_underline" for="megjelenes" data-toggle="tooltip" data-placement="top" title="Szerkezete: megjelenés helye : a kiadó neve, a megjelenés éve (Pl. Budapest. : Magvető, 1985 [!1965]). Az adatok ismételhetők, minden esetben ki kell tenni a központozó jeleket. (Pl. Budapest : Magvető : Szépirod. Kvk., 1980)">megjelenés:</label>
         <input name="megjelenes" value="<?=$megjelenes?>" maxlength="500" type="text" class="form-control" id="megjelenes">
       </div>
       <div class="form-group col-xs-12 col-sm-3">
-        <label for="terjedelem">terjedelem:</label>
+        <label class="dotted_underline" for="terjedelem" data-toggle="tooltip" data-placement="top" title="Szerkezete könyveknél: oldalszám : ill. ; méret + melléklet (oldalszám : ill. ; méret) (Pl. 219 p., : ill. ; 21 cm + mell. (18 p. : ill. ; 10 cm))Többkötetes közös adatainál: a kötetek száma, utána a minden kötetre vonatkozó adatok. (Pl. 3 db. ; 20 cm) Hang-, audiovizuális dokumentum: elvileg itt is meg lehetne adni a speciális terjedelmi adatokat: (Pl. zajszűrő rendszer megnevezése: normál, dolbi stb. hangfelvétel típusa: mono, sztereo stb. felvétel rendszere: VHS, digitális stb.) Ekkor azonban ezek az adatok nem kerülnek indexelésre és a gyorskeresővel nem kereshetők vissza, hanem csak a leválogató programmal! Ezért javasoljuk a speciális adatoknál leírni, mert így a gyorskeresővel is visszakereshetők. Amennyiben olyan szempont merül fel, ami a speciális adatoknál nem választható, jelezzék, betesszük a programba!">terjedelem:</label>
         <input name="terjedelem" value="<?=$terjedelem?>" maxlength="165" type="text" class="form-control" id="terjedelem">
       </div>
       <div class="form-group col-xs-12 col-sm-3">
-        <label for="sorozat">sorozat:</label>
+        <label class="dotted_underline" for="sorozat" data-toggle="tooltip" data-placement="top" title="Szerkezete: (sorozat főcíme = párhuzamos címe : alcíme / szerzőségi közlése, ISSN-je ; sorozati szám) (Pl.: (Módszertani írások, ISSN 0139-155X)) Amennyiben egy mű több sorozatban jelent meg, újabb zárójelek között adhatók meg a további sorozatok. Pl. (Borsod-Miskolci füzetek, ISSN 1524-0905 ; 13) . (Dokumentatio Borsodiensis, ISSN 0209-9446 ; 2)">sorozat:</label>
         <input name="sorozat" value="<?=$sorozat?>" maxlength="255" type="text" class="form-control" id="sorozat">
       </div>
       <div class="form-group col-xs-12 col-sm-3">
-        <label for="kozos_megj">közös megj:</label>
+        <label class="dotted_underline" for="kozos_megj" data-toggle="tooltip" data-placement="top" title="Itt a dokumentum összes példányára érvényes megjegyzéseket adhatjuk meg. Itt közölhetjük a bibliográfiák helyét, a közös kiadások tényét stb. (Pl. Csehszlovák - magyar közös kiadás .- Bibliogr. : p. 122-128.)">közös megj:</label>
         <input name="kozos_megj" value="<?=$kozos_megj?>" type="text" class="form-control" id="kozos_megj">
       </div>
     </div>
 
     <div class="row">
       <div class="form-group col-xs-12 col-sm-3">
-        <label for="peldany_megj">példány megj:</label>
+        <label class="dotted_underline" for="peldany_megj" data-toggle="tooltip" data-placement="top" title="Itt az adott példányra vonatkozó megjegyzéseket lehet megadni. (Pl. rongált .- hiányos .- törlésre javasolt stb.)">példány megj:</label>
         <input name="peldany_megj" value="<?=$peldany_megj?>" type="text" class="form-control" id="peldany_megj">
       </div>
       <div class="form-group col-xs-12 col-sm-3">
-        <label for="isbn">ISBN:</label>
+        <label class="dotted_underline" for="isbn" data-toggle="tooltip" data-placement="top" title="A dokumentumon feltüntetett ISBN számot kell megadni 10, vagy 13 hosszúságban (az ellenőrzőszámmal együtt.). A rendszer kezeli az új ISBN számokat is. Amennyiben a dokumentumon feltüntetett ISBN láthatóan hibás és tudjuk a jó ISBN-t, akkor itt a jó ISBN-t adjuk meg. Honosított tételeknél ide kerül a jó ISBN szám. ">ISBN:</label>
         <input name="isbn" value="<?=$isbn?>" maxlength="17" type="text" class="form-control" id="isbn">
       </div>
       <div class="form-group col-xs-12 col-sm-6">
-        <label for="kotes">Kötés:</label>
+        <label class="dotted_underline" for="kotes" data-toggle="tooltip" data-placement="top" title="Itt adható meg a hibás ISBN szám, vagy a 2. stb. ISBN, valamint a kötés típusa. Régi könyvek esetében a kötés leírása sok-sok szempont alapján, részletesen a speciális adatoknál adható meg. A speciális adatoknál megadott leírások a gyorskeresővel visszakereshetők.">Kötés:</label>
         <input name="kotes" value="<?=$kotes?>" type="text" class="form-control" id="kotes">
       </div>      
     </div>
 
     <div class="row">
       <div class="form-group col-xs-12 col-sm-5">
-        <label for="gyari_szam">gyári szám:</label>
+        <label class="dotted_underline" for="gyari_szam" data-toggle="tooltip" data-placement="top" title="Audiovizuális és hangzó dokumentum esetén a gyártási számot itt lehet megadni. Könyveknél ez a mező üres marad.">gyári szám:</label>
         <input name="gyari_szam" value="<?=$gyari_szam?>" maxlength="100" type="text" class="form-control" id="gyari_szam">
       </div>
       <div class="form-group col-xs-12 col-sm-4 col-lg-5">
-        <label for="nemzetkozi_azonosito">nemzetközi azonosító:</label>
+        <label class="dotted_underline" for="nemzetkozi_azonosito" data-toggle="tooltip" data-placement="top" title="Minden dokumentumtípusnál a nemzetközi (vagy más) azonosító kódot lehet itt megadni.">nemzetközi azonosító:</label>
         <input name="nemzetkozi_azonosito" value="<?=$nemzetkozi_azonosito?>" maxlength="100" type="text" class="form-control" id="nemzetkozi_azonosito">
       </div>
       <div class="form-group col-xs-12 col-sm-3 col-lg-2">
-        <label for="feltuntetett_ar">feltüntetett ár:</label>
+        <label class="dotted_underline" for="feltuntetett_ar" data-toggle="tooltip" data-placement="top" title="A dokumentumon feltüntetett árat adjuk itt meg. Ez az ár eltérhet a tényleges beszerzési ártól, amit szintén meg lehet adni. Ez a mező szabad szöveges, beírhatjuk azt is: ár nélkül stb.">feltüntetett ár:</label>
         <input name="feltuntetett_ar" value="<?=$feltuntetett_ar!=0?$feltuntetett_ar:''?>" maxlength="11" type="text" class="form-control" id="feltuntetett_ar">
       </div>      
     </div>
 
     <div class="row">
       <div class="form-group col-xs-12 col-sm-3 col-md-4">
-        <label for="beszerz_jegyz">beszerz. jegyz:</label>
+        <label class="dotted_underline" for="beszerz_jegyz" data-toggle="tooltip" data-placement="top" title="Az egyszerre vásárolt dokumentumok esetén azokat azonos jegyzékszámon lehet bevételezni. Ez alapján leltárkönyv formátumban pénzügyi kimutatás készíthető a beszerzésekről a gyorskeresőben. Ez a jegyzékszám lehet akár a vásárlási számla száma is!">beszerz. jegyz:</label>
         <input name="beszerz_jegyz" value="<?=$beszerz_jegyz?>" maxlength="150" type="text" class="form-control" id="beszerz_jegyz">
       </div>
       <div class="form-group col-xs-12 col-sm-3 col-lg-2">
-        <label for="beszerz_mod">beszerz. mód:</label>
+        <label class="dotted_underline" for="beszerz_mod" data-toggle="tooltip" data-placement="top" title="Kötelezően a - „v” vásárolt, „c” csere, „a” ajándék, „k” köteles, „e” egyéb - karakter valamelyike.">beszerz. mód:</label>
         <input maxlength="200" name="beszerz_mod" value="<?=$beszerz_mod?>" maxlength="200" type="text" class="form-control" id="beszerz_mod">
       </div>
       <div class="form-group col-xs-12 col-sm-3 col-lg-4">
-        <label for="datum">dátum:</label>
+        <label class="dotted_underline" for="datum" data-toggle="tooltip" data-placement="top" title="Beszerzési dátum éééé.hh.nn. formában (Pl. 1995.02.12.) A segítő menüben található „napi dátum” az aktuális dátumot beírja a mezőbe.">dátum:</label>
         <input name="datum" value="<?=$datum?>" maxlength="15" type="text" class="form-control" id="datum">
       </div>  
       <div class="form-group col-xs-12 col-sm-3 col-lg-2">
-        <label for="beszerzesi_ar">beszerzési ár:</label>
+        <label class="dotted_underline" for="beszerzesi_ar" data-toggle="tooltip" data-placement="top" title="A pénzügyi nyilvántartás adata, eltérhet a könyvön feltüntetett ártól. Az ár megadása csak a számrész feltüntetésével történik. A forint-fillér közé pontot kell tenni. (Pl. 25 vagy 100.50) Közös árral rendelkező többkötetes művek sajátosságai: Közös árral rendelkező többkötetes művek esetén mindig tudjuk a kötetek számát. Ezt a közös adatoknál a terjedelemnél kötelező megadni, mert a pénzügyi nyilvántartás csak így működik helyesen! A közös adatoknál a beszerzési ár mezőbe kötelezően a k betűt kell megadni. A valódi beszerzési árat az első kötet leírásnál kell bejegyezni. Ha a dokumentum minden kötetének külön ára van, akkor a közös adatoknál a beszerzési ár mező üresen marad, a beszerzési árat a kötetleírásoknál adjuk meg.">beszerzési ár:</label>
         <input name="beszerzesi_ar" value="<?=$beszerzesi_ar!=0?$beszerzesi_ar:''?>" maxlength="11" type="text" class="form-control" id="beszerzesi_ar">
       </div>      
     </div>
 
     <div class="row">
       <div class="form-group col-xs-12">
-        <label for="targyszavak">tárgyszavak:</label>
+        <label class="dotted_underline" for="targyszavak" data-toggle="tooltip" data-placement="top" title="Itt adhatjuk meg a dokumentum tartalmi leírását tárgyszavakkal. Vesszővel elválasztva gyakorlatilag tetszőleges számú tárgyszót adhatunk meg. Az összetett tárgyszavakat érdemes több tárgyszóként megadni a hatékonyabb visszakereshetőség miatt. (Pl. "felvidéki magyar irodalom a 18. században" helyett "magyar irodalom,Felvidék,18. sz.")">tárgyszavak:</label>
         <textarea name="targyszavak" rows="2" class="form-control" id="targyszavak"><?=$targyszavak?></textarea>
       </div>
     </div>
 
     <div class="row">
       <div class="form-group col-xs-12">
-        <label for="eto">ETO:</label>
+        <label class="dotted_underline" for="eto" data-toggle="tooltip" data-placement="top" title="Egymástól vesszővel elválasztva gyakorlatilag tetszőleges számú ETO jelzet adható meg. A ETO jelzet bármilyen bonyolult lehet. A megadott ETO jelzetek gyorskereső képesek.">ETO:</label>
         <input name="eto" value="<?=$eto?>" maxlength="500" type="text" class="form-control" id="eto">
       </div>
     </div>
 
     <div class="row">
       <div class="form-group col-xs-12 col-sm-7">
-        <label for="targyi_mt">tárgyi mt.</label>
+        <label class="dotted_underline" for="targyi_mt" data-toggle="tooltip" data-placement="top" title="A dokumentum tárgya adható meg. Ez nem azonos egy tárgyszóval. Pl. egy Mikszáth életrajznál tárgyi melléktételként megadhatjuk: Mikszáth Kálmán. Több tárgyi melléktétel is megadható, azokat a * karakterrel kell elválasztani egymástól.">tárgyi mt.</label>
         <input name="targyi_mt" value="<?=$targyi_mt?>" maxlength="500" type="text" class="form-control" id="targyi_mt">
       </div>
       <div class="form-group col-xs-12 col-sm-5">
-        <label for="kozos_spec_adat">közös spec. adat:</label>
+        <label class="dotted_underline" for="kozos_spec_adat" data-toggle="tooltip" data-placement="top" title="A közös speciális adat mezőben azokat a speciális adatokat adjuk meg, amik minden példányra érvényesek (pl. a dokumentum nyelve), a saját speciális adat mezőben pedig az adott példányra vonatkozó speciális adatokat (pl. dedikáció).">közös spec. adat:</label>
         <input name="kozos_spec_adat" value="<?=$kozos_spec_adat?>" maxlength="10" type="text" class="form-control" id="kozos_spec_adat">
       </div>
     </div>
 
     <div class="row">
       <div class="form-group col-xs-12 col-sm-10 col-lg-10">
-        <label for="saj_spec_adat">Saj. spec. adat:</label>
+        <label class="dotted_underline" for="saj_spec_adat" data-toggle="tooltip" data-placement="top" title="A rendszer egyik erőssége, hogy a speciális adatok száma és megnevezése szabadon bővíthető!">Saj. spec. adat:</label>
         <input name="saj_spec_adat" value="<?=$saj_spec_adat?>" type="text" class="form-control" id="saj_spec_adat">
       </div>
       <div class="form-group col-xs-12 col-sm-2 col-lg-2">
-        <label for="csz">Csz:</label>
+        <label class="dotted_underline" for="csz" data-toggle="tooltip" data-placement="top" title="A szerzők, vagy a cím alapján automatikusan kitöltődik. Ha valamilyen oknál fogva mégis hibás, felül lehet bírálni.">Csz:</label>
         <input name="csz" value="<?=empty($csz)?$auto_cutter:$csz?>" maxlength="10" type="text" class="form-control" id="csz">
       </div>
     </div>
@@ -506,43 +523,43 @@ $form_location = base_url()."bibliografiak/create/".$update_id;
       
       <div class="row">
         <div class="form-group col-xs-12 col-sm-2">
-          <label for="cserear">Csereár:</label>
+          <label class="dotted_underline" for="cserear" data-toggle="tooltip" data-placement="top" title="Elveszett példányok esetében szükséges a könyv eredeti ára alapján megszabni az eredeti árnál egy alacsonyabb de mégis elfogadható díjjat kiszabni, de az is előfordulhat, hogy esetleg a kölcsönző inkább saját maga sezrzi be újra, ilyenkor persze csereár megadása nem szükséges.">Csereár:</label>
           <input name="cserear" value="<?=$cserear!=0?$cserear:''?>" type="text" class="form-control" id="cserear">
         </div>
         <div class="form-group col-xs-12 col-sm-3">
-          <label for="cserear_datuma">Csereár dátuma:</label>
+          <label class="dotted_underline" for="cserear_datuma" data-toggle="tooltip" data-placement="top" title="Új csereár megadásakor szükséges kitölteni ezt a mezőt.">Csereár dátuma:</label>
           <input name="cserear_datuma" value="<?=$cserear_datuma?>" type="date" class="form-control" id="cserear_datuma">
         </div>
         <div class="form-group col-xs-12 col-sm-3">
-          <label for="nem_kolcsonzesre">Nem kölcsönzésre:</label>
+          <label class="dotted_underline" for="nem_kolcsonzesre" data-toggle="tooltip" data-placement="top" title="A könyv elérhetőségét lehetőségünk van korlátozni (Y - nem kölcsönözhető / N - kölcsönözhető).">Nem kölcsönzésre:</label>
           <input name="nem_kolcsonzesre" value="<?=$nem_kolcsonzesre?>" maxlength="10" type="text" class="form-control" id="nem_kolcsonzesre">
         </div>
         <div class="form-group col-xs-12 col-sm-2">
-          <label for="elveszett_elem">Elveszett:</label>
+          <label class="dotted_underline" for="elveszett_elem" data-toggle="tooltip" data-placement="top" title="A könnyebb visszakereshetőségért az elveszett könyvek státuszát itt kell megadni. (Alapértelmezetten ezt a mezőt nem szükséges megadni.)">Elveszett:</label>
           <input name="elveszett_elem" value="<?=$elveszett_elem?>" maxlength="10" type="text" class="form-control" id="elveszett_elem">
         </div>
         <div class="form-group col-xs-12 col-sm-2">
-          <label for="tartalekok">Tartalékok:</label>
+          <label class="dotted_underline" for="tartalekok" data-toggle="tooltip" data-placement="top" title="A bibliográfia tartalék példányaira vonatkozó információkat csak itt lehet megadni.">Tartalékok:</label>
           <input name="tartalekok" value="<?=$tartalekok!=0?$tartalekok:''?>" maxlength="10" type="text" class="form-control" id="tartalekok">
         </div>
       </div>
       <div class="row">
         <div class="form-group col-xs-12 col-sm-4">
-          <label for="melleklet_1">Melléklet 1:</label>
+          <label class="dotted_underline" for="melleklet_1" data-toggle="tooltip" data-placement="top" title="Az első melléklet leltári_számát kell itt megadni. Az adat érvényességét a rendszer nem ellenőrzi.">Melléklet 1:</label>
           <input name="melleklet_1" value="<?=$melleklet_1!=0?$melleklet_1:''?>" type="text" class="form-control" id="melleklet_1">
         </div>
         <div class="form-group col-xs-12 col-sm-4">
-          <label for="melleklet_2">Melléklet 2:</label>
+          <label class="dotted_underline" for="melleklet_2" data-toggle="tooltip" data-placement="top" title="A második melléklet leltári_számát kell itt megadni. Az adat érvényességét a rendszer nem ellenőrzi.">Melléklet 2:</label>
           <input name="melleklet_2" value="<?=$melleklet_2!=0?$melleklet_2:''?>" type="text" class="form-control" id="melleklet_2">
         </div>
         <div class="form-group col-xs-12 col-sm-4">
-          <label for="melleklet_3">Melléklet 3:</label>
+          <label class="dotted_underline" for="melleklet_3" data-toggle="tooltip" data-placement="top" title="Az harmadik melléklet leltári_számát kell itt megadni. Az adat érvényességét a rendszer nem ellenőrzi.">Melléklet 3:</label>
           <input name="melleklet_3" value="<?=$melleklet_3!=0?$melleklet_3:''?>" maxlength="10" type="text" class="form-control" id="melleklet_3">
         </div>
       </div>
       <div class="row">
         <div class="form-group col-xs-12">
-          <label for="url">URL (e-book):</label>
+          <label class="dotted_underline" for="url" data-toggle="tooltip" data-placement="top" title="Ebook-ok esetében a weboldal címét minden esetben szükséges megadni.">URL (e-book):</label>
           <input name="url" value="<?=$url?>" type="text" class="form-control" id="url">
         </div>
       </div>
@@ -568,26 +585,26 @@ $form_location = base_url()."bibliografiak/create/".$update_id;
 
     <div class="row">
       <div class="form-group col-xs-12 col-sm-3">
-        <label for="nyelv">Nyelv:</label>
-        <input name="nyelvek" list="nyelvek" value="<?=$nyelv?>" maxlength="255" type="text" class="form-control" id="nyelv" autocomplete="off">
+        <label class="dotted_underline" for="nyelv" data-toggle="tooltip" data-placement="top" title="A dokumentum nyelve adható meg rövídített, vagy normál forma szerint. Új nyelv hozzáadása a fenti menü segítségével adható meg.">Nyelv:</label>
+        <input name="nyelvek" list="nyelvek" value="<?=$nyelv?>" maxlength="255" type="text" class="form-control required_field" id="nyelv" autocomplete="off">
         <datalist id="nyelvek">
         </datalist>
       </div>
       <div class="form-group col-xs-12 col-sm-3">
-        <label for="tipus">Típus:</label>
-        <input name="tipusok" list="tipusok" value="<?=$tipus?>" maxlength="255" type="text" class="form-control" id="tipus" autocomplete="off">
+        <label class="dotted_underline" for="tipus" data-toggle="tooltip" data-placement="top" title="A dokumentum típusa adható meg. Új típus hozzáadása a fenti menü segítségével adható meg.">Típus:</label>
+        <input name="tipusok" list="tipusok" value="<?=$tipus?>" maxlength="255" type="text" class="form-control required_field" id="tipus" autocomplete="off">
         <datalist id="tipusok">
         </datalist>
       </div>
       <div class="form-group col-xs-12 col-sm-3">
-        <label for="gyujtemeny">Gyűjtemény:</label>
-        <input name="gyujtemenyek" list="gyujtemenyek" value="<?=$gyujtemeny?>" maxlength="255" type="text" class="form-control" id="gyujtemeny" autocomplete="off">
+        <label class="dotted_underline" for="gyujtemeny" data-toggle="tooltip" data-placement="top" title="A dokumentumot csak egy gyűjteménybe van lehetőség besorolni. De egy új gyűjteményt csak akkor lehet hozzáadni a fenti menüvel, ha a fiók könyvtár már előzetesen szerepel az adatbázisban. Egy új gyűjtemény létrhezozásakor figyelni kell a fiók könyvtár szabályainak a megadására, mivel más különben nem várható sem költségtérítés az elvesztett könyvekért, sem pedig a kölcsönzési idő betartatása.">Gyűjtemény:</label>
+        <input name="gyujtemenyek" list="gyujtemenyek" value="<?=$gyujtemeny?>" maxlength="255" type="text" class="form-control required_field" id="gyujtemeny" autocomplete="off">
         <datalist id="gyujtemenyek">
         </datalist>
       </div>
       <div class="form-group col-xs-12 col-sm-3">
-        <label for="kiado">Kiadó:</label>
-        <input name="kiadok" list="kiadok" value="<?=$kiado?>" maxlength="255" type="text" class="form-control" id="kiado" autocomplete="off">
+        <label class="dotted_underline" for="kiado" data-toggle="tooltip" data-placement="top" title="A könnyebb kereshetőség érdekében érdemes a mező értékét megadni (a mező kitöltése kötelező).">Kiadó:</label>
+        <input name="kiadok" list="kiadok" value="<?=$kiado?>" maxlength="255" type="text" class="form-control required_field" id="kiado" autocomplete="off">
         <datalist id="kiadok">
         </datalist>
       </div>
@@ -841,6 +858,7 @@ function check(){
       //alert(obj);
         $.each(obj, function( key, value ) {
           $("#bibliografiak input[name='"+key+"']").val(value);
+          $("#bibliografiak textarea[name='"+key+"']").text(value);
         });
         //alert(data);
      }
@@ -871,6 +889,7 @@ $(document).ready(function(){
         //$("#bibliografiak input[name='"+key+"']").val(value);
         if(value == value1 || talalat){
           $("#bibliografiak input[name='"+key+"']").val(value);
+          $("#bibliografiak textarea[name='"+key+"']").text(value);
           talalat = true;          
         }
       });
@@ -880,7 +899,9 @@ $(document).ready(function(){
 
 function gyors_honosito(){
   var cim = $('#cim').val();
-   $.get('<?=base_url()?>bibliografiak/gyors_honosito?cim='+cim, function(data) {
+  var szerver = $('select[name=fast_cat] option:selected').text();
+  
+   $.get('<?=base_url()?>bibliografiak/gyors_honosito?szerver='+szerver+'&cim='+cim, function(data) {
      if( data != "" ) {
       var arr = data.replace(/\'/g,'\"');
       var obj = JSON.parse(arr);
@@ -1191,4 +1212,10 @@ function determineOverflow(content, container) {
 }));
 
 //# sourceURL=pen.js
+</script>
+
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip(); 
+});
 </script>

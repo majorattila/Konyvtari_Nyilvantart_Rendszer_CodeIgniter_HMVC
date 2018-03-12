@@ -179,6 +179,7 @@ function fetch_data_from_db($update_id)
     return $data;
 }
 
+/*
 function manage()
 {
     $this->load->module('site_security');
@@ -189,6 +190,89 @@ function manage()
     $data['query'] = $this->get('oldal_url');
 
     //$data['view_module'] = "weboldalak";
+    $data['view_file'] = "manage";
+    $this->load->module('templates');
+    $this->templates->admin_template($data);
+}
+*/
+
+
+function get_offset(){
+    $offset = $this->uri->segment(4);
+    if(!is_numeric($offset)){
+        $offset = 0;
+    }
+    return $offset;
+}
+
+function get_limit(){
+    $limit = 20;
+    return $limit;
+}
+
+function get_target_pagination_base_url(){
+    $first_bit = $this->uri->segment(1);
+    $second_bit = $this->uri->segment(2);
+    $third_bit = $this->uri->segment(3);
+    $target_base_url = base_url().$first_bit.'/'.$second_bit.'/'.$third_bit;
+    return $target_base_url;
+}
+
+function _generate_mysql_query($mysql_query, $oldal_szam, $limit){
+
+    if($limit == TRUE){
+        $limit = $this->get_limit();
+        $offset = $this->get_offset();
+        $mysql_query .= " limit ".$offset.", ".$limit;
+    }
+
+    return $mysql_query;
+}
+
+
+function manage()
+{
+    $this->load->module('custom_pagination');
+    $this->load->module('site_security');
+    $this->site_security->_is_admin();
+
+    $data['flash'] = $this->session->flashdata('item');
+
+
+    $oldal_szam = $this->uri->segment(3);
+    if(is_null($oldal_szam) || !is_numeric($oldal_szam))
+    {
+        $oldal_szam = $this->get_limit();
+    }
+
+    $limit = TRUE;
+
+    $keres = $this->input->get('keres',TRUE);
+    $rendez = $this->input->get('rendez',TRUE);
+
+    $order_by = empty($rendez)?'oldal_url':$rendez;
+    $where = empty($keres)?"":"WHERE lower(oldal_url) LIKE lower('%$keres%') OR lower(oldal_cim) LIKE lower('%$keres%')";
+
+    $query ="SELECT * FROM biblioteka.weboldalak $where ORDER BY $order_by";
+    $data['result_number'] = $this->_custom_query($query)->num_rows();
+
+    $mysql_query = $this->_generate_mysql_query($query, $oldal_szam, $limit);
+    $data['query'] = $this->_custom_query($mysql_query);
+
+    $data['rendez'] = $rendez;
+    $data['keres'] = $keres;
+
+    $pagination_data['template'] = 'public_bootstrap';
+    $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
+    $pagination_data['total_rows'] = $data['result_number'];
+    $pagination_data['offset_segment'] = 4;
+    $pagination_data['limit'] = $this->get_limit();
+
+    $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
+
+    $pagination_data['offset'] = $this->get_offset();
+    $data['showing_statement'] = $this->custom_pagination->get_showing_statement($pagination_data);
+
     $data['view_file'] = "manage";
     $this->load->module('templates');
     $this->templates->admin_template($data);

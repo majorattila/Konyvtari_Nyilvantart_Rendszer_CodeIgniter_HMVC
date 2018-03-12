@@ -6,6 +6,10 @@ function __construct() {
 parent::__construct();
 }
 
+function _get_path(){
+	return "G:\\biblioteka-x64\\mariadb\\bin\\mysqldump.exe";
+}
+
 function _get_support_team_name()
 {
     $name = "Customer Support";

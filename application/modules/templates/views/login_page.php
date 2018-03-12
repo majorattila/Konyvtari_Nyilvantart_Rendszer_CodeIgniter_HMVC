@@ -7,6 +7,9 @@ $form_location = base_url().$first_bit.'/submit_login';
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <link rel="icon" href="<?= base_url() ?>dist/img/llama_ico.png">
+
   <title>LOGIN</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -33,6 +36,14 @@ $form_location = base_url().$first_bit.'/submit_login';
     .login-box{
       background-color: #fff;
       margin: 9% auto;
+    }
+    @media (max-width:576px){
+      .cb-slideshow{
+        display: none;
+      }
+      .login-page{
+        background-color: #fff;
+      }
     }
   </style>
 
@@ -103,8 +114,8 @@ $form_location = base_url().$first_bit.'/submit_login';
     </div-->
     <!-- /.social-auth-links -->
 
-    <a href="#">Elfelejtettem a jelszavam</a><br>
-    <a href="register.html" class="text-center">Regisztrálás új tagként</a>
+    <a href="<?=base_url()?>fiok/password">Elfelejtettem a jelszavam</a><br>
+    <a href="<?=base_url()?>fiok/start" class="text-center">Regisztrálás új tagként</a>
 
   </div>
   <!-- /.login-box-body -->

@@ -6,6 +6,16 @@ function __construct() {
 parent::__construct();
 }
 
+function _draw_advertisement()
+{
+	$this->load->view("_draw_advertisement");
+}
+
+function _draw_newsletter_register_box()
+{
+	$this->load->view("_draw_newsletter_register_box.php");
+}
+
 function _draw_employees()
 {
 	$data['num_rows'] = $this->get_employees();
@@ -24,21 +34,21 @@ function _draw_user_registrations()
     $this->load->view("_draw_user_registrations.php", $data);
 }
 
-function _draw_unique_vistors()
+function _draw_subscribers()
 {
-	$data['num_rows'] = $this->get_unique_vistors();
-    $this->load->view("_draw_unique_vistors.php", $data);
+	$data['num_rows'] = $this->get_subscribers();
+    $this->load->view("_draw_subscribers.php", $data);
 }
 
 function _draw_calendar()
 {
-	$data = [];
+	$data = array();
     $this->load->view("_draw_calendar.php", $data);
 }
 
 function _draw_quick_email()
 {
-	$data = [];
+	$data = array();
     $this->load->view("_draw_quick_email.php", $data);
 }
 
@@ -74,9 +84,9 @@ function get_user_registrations(){
 	return $query;
 }
 
-function get_unique_vistors(){
+function get_subscribers(){
 	$this->load->model("mdl_widgets");
-	$query = $this->mdl_widgets->get_unique_vistors();
+	$query = $this->mdl_widgets->get_subscribers();
 	return $query;
 }
 

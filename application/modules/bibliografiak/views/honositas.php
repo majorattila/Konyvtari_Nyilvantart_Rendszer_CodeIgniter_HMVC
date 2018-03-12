@@ -24,7 +24,7 @@
                   <button type="button" onclick="self.close()" class="btn btn-lg">Mégse</button>
                 </div><hr/>
 
-                <div class="col-xs-3">
+                <div class="col-xs-12 col-sm-3">
                     <div class="form-group">
                       <label for="szempont1">Szempont:</label>
                       <select name = "szempont1" class="form-control" id="szempont1">
@@ -39,11 +39,11 @@
                       </select>
                     </div>
                 </div>
-                <div class="col-xs-3">
+                <div class="col-xs-12 col-sm-3">
                     <label for="kriterium1">Kritérium:</label>
                     <input name="kriterium1" class="form-control" id="kriterium1" type="text">
                 </div>                
-                <div class="col-xs-3">
+                <div class="col-xs-12 col-sm-3">
                     <div class="form-group">
                       <label for="kapcsolat1">Kapcsolat:</label>
                       <select name = "kapcsolat1" class="form-control" id="kapcsolat1">
@@ -53,7 +53,7 @@
                       </select>
                     </div>
                 </div>
-                <div class="col-xs-3">
+                <div class="col-xs-12 col-sm-3">
                     <div class="form-group">
                       <label for="formatum">Formátum:</label>
                       <select name = "formatum" class="form-control" id="formatum">
@@ -65,7 +65,7 @@
             </div>
 
             <div class="row">
-                <div class="col-xs-3">
+                <div class="col-xs-12 col-sm-3">
                     <div class="form-group">
                       <label for="szempont2">Szempont:</label>
                       <select name = "szempont2" class="form-control" id="szempont2">
@@ -80,11 +80,11 @@
                       </select>
                     </div>
                 </div>
-                <div class="col-xs-3">
+                <div class="col-xs-12 col-sm-3">
                     <label for="kriterium2">Kritérium:</label>
                     <input name="kriterium2" class="form-control" id="kriterium2" type="text">
                 </div>                
-                <div class="col-xs-3">
+                <div class="col-xs-12 col-sm-3">
                     <div class="form-group">
                       <label for="kapcsolat2">Kapcsolat:</label>
                       <select name = "kapcsolat2" class="form-control" id="kapcsolat2">
@@ -94,7 +94,7 @@
                       </select>
                     </div>
                 </div>                
-                <div class="col-xs-3">
+                <div class="col-xs-12 col-sm-3">
                     <div class="form-group">
                       <label for="szerver">Szerver:</label>
                       <select name = "szerver" class="form-control" id="szerver">
@@ -107,7 +107,7 @@
             </div>
 
             <div class="row">
-                <div class="col-xs-3">
+                <div class="col-xs-12 col-sm-3">
                     <div class="form-group">
                       <label for="szempont3">Szempont:</label>
                       <select name = "szempont3" class="form-control" id="szempont3">
@@ -122,11 +122,11 @@
                       </select>
                     </div>
                 </div>
-                <div class="col-xs-3">
+                <div class="col-xs-12 col-sm-3">
                     <label for="kriterium3">Kritérium:</label>
                     <input name="kriterium3" class="form-control" id="kriterium3" type="text">
                 </div>                
-                <div class="col-xs-3">
+                <div class="col-xs-12 col-sm-3">
                     <div class="form-group">
                       <label for="kapcsolat3">Kapcsolat:</label>
                       <select name = "kapcsolat3" class="form-control" id="kapcsolat3">
@@ -136,13 +136,13 @@
                       </select>
                     </div>
                 </div>
-                <div class="col-xs-3">
+                <div class="hidden-xs col-sm-3">
                     <a class="btn btn-primary" onClick="self.close(); newwindow = window.open('<?=base_url()?>bibliografiak/manage_z3950', '', '');" href="javascript:void(0);">z39.50 szerverek</a>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-xs-3">
+                <div class="col-xs-12 col-sm-3">
                     <div class="form-group">
                       <label for="szempont4">Szempont:</label>
                       <select name = "szempont4" class="form-control" id="szempont4">
@@ -157,11 +157,11 @@
                       </select>
                     </div>
                 </div>
-                <div class="col-xs-3">
+                <div class="col-xs-12 col-sm-3">
                     <label for="kriterium4">Kritérium:</label>
                     <input name="kriterium4" class="form-control" id="kriterium4" type="text">
                 </div>                
-                <div class="col-xs-3">
+                <div class="col-xs-12 col-sm-3">
                     <div class="form-group">
                       <label for="kapcsolat4">Kapcsolat:</label>
                       <select name = "kapcsolat4" class="form-control" id="kapcsolat4">
@@ -171,11 +171,11 @@
                       </select>
                     </div>
                 </div>
-                <div class="col-xs-3"></div>
+                <div class="col-xs-12 col-sm-3"></div>
             </div>
 
             <div class="row">
-                <div class="col-xs-3">
+                <div class="col-xs-12 col-sm-3">
                     <div class="form-group">
                       <label for="szempont5">Szempont:</label>
                       <select name = "szempont5" class="form-control" id="szempont5">
@@ -190,11 +190,11 @@
                       </select>
                     </div>
                 </div>
-                <div class="col-xs-3">
+                <div class="col-xs-12 col-sm-3">
                     <label for="kriterium5">Kritérium:</label>
                     <input name="kriterium5" class="form-control" id="kriterium5" type="text">
                 </div>                
-                <div class="col-xs-3">                    
+                <div class="col-xs-12 col-sm-3"><br/>
                 </div>
             </div>            
         </form>

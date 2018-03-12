@@ -1,9 +1,11 @@
 <style>
+/*
   body{
     background-image:url("<?=base_url()?>dist/img/background/reg_panel.jpg");
     background-size:cover;
     background-repeat: no-repeat;
   }
+  */
   /*
   h1{    
     font-family: 'Expletus Sans';
@@ -11,10 +13,12 @@
     font-weight: bold;
   }
   */
+  /*
   footer{
     position: fixed;
     bottom: 0;
   }
+  */
   #reg_panel{
     margin: 0 auto;
     float: none;

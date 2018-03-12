@@ -20,7 +20,7 @@ function get_library_name_from_id($id)
     $mysql_query = "SELECT nev FROM biblioteka.konyvtarak WHERE fiok_id LIKE ?";
     $query = $this->db->query($mysql_query, array($id));
     $row = $query->row();
-    $nev = $row['nev'];
+    $nev = @$row->nev;
     return $nev;
 }
 
@@ -267,11 +267,25 @@ function manage()
     $limit = TRUE;
 
 
-    $query ="SELECT * FROM biblioteka.gyujtemenyek ORDER BY leiras";
+    $keres = $this->site_security->prevent_injection($this->input->get('keres',TRUE));
+    $rendez = $this->input->get('rendez',TRUE);
+
+    if(!empty($rendez) && in_array($rendez, array('gyujtemeny_id', 'leiras'))){
+        $order_by = $rendez;
+    }else{
+        $order_by = 'gyujtemeny_id';
+    }
+
+    $where = empty($keres)?"":"WHERE lower(gyujtemeny_id) LIKE lower('%$keres%') OR lower(leiras) LIKE lower('%$keres%') ";
+
+    $query ="SELECT * FROM biblioteka.gyujtemenyek $where ORDER BY $order_by";
     $data['result_number'] = $this->_custom_query($query)->num_rows();
 
     $mysql_query = $this->_generate_mysql_query($query, $oldal_szam, $limit);
     $data['query'] = $this->_custom_query($mysql_query);
+
+    $data['rendez'] = $rendez;
+    $data['keres'] = $keres;
 
     $pagination_data['template'] = 'public_bootstrap';
     $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
@@ -287,6 +301,23 @@ function manage()
     $data['view_file'] = "manage";
     $this->load->module('templates');
     $this->templates->admin_template($data);
+}
+/*
+function truncate(){
+    $this->load->module('site_security');
+    $this->site_security->_is_admin();
+    
+    $this->_truncate();
+    redirect(base_url().'gyujtemenyek/manage/20/');
+}
+*/
+function truncate(){
+    $this->load->module('site_security');
+    $this->load->model('mdl_gyujtemenyek');
+
+    if($this->site_security->_get_user_type() == "admin"){
+        $this->mdl_gyujtemenyek->_truncate();
+    }
 }
 
 function get($order_by)
@@ -377,67 +408,6 @@ function _custom_query($mysql_query)
     $this->load->model('mdl_gyujtemenyek');
     $query = $this->mdl_gyujtemenyek->_custom_query($mysql_query);
     return $query;
-}
-
-
-function autogen()
-{
-    $mysql_query = "SHOW COLUMNS FROM gyujtemenyek";
-    $query = $this->_custom_query($mysql_query);
-
-    
-    foreach ($query->result() as $row) {
-        $column_name = $row->Field;
-        //echo $column_name."<br>";
-        if($column_name != "id")
-        {
-            //echo $column_name."<br>";
-            echo '$data[\''.$column_name.'\'] = $this->input->post(\''.$column_name.'\', TRUE);<br>';
-        }
-    }
-
-    echo "<hr>";
-
-    foreach ($query->result() as $row) {
-        $column_name = $row->Field;
-        //echo $column_name."<br>";
-        if($column_name != "id")
-        {
-            //echo $column_name."<br>";
-            //echo '$data[\''.$column_name.'\'] = $this->input->post(\''.$column_name.'\', TRUE);<br>';
-            echo '$data[\''.$column_name.'\'] = $row->'.$column_name.';<br>';
-        }
-    }
-
-    echo "<hr>";
-
-
-    foreach ($query->result() as $row) {
-        $column_name = $row->Field;
-        //echo $column_name."<br>";
-        if($column_name != "id")
-        {
-
-$var = '<div class="control-group">
-  <label class="control-label" for="typeahead">'.ucfirst($column_name).'</label>
-  <div class="controls">
-    <input type="text" class="span6" name="'.$column_name.'" value="<?=$'.$column_name.' ?>">
-  </div>
-</div>';
-
-$var = '<div class="row"><div class="form-group col-xs-3">
-<label for="'.$column_name.'">'.ucfirst($column_name).'</label>
-<input name="'.$column_name.'" value="<?=$'.$column_name.' ?>" type="text" class="form-control" id="'.$column_name.'">
-</div></div>';
-
-echo htmlentities($var);
-
-echo "<br>";
-
-        }
-    }
-
-
 }
 
 }

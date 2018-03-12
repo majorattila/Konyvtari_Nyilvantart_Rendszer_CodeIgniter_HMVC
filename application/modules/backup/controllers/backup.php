@@ -49,8 +49,24 @@ private function get_mysqli() {
     return mysqli_connect('localhost', $db['username'], $db['password']);
 }
 
+function print_last_id()
+{
+    $sql = "SHOW TABLE STATUS LIKE 'backup'";
+    $result= $this->db->query($sql);
+
+    $output = '';
+
+    foreach ($result->result() as $row) {
+        $output = $row->Auto_increment;
+    }
+
+    echo $output;
+}
+
 function ajax_api($action = "insert")
 {
+    $this->load->database();
+    $this->load->module("site_settings");
     $this->load->module('site_security');
     $this->site_security->_is_admin();
     $this->site_security->_get_details_from_user();
@@ -59,21 +75,67 @@ function ajax_api($action = "insert")
     {
         die('Non-numeric variable!');
     }
+    else if($action == "truncate")
+    {
+        $this->db->query("SET FOREIGN_KEY_CHECKS=0");
+        $backup_query = $this->db->query("SELECT * from biblioteka.backup");
+        $query = $this->db->query("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA='biblioteka'");
+        foreach ($query->result() as $row) {
+            if($row->TABLE_NAME != "ci_sessions" && $row->TABLE_NAME != "site_cookies"){
+                $this->db->truncate($row->TABLE_NAME);
+            }
+        }
+        $fields = array('fiok_id' => '2','nev' => 'Központi Könyvtár','foigazgato' => 'Major Attila','iranyitoszam' => '1083','varos' => 'Budapest','kerulet' => 'VIII','cim' => 'Tömő utca 48-54 14.em 156','telefon_szam' => '06205534854','fax_szam' => '','email' => 'attilamajor1997@gmail.com','fiok_megjegyzesek' => '','url' => ''
+        );
+        $this->db->insert('konyvtarak', $fields);
+        $fields = array('id' => '2','fiok_id' => '2','vezeteknev' => 'Major','keresztnev' => 'Attila','felhasznalonev' => 'admin','email' => 'admin@gmail.com','jelszo' => '$2y$11$ZRd4tmoLVfErdG3h4pnaX.RnIwszHaNG4ftWYT8W4maZFW/84460S','olvasojegy' => '102','jogosultsag' => 'admin','statusz' => 'aktiv','reg_datuma' => '2017-12-05','utolso_bejelentkezes' => '1517576397','hirlevel' => '0','profilkep' => 'man-2.png'
+        );
+        $this->db->insert('felhasznalok', $fields);
+        foreach ($backup_query->result() as $row) {
+            $fields = array('id' => $row->id,'fiok_id' => $row->fiok_id,'szemelyzet_id' => $row->szemelyzet_id,'datum' => $row->datum,'fajl_nev' => $row->fajl_nev
+            );
+            $this->db->insert('backup', $fields);
+        }
+        $fields_array = array(
+            array('id' => '1' ,'kategoria_cim' => 'Kezdőlap','kategoria_url' => '','prioritas' => '1'),
+            array('id' => '2' ,'kategoria_cim' => 'Rólunk','kategoria_url' => 'rolunk','prioritas' => '2'),
+            array('id' => '3' ,'kategoria_cim' => 'Katalógus','kategoria_url' => 'katalogus/kereses','prioritas' => '3'),
+            array('id' => '4' ,'kategoria_cim' => 'Hírek','kategoria_url' => 'hirek/kategoriak','prioritas' => '4'),
+            array('id' => '5' ,'kategoria_cim' => 'Könyvtárak','kategoria_url' => 'konyvtarak/kirendeltseg','prioritas' => '5')
+        );
+        foreach ($fields_array as $fields) {
+            $this->db->insert('navbar', $fields);
+        }
+        $fields_array = array(
+            array('id' => 1,'oldal_url' => '','oldal_cim' => 'Kezdőlap','oldal_kulcsszavak' => 'KossuthKönyvtár | Kezdőlap','oldal_leiras' => '','oldal_tartalom' => ''),
+            array('id' => 2,'oldal_url' => 'rolunk','oldal_cim' => 'rolunk','oldal_kulcsszavak' => 'Rólunk','oldal_leiras' => '','oldal_tartalom' => ''),
+            array('id' => 3,'oldal_url' => 'feltetelek','oldal_cim' => 'Feltételek','oldal_kulcsszavak' => 'A könyvtár használat feltételei - KossuthKönyvtár','oldal_leiras' => '','oldal_tartalom' => ''
+            )
+        );
+        foreach ($fields_array as $fields) {
+            $this->db->insert('weboldalak', $fields);
+        }
+        $fields = array("nev" => "oszk", "host" => "tagetes2.oszk.hu", "port" => "1616", "adatbazis" => "ANY");
+        $this->db->insert('z3950', $fields);
+    }
     else
     {
-        $drive = substr($_SERVER['DOCUMENT_ROOT'],0,1);
+        //$drive = substr($_SERVER['DOCUMENT_ROOT'],0,1);
 
         if($action == "insert")
         {        
             $data = $this->fetch_data_form_post();
             if(!empty($data['fajl_nev'])){
-                /*
-                date_default_timezone_set('Europe/Budapest');
-                $data['datum'] = date('Y-m-d H:i:s');
-                */
                 $this->_insert($data);
 
-                exec("\"".$drive.":\\biblioteka-x64\\mariadb\\bin\\mysqldump.exe\" -h 127.0.0.1 -u root biblioteka > database/".$data['fajl_nev'].".sql");
+                $path = $this->site_settings->_get_path();
+                $password = ($this->db->password!="")?' -p '.$this->db->password.' ':'';
+                $host = ' -h '.explode(':',$this->db->hostname)[0].' ';
+                $port = isset(explode(':',$this->db->hostname)[1])?' --port '.explode(':',$this->db->hostname)[1].' ':'';
+
+//die("\"".$path."\" ".$host.$port." -u ".$this->db->username.$password." --events biblioteka > database/".$data['fajl_nev'].".sql");
+                exec("\"".$path."\" ".$host.$port." -u ".$this->db->username.$password." --events biblioteka > database/".$data['fajl_nev'].".sql");
+
             }
         }
         else if($action == "delete" && !is_null($id))
@@ -92,81 +154,6 @@ function ajax_api($action = "insert")
             }
         }
     }
-/*
-    else if($action == "use"){
-        /+
-        $string = "";
-        $query = $this->db->query("SELECT GROUP_CONCAT(Concat('TRUNCATE TABLE ',table_schema,'.',TABLE_NAME) SEPARATOR ';') AS print FROM INFORMATION_SCHEMA.TABLES where table_schema in ('biblioteka') AND table_type LIKE 'BASE TABLE'");
-
-        foreach ($query->result() as $row) {
-            $string = $row->print;
-        };
-
-        $array = split(";", $string);
-        foreach ($array as $key => $value) {
-            //if (strpos($value, "view") !== false) {
-                $query = $this->db->query($value);
-            //}
-        }
-        
-        exec("\"".$drive.":\\biblioteka-x64\\mariadb\\bin\\mysqldump.exe\" -u root biblioteka < \"G:/biblioteka-x64/apache/htdocs/biblioteka/database/5tFxGg9gDP5F.sql\"");
-        +/
-        $conn = $this->get_mysqli();
-
-        $sql = '
-        DROP DATABASE biblioteka;
-        CREATE SCHEMA biblioteka;
-        USE biblioteka;
-        ';
-/+
-        $this->db->query("DROP DATABASE biblioteka");
-        $this->db->query("CREATE SCHEMA biblioteka");
-        $this->db->query("USE biblioteka");
-+/
-        $lines = file('database/5tFxGg9gDP5F.sql'); 
-        foreach ($lines as $line)
-        {
-            $sql .= $line."\n";
-        }
-
-        //echo $sql;
-
-        if ($conn->multi_query($sql) === TRUE) {
-            echo "New records created successfully";
-        } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
-        }
-/+
-        // Set line to collect lines that wrap
-        $templine = '';
-
-        // Read in entire file
-        $lines = file('database/5tFxGg9gDP5F.sql'); 
-
-        // Loop through each line
-        foreach ($lines as $line)
-        {
-        // Skip it if it's a comment
-        if (substr($line, 0, 2) == '--' || $line == '')
-        continue;
-
-        // Add this line to the current templine we are creating
-        $templine .= $line;
-
-        // If it has a semicolon at the end, it's the end of the query so can process this templine
-        if (substr(trim($line), -1, 1) == ';')
-        {        
-        // Perform the query
-        $this->db->query($templine);
-
-        // Reset temp variable to empty
-        $templine = '';
-        }
-        }
-/+
-    }
-*/
-
 }
 
 function fetch_data_form_post()
@@ -253,7 +240,7 @@ function manage()
     $limit = TRUE;
 
 
-    $query ="SELECT * FROM biblioteka.backup ORDER BY datum";
+    $query ="SELECT * FROM biblioteka.backup ORDER BY datum DESC";
     $data['result_number'] = $this->_custom_query($query)->num_rows();
 
     $mysql_query = $this->_generate_mysql_query($query, $oldal_szam, $limit);
@@ -362,67 +349,6 @@ function _custom_query($mysql_query)
     $this->load->model('mdl_backup');
     $query = $this->mdl_backup->_custom_query($mysql_query);
     return $query;
-}
-
-
-function autogen()
-{
-    $mysql_query = "SHOW COLUMNS FROM backup";
-    $query = $this->_custom_query($mysql_query);
-
-    
-    foreach ($query->result() as $row) {
-        $column_name = $row->Field;
-        //echo $column_name."<br>";
-        if($column_name != "id")
-        {
-            //echo $column_name."<br>";
-            echo '$data[\''.$column_name.'\'] = $this->input->post(\''.$column_name.'\', TRUE);<br>';
-        }
-    }
-
-    echo "<hr>";
-
-    foreach ($query->result() as $row) {
-        $column_name = $row->Field;
-        //echo $column_name."<br>";
-        if($column_name != "id")
-        {
-            //echo $column_name."<br>";
-            //echo '$data[\''.$column_name.'\'] = $this->input->post(\''.$column_name.'\', TRUE);<br>';
-            echo '$data[\''.$column_name.'\'] = $row->'.$column_name.';<br>';
-        }
-    }
-
-    echo "<hr>";
-
-
-    foreach ($query->result() as $row) {
-        $column_name = $row->Field;
-        //echo $column_name."<br>";
-        if($column_name != "id")
-        {
-
-$var = '<div class="control-group">
-  <label class="control-label" for="typeahead">'.ucfirst($column_name).'</label>
-  <div class="controls">
-    <input type="text" class="span6" name="'.$column_name.'" value="<?=$'.$column_name.' ?>">
-  </div>
-</div>';
-
-$var = '<div class="row"><div class="form-group col-xs-3">
-<label for="'.$column_name.'">'.ucfirst($column_name).'</label>
-<input name="'.$column_name.'" value="<?=$'.$column_name.' ?>" type="text" class="form-control" id="'.$column_name.'">
-</div></div>';
-
-echo htmlentities($var);
-
-echo "<br>";
-
-        }
-    }
-
-
 }
 
 }

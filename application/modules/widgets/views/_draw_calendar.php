@@ -79,4 +79,12 @@
 	$(document).ready(function(){
 	$("#calendar_widget td:contains('<?= date('d') ?>')").addClass('active day');
 	});
-</script->
+</script-->
+
+<script>
+    // The Calender
+    $(document).ready(function(){
+  		$('#calendar').datepicker();
+    });
+
+</script>

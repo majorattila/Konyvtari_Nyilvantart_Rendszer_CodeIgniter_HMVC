@@ -7,64 +7,6 @@ parent::__construct();
 $this->load->library('form_validation');
 $this->form_validation->CI =& $this;
 }
-/*
-function g_login_success()
-{
-    $data['view_file'] = "welcome";
-    $this->load->module('templates');
-    $this->templates->public_template($data);
-}
-
-function config()
-{
-    require_once("./GoogleAPI/vendor/autoload.php");
-    $this->gClient = new Google_Client();
-    $this->gClient->setClientId("288578857674-vjmq13egnmcn0os6pcq71m2quvp31bog.apps.googleusercontent.com");
-    $this->gClient->setClientSecret("GUHiVoMAYeriE78GRZ0cyQe3");
-    $this->gClient->setApplicationName("Biblioteka");
-    $this->gClient->setRedirectUri("http://localhost:8089/biblioteka/fiok/g_callback");
-    $this->gClient->addScope("https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email");
-}
-
-function g_callback()
-{
-    $code = $this->input->get('code', TRUE);
-    if (!is_null($this->session->userdata('access_token')))
-        $this->gClient->setAccessToken($this->session->userdata('access_token'));
-    else if (!is_null($code)) {
-        $token = $this->gClient->fetchAccessTokenWithAuthCode($code);
-        $this->session->set_userdata('access_token', $token);
-    } else {
-        redirect(base_url().'fiok/login');
-    }
-
-    $oAuth = new Google_Service_Oauth2($this->gClient);
-    $userData = $oAuth->userinfo_v2_me->get();
-
-    $this->session->set_userdata('id', $userData['id']);
-    $this->session->set_userdata('email', $userData['email']);
-    $this->session->set_userdata('gender', $userData['gender']);
-    $this->session->set_userdata('picture', $userData['picture']);
-    $this->session->set_userdata('familyName', $userData['familyName']);
-    $this->session->set_userdata('givenName', $userData['givenName']);
-
-    redirect(base_url().'fiok/g_login_success');
-}
-
-function google_login()
-{
-    $this->load->module('templates');
-    $data = $this->session->userdata('access_token');
-
-    if(!is_null($data)){
-        $data['view_file'] = "welcome";
-    }else{
-        $data['view_file'] = "google_login";
-    }   
-    $this->templates->public_template($data); 
-}
-*/
-
 function profil_kep_ajax()
 {
     $this->load->module('site_security');
@@ -74,11 +16,12 @@ function profil_kep_ajax()
     $this->db->query('UPDATE biblioteka.felhasznalok SET profilkep = ? WHERE id = ?', array($picture, $user_id));
 }
 
-function profil()
+function profil($template="user")
 {
     $this->load->library('session');
     $this->load->module('site_security');
     $this->site_security->_make_sure_logged_in();
+    $this->site_security->_get_details_from_user();
 
     $submit = $this->input->post('submit');
 
@@ -90,7 +33,6 @@ function profil()
         $this->form_validation->set_rules('vezeteknev', 'Vezetéknév', 'required'); 
         $this->form_validation->set_rules('keresztnev', 'Keresztnév', 'required');   
         $this->form_validation->set_rules('felhasznalonev', 'Felhasználónév', 'required');
-        $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
         $this->form_validation->set_rules('olvasojegy', 'Olvasójegy', 'required');
 
         if($this->form_validation->run() == TRUE)
@@ -101,10 +43,9 @@ function profil()
             $vezeteknev = $this->input->post('vezeteknev', TRUE);
             $keresztnev = $this->input->post('keresztnev', TRUE);
             $felhasznalonev = $this->input->post('felhasznalonev', TRUE);
-            //$email = $this->input->post('email', TRUE);
             $olvasojegy = $this->input->post('olvasojegy', TRUE);
 
-            $this->db->query('UPDATE biblioteka.felhasznalok SET vezeteknev = ?, keresztnev = ?, felhasznalonev = ?, email = ?, olvasojegy = ? WHERE id = ?', array($vezeteknev, $keresztnev, $felhasznalonev, $email, $olvasojegy, $user_id));
+            $this->db->query('UPDATE biblioteka.felhasznalok SET vezeteknev = ?, keresztnev = ?, felhasznalonev = ?, olvasojegy = ? WHERE id = ?', array($vezeteknev, $keresztnev, $felhasznalonev, $olvasojegy, $user_id));
 
             $flash_msg = "A felhasználói profilját sikeresen frissítette!";
             $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
@@ -116,7 +57,7 @@ function profil()
 
     $profile_img = $this->session->userdata('profile_img');
 
-    if(empty(trim($profile_img)))
+    if(trim($profile_img) == "")
     {
         $profile_img = "man-3.png";
     }
@@ -130,9 +71,9 @@ function profil()
     $data['view_file'] = "profil";
 
     $this->load->module('templates');
-    if(isset($_SESSION['is_admin']) && is_numeric($_SESSION['is_admin'])){
+    if($template=="admin" && $this->site_security->_get_user_type() == "admin"){
         $this->templates->admin_template($data);
-    }else{
+    }else if($template=="user"){
         $data += array(
             'username' => $this->session->userdata('username'),
             'firstname' => $this->session->userdata('firstname'),
@@ -140,7 +81,95 @@ function profil()
         );
 
         $this->templates->public_template($data);
+    }else{
+        redirect(base_url()."fiok/profil/user");
     }
+}
+
+function check_activation_key($activation_key){
+    $this->load->module('felhasznalok');
+    $query = $this->felhasznalok->get_where_custom('md5(email)', $activation_key);
+    return $query->num_rows() > 0;
+}
+
+function change_password($activation_key){
+    $this->load->module('felhasznalok');
+
+    $data['is_valid_key'] = $this->check_activation_key($activation_key);
+    $data['olvasojegy'] = "";
+    $query = $this->felhasznalok->get_where_custom('md5(email)', $activation_key);
+    foreach ($query->result() as $row) {
+        $data['olvasojegy'] = $row->olvasojegy;
+    }
+    $this->load->view('password', $data);
+}
+
+function password_ajax($step = 0, $code = null) {
+    $this->load->module('felhasznalok');
+    $this->load->module('mail_service');
+
+    $email = $this->input->post('email', true);
+    $pword = $this->input->post('pword', true);
+    $olvasojegy = $this->input->post('olvasojegy', true);
+    $action = $this->input->post('action', true);
+
+    switch($step){
+        case 1: 
+            $query = $this->felhasznalok->get_where_custom('email', $email);
+            if($query->num_rows() > 0) {
+                echo "true";
+            }else{
+                echo "false";
+            }
+        break;
+
+        case 2: 
+            if($action == 'Send'){
+                $text = "
+                <h1>Köszönti a KossuthKönyvtár</h1><br/>
+                <p>Amennyiben Ön igényelte, hogy megváltoztassa a jelszavát, kérjük kattintson az alábbi linkre:<br/>
+                <a href='".base_url()."fiok/change_password/".md5($email)."'>".base_url()."fiok/change_password/".md5($email)."</a><br/>
+                Abban az esetben, ha nem igényelte volna a felhasználói fiók módosítását, <br/>
+                kérjük hagyja figyelmen kívül ezt az üzenetet.</p>";
+                $this->mail_service->send_custom($email, 'Aktiválási Kulcs', $text);
+
+                echo "Az emailt sikeresen elküldte...";
+            }
+        break;
+
+        case 3:
+            $query = $this->felhasznalok->_get_with_double_condition('email', $email, 'olvasojegy', $olvasojegy);
+            if($query->num_rows() > 0){
+                echo "confirm";
+            }
+        break;
+
+        case 4:
+            if(!is_null($code)){
+                $email = $code;
+            }
+            $query = $this->felhasznalok->_get_with_double_condition('md5(email)', $email, 'olvasojegy', $olvasojegy);
+            //die($this->db->last_query());
+            $update_id = 0;
+            foreach ($query->result() as $row) {
+                $update_id = $row->id;
+            }
+
+            $this->load->module('site_security');
+            $data['jelszo'] = $this->site_security->_hash_string($pword);
+
+            //update the item details
+            $output = $this->felhasznalok->_update($update_id, $data);
+            //die($this->db->last_query());
+            echo $this->db->affected_rows();
+        break;
+    }
+    
+}
+
+function password()
+{
+    $this->load->view('password');
 }
 
 function logout(){
@@ -149,16 +178,6 @@ function logout(){
     $this->load->module('site_cookies');
     $this->site_cookies->_destroy_cookie();
     redirect(base_url());
-}
-
-function welcome(){
-    $this->load->module('site_security');
-    $this->site_security->_make_sure_logged_in();
-
-    $data['flash'] = $this->session->flashdata('item');
-    $data['view_file'] = "welcome";
-    $this->load->module('templates');
-    $this->templates->public_template($data);
 }
 
 function test1()
@@ -218,8 +237,7 @@ function submit_login()
         $this->load->library('form_validation');
         $this->form_validation->CI =& $this;   
         $this->form_validation->set_rules('username', 'Felhasználónév', 'required|callback_username_check'); 
-        /*min_length[5]|max_length[60]*/   
-        $this->form_validation->set_rules('pword', 'Jelszó', 'required'); /*min_length[7]|max_length[35]*/
+        $this->form_validation->set_rules('pword', 'Jelszó', 'required');
 
         if($this->form_validation->run() == TRUE)
         {            
@@ -250,7 +268,6 @@ function submit_login()
 
         }else{
             $this->login();
-            //echo validation_errors();
         }    
     }
 }
@@ -290,14 +307,6 @@ function unique_felhasznalonev($val)
 }
 
 function submit(){
-    /*
-    foreach ($_POST as $key => $value) {        
-        echo "key of $key has value of $value<br>";
-        /* INVALID TYPE
-        echo "key of ".$key." has value of ".$value."<br>";
-        *//*
-    }
-    */
 
     $submit = $this->input->post('submit', TRUE);
 
@@ -331,7 +340,7 @@ function submit(){
 
 function _in_you_go($user_id, $login_type, $priority)
 {
-    $this->session->sess_expiration = '14400';// expires in 4 hours
+    $this->session->sess_expiration = '14400'; // expires in 4 hours
 
     //NOTE: the login_type can be longterm or shortterm
     if($login_type=="longterm"){
@@ -355,7 +364,7 @@ function _in_you_go($user_id, $login_type, $priority)
     else if($priority == 'user')
     {
         //send the usser to the private page
-        redirect('fiok/welcome');
+        redirect(base_url());
     }    
 }
 
@@ -470,32 +479,6 @@ function username_check($str)
         $this->form_validation->set_message('username_check', $error_msg);
         return FALSE;
     }
-    
-    /*
-    $item_url = url_title($str);
-    $mysql_query = "select * from store_items where item_title='$str' and item_url='$item_url'";
-
-    $update_id = $this->uri->segment(3);
-
-    if(is_numeric($update_id))
-    {
-        //this is an update
-        $mysql_query.= "and id!=$update_id";
-    }
-
-    $query = $this->_custom_query($mysql_query);
-    $num_rows = $query->num_rows();
-
-
-    if($num_rows>0)
-    {
-        $this->form_validation->set_message('item_check', 'The item title that you submitted is not available');
-        return FALSE;
-    }
-    else
-    {
-        return TRUE;
-    }*/
 }
 
 }

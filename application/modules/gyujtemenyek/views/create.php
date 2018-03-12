@@ -59,8 +59,8 @@ if(is_numeric($update_id)) { ?>
 								<div class="form-group col-xs-2">
 									<label for="nem_masolhato">Nem másolható?</label>
 									<select name="nem_masolhato" class="form-control" id="nem_masolhato">
-										<option>Y</option>
-										<option>N</option>
+										<option <?=$nem_masolhato=="Y"?"selected":""?>>Y</option>
+										<option <?=$nem_masolhato=="N"?"selected":""?>>N</option>
 									</select>
 								</div>
 							</div>

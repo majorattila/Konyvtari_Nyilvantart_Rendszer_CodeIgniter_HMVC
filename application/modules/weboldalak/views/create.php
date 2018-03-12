@@ -110,7 +110,7 @@ if(is_numeric($update_id)) { ?>
 		<?php
 		}
 		?>
-			<a href="<?= base_url().$oldal_url ?>"><button type="button" class="btn metro-button mtr-steel mtr-round margin">Oldal megtekintése</button></a>
+			<a href="<?= base_url().$oldal_url ?>"><button type="button" class="btn btn-secondary margin">Oldal megtekintése</button></a>
 		</div>
 	</div><!--/span-->
 </div><!--/row-->

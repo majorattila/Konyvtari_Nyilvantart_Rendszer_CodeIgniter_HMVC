@@ -50,15 +50,15 @@ function get_nice_date($timestamp, $format)
     return $the_date;
 }
 
-function make_timestamp_from_datepicker($datepicker)
+function make_timestamp_from_datepicker_hu($datepicker)
 {
     $hour = 7;
     $minute = 0;
     $second = 0;
 
-    $day = substr($datepicker, 0, 2);
-    $month = substr($datepicker, 3, 2);
-    $year = substr($datepicker, 6, 4);
+    $day = substr($datepicker, 8, 2);
+    $month = substr($datepicker, 5, 2);
+    $year = substr($datepicker, 0, 4);
 
     //$timestamp = $this->maketime($hour, $minute, $second, $month, $day, $year);
     $timestamp = mktime($hour, $minute, $second, $month, $day, $year);

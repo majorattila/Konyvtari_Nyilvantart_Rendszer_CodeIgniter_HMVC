@@ -42,10 +42,10 @@ function get_where_custom($col, $value)
     return $query;
 }
 
-function get_where_custom_with_triple_condition($col1, $value1, $col2, $value2, $col3, $value3)
+function get_where_custom_with_four_condition($col1, $value1, $col2, $value2, $col3, $value3, $col4, $value4)
 {
     $this->load->model('mdl_latogatok');
-    $query = $this->mdl_latogatok->get_where_custom_with_triple_condition($col1, $value1, $col2, $value2, $col3, $value3);
+    $query = $this->mdl_latogatok->get_where_custom_with_four_condition($col1, $value1, $col2, $value2, $col3, $value3, $col4, $value4);
     return $query;    
 }
 

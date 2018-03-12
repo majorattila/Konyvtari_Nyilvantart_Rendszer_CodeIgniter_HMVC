@@ -24,11 +24,10 @@ function get_user_registrations(){
     return $num_rows;
 }
 
-function get_unique_vistors(){
-    $query = $this->db->get('widget_latogatok');
-    $row=$query->row();
-    $latogatok=$row->latogatok;
-    return $latogatok;
+function get_subscribers(){
+    $query = $this->db->get('hirlevelek');
+    $num_rows = $query->num_rows();
+    return $num_rows;
 }
 
 }

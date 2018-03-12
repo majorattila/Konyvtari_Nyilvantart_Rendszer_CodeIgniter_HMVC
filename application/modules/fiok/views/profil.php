@@ -73,7 +73,7 @@ function previewFile() {
 }
 </script>
 
-<div class="container" style="margin-top: 100px; margin-bottom: 50px;">
+<div class="container" style="margin-top: 100px; margin-bottom: 50px; background-color: unset;">
     <div class="fb-profile">
         <a href="javascript:void(0)" data-toggle="modal" data-target="#myModal">
         	<img align="left" class="img-circle fb-image-profile" src="<?php echo base_url() . 'dist/img/avatar/png/' . $profile; ?>" alt="Profile Image"/>

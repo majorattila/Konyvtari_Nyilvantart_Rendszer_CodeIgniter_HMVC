@@ -1,4 +1,6 @@
-
+<?php
+$third_segment = $this->uri->segment(3);
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,9 +12,13 @@
 	<script src="<?=base_url()?>bower_components/bootstrap/dist/js/popper.js"></script>
 	<script src="<?=base_url()?>bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 </head>
-<body><br/>
+<body><br/>   
 
     <section class="container">
+
+    <span><b>Nyomtatás: </b></span><a href='<?= base_url()?>bibliografiak/download_pdf/<?= $third_segment ?>'><i class='glyphicon glyphicon-print'></i></a>
+    <br/><br/>
+
 	<table class="table table-striped table-bordered">
 	<?php if(!empty($leltari_szam)){ ?><tr><td>Leltári szám</td><td><?=$leltari_szam?></td></tr><?php } ?>
     <?php if(!empty($rszj)){ ?><tr><td>Rszj</td><td><?=$rszj?></td></tr><?php } ?>
@@ -104,5 +110,6 @@
         </tbody>
     </table>
 </section>
+
 </body>
 </html>

@@ -8,11 +8,257 @@ $this->load->library('form_validation');
 $this->form_validation->CI =& $this;
 }
 
+function download_pdf($param){
+    $this->load->module("site_security");
+
+    $title = $this->input->post("title", TRUE);
+    $content = $this->input->post("content", TRUE);
+    $rnd = $this->site_security->generate_random_string(12);
+
+    $this->load->module("dompdf");
+    $this->dompdf->create_pdf("<h1>".$title."</h1><br/>".file_get_contents(base_url()."bibliografiak/details/".$param), false, $rnd, $rnd);
+}
+
+function admin_search()
+{
+    $this->load->module('site_security');
+    $this->site_security->_is_admin();
+
+    $this->load->module('custom_pagination');
+    $this->load->module("gyujtemenyek");
+    $this->load->module("konyvtarak");
+    $this->load->module("nyelvek");
+    $this->load->module("tipusok");
+    $this->load->module("termek");
+
+    $data['flash'] = $this->session->flashdata('catalog');
+
+    $oldal_szam = $this->uri->segment(3);
+    if(is_null($oldal_szam) || !is_numeric($oldal_szam))
+    {
+        $oldal_szam = $this->get_limit();
+    }
+
+    $limit = TRUE;
+
+    
+    $result = $this->check_search_result();
+    if(!is_null($result['query'])){
+        $query = $result['query'];
+        $data = $result;
+    }        
+    
+
+    if(isset($query)){
+        $data['result_number'] = $this->_custom_query($query)->num_rows();
+
+        $mysql_query = $this->_generate_mysql_query($query, $oldal_szam, $limit);
+        $data['query'] = $this->_custom_query($mysql_query);
+
+        $pagination_data['template'] = 'public_bootstrap';
+        $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
+        $pagination_data['total_rows'] = $data['result_number'];
+        $pagination_data['offset_segment'] = 4;
+        $pagination_data['limit'] = $this->get_limit();
+
+        $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
+
+        $pagination_data['offset'] = $this->get_offset();
+        $data['showing_statement'] = $this->custom_pagination->get_showing_statement($pagination_data);
+
+    }
+
+    $data['tipus_query'] = $this->tipusok->get("leiras");
+    $data['nyelv_query'] = $this->nyelvek->get("nyelv");
+    $data['gyujtemeny_query'] = $this->gyujtemenyek->get("leiras");
+
+    $data['get_user_type'] = $this->site_security->_get_user_type();
+
+    $data['view_module'] = "bibliografiak";
+    $data['view_file'] = "admin_search";
+    $this->load->module('templates');
+
+    $this->templates->admin_template($data);
+}
+
+function check_search_result(){
+    $this->load->module('site_security');
+    $query = null;
+
+    $keresokifejezes1_input = $this->site_security->prevent_injection($this->input->get('keresokifejezes1_input', TRUE));
+    $keresokifejezes2_input = $this->site_security->prevent_injection($this->input->get('keresokifejezes2_input', TRUE));
+    $keresokifejezes3_input = $this->site_security->prevent_injection($this->input->get('keresokifejezes3_input', TRUE));
+    $oldal = $this->site_security->prevent_injection($this->input->get('oldal', TRUE));
+    $tipus = $this->site_security->prevent_injection($this->input->get('tipus', TRUE));
+    $nyelv = $this->site_security->prevent_injection($this->input->get('nyelv', TRUE));
+    $gyujtemeny = $this->site_security->prevent_injection($this->input->get('gyujtemeny', TRUE));
+    $keresokifejezes1 = $this->site_security->prevent_injection($this->input->get('keresokifejezes1', TRUE));
+    $keresokifejezes2 = $this->site_security->prevent_injection($this->input->get('keresokifejezes2', TRUE));
+    $keresokifejezes3 = $this->site_security->prevent_injection($this->input->get('keresokifejezes3', TRUE));
+    $textlogic0 = $this->site_security->prevent_injection($this->input->get('textlogic0', TRUE));
+    $textlogic1 = $this->site_security->prevent_injection($this->input->get('textlogic1', TRUE));
+
+    if(empty($textlogic0)){
+        $textlogic0 = "OR";
+    }
+
+    if(empty($textlogic1)){
+        $textlogic1 = "OR";
+    }
+
+    if(empty($keresokifejezes1) || $keresokifejezes1 == "kulcsszo"){
+        $keresokifejezes1 = "cim";
+    }
+
+    if($keresokifejezes1 == "leiras_tipus") {
+        $keresokifejezes1 = "biblioteka.tipusok.leiras";
+    }else if($keresokifejezes1 == "leiras_gyujtemeny"){
+        $keresokifejezes1 = "biblioteka.gyujtemenyek.leiras";
+    }else if($keresokifejezes1 == "szerzo"){
+        $keresokifejezes1 = "biblioteka.szerzok.nev";
+    }
+
+    if(empty($keresokifejezes2) || $keresokifejezes2 == "kulcsszo"){
+        $keresokifejezes2 = "cim";
+    }
+
+    if($keresokifejezes2 == "leiras_tipus"){
+        $keresokifejezes2 = "biblioteka.tipusok.leiras";
+    }else if($keresokifejezes2 == "leiras_gyujtemeny"){
+        $keresokifejezes2 = "biblioteka.gyujtemenyek.leiras";
+    }else if($keresokifejezes2 == "szerzo"){
+        $keresokifejezes2 = "biblioteka.szerzok.nev";
+    }
+
+    if(empty($keresokifejezes3) || $keresokifejezes3 == "kulcsszo"){
+        $keresokifejezes3 = "cim";
+    }
+
+    if($keresokifejezes3 == "leiras_tipus"){
+        $keresokifejezes3 = "biblioteka.tipusok.leiras";
+    }else if($keresokifejezes3 == "leiras_gyujtemeny"){
+        $keresokifejezes3 = "biblioteka.gyujtemenyek.leiras";
+    }else if($keresokifejezes3 == "szerzo"){
+        $keresokifejezes3 = "biblioteka.szerzok.nev";
+    }
+
+    $data['oldal'] = $oldal;
+    $data['tipus'] = $tipus;
+    $data['nyelv'] = $nyelv;
+    $data['gyujtemeny'] = $gyujtemeny;
+    $data['keresokifejezes1'] = $keresokifejezes1;
+    $data['keresokifejezes2'] = $keresokifejezes2;
+    $data['keresokifejezes3'] = $keresokifejezes3;
+    $data['keresokifejezes1_input'] = $keresokifejezes1_input;
+    $data['keresokifejezes2_input'] = $keresokifejezes2_input;
+    $data['keresokifejezes3_input'] = $keresokifejezes3_input;
+    $data['textlogic0'] = $textlogic0;
+    $data['textlogic1'] = $textlogic1;
+
+    if(
+        !empty($keresokifejezes1_input) && strlen($keresokifejezes1_input) >= 3 ||
+        !empty($keresokifejezes2_input) && strlen($keresokifejezes2_input) >= 3 ||
+        !empty($keresokifejezes3_input) && strlen($keresokifejezes3_input) >= 3
+    )
+    {
+
+        $query = "SELECT bibliografiak.id, szerzok.nev, bibliografiak.cim, bibliografiak.targyszavak, kiadok.kiado, nyilvantartas.rszj, tipusok.leiras as leiras_tipus, nyilvantartas.url, bibliografiak.isbn, bibliografiak.gyari_szam, gyujtemenyek.leiras as leiras_gyujtemeny, bibliografiak.megjelenes, bibliografiak.eto FROM biblioteka.bibliografiak INNER JOIN biblioteka.tipusok USING(tipus_id) INNER JOIN biblioteka.szerzok USING(szerzo_id) INNER JOIN biblioteka.gyujtemenyek USING(gyujtemeny_id) INNER JOIN biblioteka.kiadok USING(kiado_id) INNER JOIN biblioteka.nyilvantartas USING(nyilvantartas_id) WHERE (lower('tipusok.leiras') LIKE lower('$tipus') OR lower('nyelvek.nyelv') LIKE lower('$nyelv') OR lower('gyujtemenyek.leiras') LIKE lower('$gyujtemeny')) or ($keresokifejezes1 LIKE lower(CONCAT('%','$keresokifejezes1_input','%')) $textlogic0 $keresokifejezes2 LIKE lower(CONCAT('%','$keresokifejezes2_input','%')) $textlogic1 $keresokifejezes3 LIKE lower(CONCAT('%','$keresokifejezes3_input','%'))) ORDER BY cim";
+    }
+    //die($query);
+
+    $data['query'] = $query;
+
+    return $data;
+}
+
+function _draw_search_toolkit(){
+    $this->load->view("search");
+}
+
+function hosszabbit(){
+
+    $this->load->module('custom_pagination');
+    $this->load->module('site_security');
+    $this->site_security->_make_sure_logged_in();
+
+    $update_id = $this->uri->segment(3);
+
+    if(!empty($update_id) && !is_numeric($update_id)){
+        $this->site_security->not_allowed();
+    }else if(!empty($update_id) && is_numeric($update_id)){
+        $mysql_query = "UPDATE biblioteka.kolcsonzesek SET hosszabbit = IF(hosszabbit<3, hosszabbit + 1, hosszabbit), datum = IF(hosszabbit<3, ?, datum) WHERE leltari_szam = ?";
+        $this->db->query($mysql_query, array($update_id, date('Y-m-d')));
+
+        $flash_msg = "A bibliográfiát sikeresen meghosszabbította!";
+        $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
+        $this->session->set_flashdata('item', $value);
+        
+        redirect(base_url().'bibliografiak/hosszabbit');
+    }
+
+    $lib_card = $this->session->userdata('library_card');
+
+    if(is_null($lib_card))
+    {
+        $lib_card = 'NULL';
+    }
+
+
+    $oldal_szam = $this->uri->segment(3);
+    $limit = TRUE;
+
+    $query = "
+        SELECT
+          biblioteka.bibliografiak.leltari_szam,
+          biblioteka.szerzok.nev as szerzo,
+          biblioteka.bibliografiak.cim,
+          biblioteka.kolcsonzesek.datum,
+          biblioteka.kolcsonzesek.hosszabbit,
+          biblioteka.gyujtemenyek.hatralevo_napok
+        FROM
+          biblioteka.bibliografiak
+          INNER JOIN biblioteka.kolcsonzesek ON biblioteka.bibliografiak.leltari_szam = biblioteka.kolcsonzesek.leltari_szam
+          INNER JOIN biblioteka.kolcsonzesek_has_tagok ON biblioteka.kolcsonzesek_has_tagok.kolcsonzesek_id =
+            biblioteka.kolcsonzesek.id
+          INNER JOIN biblioteka.tagok ON biblioteka.tagok.id = biblioteka.kolcsonzesek_has_tagok.tagok_id
+          INNER JOIN biblioteka.tagok_adatai ON biblioteka.tagok.tagok_adatai_id = biblioteka.tagok_adatai.id
+          INNER JOIN biblioteka.szerzok ON biblioteka.bibliografiak.szerzo_id = biblioteka.szerzok.szerzo_id
+          INNER JOIN biblioteka.gyujtemenyek ON biblioteka.bibliografiak.gyujtemeny_id = biblioteka.gyujtemenyek.gyujtemeny_id
+          INNER JOIN biblioteka.felhasznalok ON biblioteka.tagok_adatai.olvasojegy = biblioteka.felhasznalok.olvasojegy
+          WHERE biblioteka.tagok_adatai.olvasojegy = $lib_card
+    ";
+
+
+    $data['result_number'] = @$this->_custom_query($query)->num_rows();
+
+    $mysql_query = $this->_generate_mysql_query($query, $oldal_szam, $limit);
+    $data['query'] = $this->_custom_query($mysql_query);
+
+
+    $pagination_data['template'] = 'public_bootstrap';
+    $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
+    $pagination_data['total_rows'] = $data['result_number'];
+    $pagination_data['offset_segment'] = 4;
+    $pagination_data['limit'] = $this->get_limit();
+
+    $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
+
+    $pagination_data['offset'] = $this->get_offset();;
+    $data['showing_statement'] = $this->custom_pagination->get_showing_statement($pagination_data);
+   
+    $data['headline'] = "Hosszabbítás";
+    $data['flash'] = $this->session->flashdata('item');
+    $data['view_file'] = "hosszabbit";
+    $this->load->module('templates');
+    $this->templates->public_template($data);
+
+}
+
 function get_elofoglalasok_to_datatable(){
 
     $this->load->module('site_security');
     $user_id = $this->site_security->_get_user_id();
-    $mysql_query = 'SELECT elofoglalasok.id, elofoglalasok.datum, szerzok.nev, bibliografiak.cim FROM biblioteka.elofoglalasok INNER JOIN biblioteka.elofoglalasok_has_tagok ON (elofoglalasok_has_tagok.elofoglalasok_id = elofoglalasok.id) INNER JOIN biblioteka.bibliografiak ON (bibliografiak.leltari_szam = elofoglalasok.leltari_szam) INNER JOIN biblioteka.szerzok ON (bibliografiak.szerzo_id = szerzok.szerzo_id) WHERE felhasznalok_id = ? group by elofoglalasok.id';
+    $mysql_query = 'SELECT bibliografiak.leltari_szam, elofoglalasok.id, elofoglalasok.datum, szerzok.nev, bibliografiak.cim FROM biblioteka.elofoglalasok INNER JOIN biblioteka.elofoglalasok_has_tagok ON (elofoglalasok_has_tagok.elofoglalasok_id = elofoglalasok.id) INNER JOIN biblioteka.bibliografiak ON (bibliografiak.leltari_szam = elofoglalasok.leltari_szam) INNER JOIN biblioteka.szerzok ON (bibliografiak.szerzo_id = szerzok.szerzo_id) WHERE felhasznalok_id = ? group by elofoglalasok.id';
 
     $query = $this->db->query($mysql_query, array($user_id));
 
@@ -22,13 +268,15 @@ function get_elofoglalasok_to_datatable(){
     foreach($query->result() as $row){        
 
         $var = $row->id;
-        $actions = '<input style=\"margin: 0 auto; width: 100%;\" type=\"checkbox\" class=\"editor-active\" name=\"eltavolit('.$id.')\" value=\"'.$var.'\">';
+        $actions = '<input type=\"checkbox\" class=\"editor-active\" name=\"eltavolit('.$id.')\" value=\"'.$var.'\">';
+        $reszletek = "<a onClick=\\\"newwindow = window.open('".base_url()."bibliografiak/details/".$row->leltari_szam."', '_blank', 'resizable=yes, scrollbars=yes, titlebar=yes, width=600, height=600, top=10, left=10');\\\" href='javascript:void(0);'>Részletek</a>";
         
         $tabla.='{
                   "actions":"'.trim($actions).'",
                   "datum":"'.substr(trim($row->datum),0,85).'",
                   "nev":"'.substr(trim($row->nev),0,85).'",
-                  "cim":"'.substr(trim($row->cim),0,85).'"
+                  "cim":"'.substr(trim($row->cim),0,85).'",
+                  "reszletek":"'.$reszletek.'"
                 },';    
         $id++;    
     }   
@@ -72,7 +320,7 @@ function elofoglalas()
         }
     }
 
-    foreach($checked_elements as $element) { 
+    foreach(array_unique($checked_elements) as $element) { 
         if(is_numeric($element)){
 
             if(!is_numeric($query) && $query->num_rows()==0){
@@ -80,10 +328,14 @@ function elofoglalas()
                 $mysql_query = "INSERT INTO biblioteka.elofoglalasok (leltari_szam, datum) values (?, ?)";
                 $this->db->query($mysql_query, array($element, date('Y-m-d')));
 
+                echo($this->db->last_query());
+
                 $get_elofoglalasok_id = $this->db->insert_id();
                 
                 $mysql_query = "INSERT INTO biblioteka.elofoglalasok_has_tagok (elofoglalasok_id, felhasznalok_id) values (?,?)";
                 $this->db->query($mysql_query, array($get_elofoglalasok_id, $user_id));
+
+                echo($this->db->last_query());
             }
         }
     }
@@ -191,13 +443,6 @@ function do_upload($update_id)
         $data = array('upload_data' => $this->upload->data());
         $upload_data = $data['upload_data'];
 
-        /* TESZT
-        foreach ($upload_data as $key => $value) {
-            echo "key of $key has value of $value<br>";
-        }
-        die();
-        */
-
         //raw_name ... file_ext
         $raw_name = $upload_data['raw_name'];
         $file_ext = $upload_data['file_ext'];
@@ -244,65 +489,7 @@ function borito_feltoltes($update_id)
 function try_out_some_crazy_things()
 {
     $this->load->model('mdl_yaz');
-    $this->mdl_yaz->fetch_data_from_library("lx2.loc.gov:210/LCDB", "usmarc");
-}
-
-function autogen()
-{
-    $mysql_query = "SHOW COLUMNS FROM z3950";
-    $query = $this->_custom_query($mysql_query);
-
-    
-    foreach ($query->result() as $row) {
-        $column_name = $row->Field;
-        //echo $column_name."<br>";
-        if($column_name != "id")
-        {
-            //echo $column_name."<br>";
-            echo '$data[\''.$column_name.'\'] = $this->input->post(\''.$column_name.'\', TRUE);<br>';
-        }
-    }
-
-    echo "<hr>";
-
-    foreach ($query->result() as $row) {
-        $column_name = $row->Field;
-        //echo $column_name."<br>";
-        if($column_name != "id")
-        {
-            //echo $column_name."<br>";
-            //echo '$data[\''.$column_name.'\'] = $this->input->post(\''.$column_name.'\', TRUE);<br>';
-            echo '$data[\''.$column_name.'\'] = $row->'.$column_name.';<br>';
-        }
-    }
-
-    echo "<hr>";
-
-
-    foreach ($query->result() as $row) {
-        $column_name = $row->Field;
-        //echo $column_name."<br>";
-        if($column_name != "id")
-        {
-
-$var = '<div class="control-group">
-  <label class="control-label" for="typeahead">'.ucfirst($column_name).'</label>
-  <div class="controls">
-    <input type="text" class="span6" name="'.$column_name.'" value="<?=$'.$column_name.' ?>">
-  </div>
-</div>';
-
-$var = '<div class="row"><div class="form-group col-xs-3">
-<label for="'.$column_name.'">'.ucfirst($column_name).'</label>
-<input name="'.$column_name.'" value="<?=$'.$column_name.' ?>" type="text" class="form-control" id="'.$column_name.'">
-</div></div>';
-
-echo htmlentities($var);
-
-echo "<br>";
-
-        }
-    }
+    $this->mdl_yaz->fetch_data_from_library("lx2.loc.gov:210/LCDB", "unimarc");
 }
 
 function fetch_z3950_data_from_post()
@@ -345,163 +532,6 @@ function fetch_z3950_data_from_db($update_id)
     return $data;
 }
 
-function manage_z3950()
-{
-    $this->load->module('custom_pagination');
-    $this->load->module('site_security');
-    $this->site_security->_is_admin();
-
-    $oldal_szam = $this->uri->segment(3);
-    $limit = TRUE;
-
-    $data['flash'] = $this->session->flashdata('item');
-    $query = "SELECT * FROM  biblioteka.z3950";
-    $data['result_number'] = $this->_custom_query($query)->num_rows();
-    
-    $mysql_query = $this->_generate_mysql_query($query, $oldal_szam, $limit);
-    $data['query'] = $this->_custom_query($mysql_query);
-
-    $pagination_data['template'] = 'public_bootstrap';
-    $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
-    $pagination_data['total_rows'] = $data['result_number'];
-    $pagination_data['offset_segment'] = 4;
-    $pagination_data['limit'] = $this->get_limit();
-
-    $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
-
-    $pagination_data['offset'] = $this->get_offset();;
-    $data['showing_statement'] = $this->custom_pagination->get_showing_statement($pagination_data);
-   
-
-    $data['headline'] = "z39.50 szerverek kezelése";
-    $data['view_file'] = "manage_z3950";
-    $this->load->module('templates');
-    $this->templates->admin_template($data);
-
-}
-
-function create_z3950()
-{
-    $this->load->module('site_security');
-    $this->site_security->_is_admin();
-
-    $update_id = $this->uri->segment(3);
-
-    $submit = $this->input->post('submit', TRUE);
-
-    if($submit == "Cancel")
-    {
-        redirect(base_url()."bibliografiak/manage_z3950");
-    }
-
-    if($submit == "Submit")
-    {
-
-        //process the form
-        $this->config->set_item('language', 'hungarian');
-        $this->load->library('form_validation');
-        $this->form_validation->set_rules('nev', 'Név', 'required');
-        $this->form_validation->set_rules('host', 'Host', 'required');
-        $this->form_validation->set_rules('port', 'Port', 'required');
-        $this->form_validation->set_rules('adatbazis', 'Adatbázis', 'required');
-
-
-        if($this->form_validation->run() == TRUE)
-        {
-            $data = $this->fetch_z3950_data_from_post();
-
-            if(is_numeric($update_id))
-            {
-                 $mysql_query = "UPDATE biblioteka.z3950 SET nev = ?, host = ?, port = ?, adatbazis = ?, felhasznalonev = ?, jelszo = ? WHERE id = ?";
-                $this->db->query($mysql_query, array($data['nev'], $data['host'], $data['port'], $data['adatbazis'], $data['felhasznalonev'], $data['jelszo'], $update_id));
-
-                $flash_msg = "A szerver adatait sikeresen módosította!";
-                $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
-                $this->session->set_flashdata('item', $value);
-                redirect('bibliografiak/create_z3950/'.$update_id);
-            }
-            else
-            {              
-                $mysql_query = "INSERT INTO biblioteka.z3950 (nev, host, port, adatbazis, felhasznalonev, jelszo) VALUES (?,?,?,?,?,?)";
-                $this->db->query($mysql_query, array($data['nev'], $data['host'], $data['port'], $data['adatbazis'], $data['felhasznalonev'], $data['jelszo']));
-
-                $flash_msg = "A szervert sikeresen hozzáadta!";
-                $value = '<div class="alert alert-success" role="alert">'.$flash_msg.'</div>';
-                $this->session->set_flashdata('item', $value);
-                redirect('bibliografiak/create_z3950/'.$update_id);
-            }
-        }
-    }
-
-    if((is_numeric($update_id)) && ($submit!="Submit"))
-    {
-        $data = $this->fetch_z3950_data_from_db($update_id);
-
-        if($data == "")
-        {
-            redirect(base_url().'bibliografiak/honositas');
-        }
-    }
-    else
-    {
-        $data = $this->fetch_z3950_data_from_post();
-    }
-
-    if(!is_numeric($update_id))
-    {
-        $data['headline'] = "Új Z39.50 Szerver Hozzáadása";
-    }
-    else
-    {
-        $data['headline'] = "Z39.50-es Szerver Módosítása";
-    }
-
-    $data['flash'] = $this->session->flashdata('item');
-    $data['update_id'] = $update_id;
-    $data['view_file'] = "create_z3950";
-    $this->load->module('templates');
-    $this->templates->admin_template($data);
-}
-
-/*
-function get_cimek()
-{
-    $this->load->model('mdl_yaz');
-
-    $cim = $this->input->get('cim',TRUE);
-    $ccl_query = "title = $cim";
-    $szerver = "oszk";
-
-    $mysql_query = "SELECT * FROM biblioteka.z3950 WHERE nev LIKE ?";
-    $server_data = $this->db->query($mysql_query, array($szerver));
-
-    $row = $server_data->row();
-    $host = $row->host;
-    $port = $row->port;
-    $szerver = $row->adatbazis;
-    $formatum = "marc";
-
-    $arr = array();
-
-    $parsedResult = $this->mdl_yaz->fetch_data_from_library($host.":".$port."/".$szerver, $formatum, $ccl_query);
-
-    $arr = array();
-
-    if(isset($parsedResult)){
-        foreach($parsedResult as $row){
-            if(!empty($row) && isset($row['titel']) && !empty($row['titel']) && !empty($row) ){ 
-                array_push($arr, array('cim' => iconv(mb_detect_encoding($row['titel'], mb_detect_order(), true), "UTF-8", $row['titel'])));
-            }
-        }
-    }
-
-    $cimek = str_replace(array('"'),array('\''),json_encode($arr));    
-
-    echo "'cimek' : $cimek";
-}
-*/
-
-
 function gyors_honosito()
 {
     $this->load->module('site_security');
@@ -510,21 +540,29 @@ function gyors_honosito()
     $this->load->model('mdl_yaz');
 
     $cim = $this->input->get('cim',TRUE);
+    $szerver = $this->input->get('szerver',TRUE);
+    //$formatum = $this->input->get('format',TRUE);
     $ccl_query = "title = $cim";
-    $szerver = "oszk";
+    //$szerver = "oszk";
 
-    $mysql_query = "SELECT * FROM biblioteka.z3950 WHERE nev LIKE ?";
+    $mysql_query = "SELECT * FROM biblioteka.z3950 WHERE nev LIKE ? LIMIT 1";
     $server_data = $this->db->query($mysql_query, array($szerver));
+    //echo $this->db->last_query();
+
+    //die(var_dump($server_data->result()));
 
     $row = $server_data->row();
     $host = $row->host;
     $port = $row->port;
     $szerver = $row->adatbazis;
-    $formatum = "marc";
-
-    $parsedResult = $this->mdl_yaz->fetch_data_from_library($host.":".$port."/".$szerver, $formatum, $ccl_query);
+    $formatum = "unimarc";
 
     $arr = array();
+    array_push($arr, array());
+
+    $parsedResult = $this->mdl_yaz->fetch_data_from_library($host.":".$port."/".$szerver, $formatum, $ccl_query);
+    //die($parsedResult);
+
 
     if(isset($parsedResult)){
 
@@ -533,14 +571,43 @@ function gyors_honosito()
     if(!empty($row) && !empty($row['titel'])){ 
 
     //language,isbn,issn,author,titel,edition,pub_date,extent,series,editor
-    array_push($arr, array("cim" => $this->json_string_encode((isset($row['titel'])?iconv(mb_detect_encoding($row['titel'], mb_detect_order(), true), "UTF-8", $row['titel']):'')),"szerzok" => $this->json_string_encode((isset($row['author'])?iconv(mb_detect_encoding($row['author'], mb_detect_order(), true), "UTF-8", $row['author']):'')),"datum" => $this->json_string_encode((isset($row['pub_date'])?iconv(mb_detect_encoding($row['pub_date'], mb_detect_order(), true), "UTF-8", $row['pub_date']):'')),"isbn" => $this->json_string_encode((isset($row['isbn'])?iconv(mb_detect_encoding($row['isbn'], mb_detect_order(), true), "UTF-8", $row['isbn']):'')),"nyelvek" => $this->json_string_encode((isset($row['language'])?iconv(mb_detect_encoding($row['language'], mb_detect_order(), true), "UTF-8", $row['language']):'')),"nemzetkozi_azonosito" => $this->json_string_encode((isset($row['national_no'])?iconv(mb_detect_encoding($row['national_no'], mb_detect_order(), true), "UTF-8", $row['national_no']):'')),"tipusok" => $this->json_string_encode((isset($row['genre'])?iconv(mb_detect_encoding($row['genre'], mb_detect_order(), true), "UTF-8", $row['genre']):'')),"eto" => $this->json_string_encode((isset($row['eto'])?iconv(mb_detect_encoding($row['eto'], mb_detect_order(), true), "UTF-8", $row['eto']):'')),"kiadok" => $this->json_string_encode((isset($row['publisher'])?iconv(mb_detect_encoding($row['publisher'], mb_detect_order(), true), "UTF-8", $row['publisher']):'')))
+      
+      
+    array_push($arr, array(
+        "cim" => $this->json_string_encode((isset($row['titel'])?iconv(mb_detect_encoding($row['titel'], mb_detect_order(), true), "UTF-8", $row['titel']):'')),
+        "szerzok" => $this->json_string_encode((isset($row['author'])?iconv(mb_detect_encoding($row['author'], mb_detect_order(), true), "UTF-8", $row['author']):'')),
+        "megjelenes" => $this->json_string_encode((isset($row['pub_date'])?iconv(mb_detect_encoding($row['pub_date'], mb_detect_order(), true), "UTF-8", $row['pub_date']):'')), 
+        "terjedelem" => $this->json_string_encode((isset($row['extent'])?iconv(mb_detect_encoding($row['extent'], mb_detect_order(), true), "UTF-8",$row['extent']):'')), 
+        "datum" => date('Y. m. d'), 
+
+        "dok_stat" => 'n',
+
+        "beszerz_mod" => 'v', 
+
+        "kotes" => $this->json_string_encode((isset($row['quality_note'])?iconv(mb_detect_encoding($row['quality_note'], mb_detect_order(), true), "UTF-8",$row['quality_note']):'')), 
+
+        "targyszavak" => $this->json_string_encode((isset($row['author'])?iconv(mb_detect_encoding($row['author'], mb_detect_order(), true), "UTF-8", $row['author']):'')).';'.$this->json_string_encode((isset($row['titel'])?iconv(mb_detect_encoding($row['titel'], mb_detect_order(), true), "UTF-8", $row['titel']):'')),
+
+        "peldany_megj" => $this->json_string_encode((isset($row['diss_note'])?iconv(mb_detect_encoding($row['diss_note'], mb_detect_order(), true), "UTF-8",$row['diss_note']):'')), 
+        "feltuntetett_ar" => $this->json_string_encode((isset($row['trade_price'])?iconv(mb_detect_encoding($row['trade_price'], mb_detect_order(), true), "UTF-8",$row['trade_price']):'')), 
+        "isbn" => $this->json_string_encode((isset($row['isbn'])?iconv(mb_detect_encoding($row['isbn'], mb_detect_order(), true), "UTF-8", $row['isbn']):'')),
+        "nyelvek" => $this->json_string_encode((isset($row['language'])?iconv(mb_detect_encoding($row['language'], mb_detect_order(), true), "UTF-8", $row['language']):'')),
+        "nemzetkozi_azonosito" => $this->json_string_encode((isset($row['national_no'])?iconv(mb_detect_encoding($row['national_no'], mb_detect_order(), true), "UTF-8", $row['national_no']):'')),
+        "gyujtemenyek" => $this->json_string_encode((isset($row['genre'])?iconv(mb_detect_encoding($row['genre'], mb_detect_order(), true), "UTF-8", $row['genre']):'')),
+        "eto" => $this->json_string_encode((isset($row['eto'])?iconv(mb_detect_encoding($row['eto'], mb_detect_order(), true), "UTF-8", $row['eto']):'')),
+        "kiadok" => $this->json_string_encode((isset($row['publisher'])?iconv(mb_detect_encoding($row['publisher'], mb_detect_order(), true), "UTF-8", $row['publisher']):'')))
 ); 
+
     }
     }
     }
+    
     $konyv_adatok = str_replace('"','\'',json_encode($arr));    
 
     echo $konyv_adatok;
+
+    //var_dump($arr);
+    
 }
 
 function json_string_encode( $str ) {
@@ -564,10 +631,6 @@ function check_honositas()
         echo $_COOKIE['honositas_check'];
         unset($_COOKIE['honositas_check']);
         setcookie('honositas_check', '');
-    }
-    else
-    {
-        //echo "none";
     }
 }
 
@@ -676,25 +739,15 @@ function honositas_kereso()
         $server_data = $this->db->query($mysql_query, array($szerver));
 
         $row = $server_data->row();
+        $szerver = $row->adatbazis;  
         $host = $row->host;
-
-        $row = $server_data->row();
         $port = $row->port;
 
-        $row = $server_data->row();
-        $szerver = $row->adatbazis;    
-
-        //echo $ccl_query;die();
-
-        $formatum = mysqli_real_escape_string($this->get_mysqli(), $formatum);
+        $formatum = $this->site_security->prevent_injection($formatum);
 
         $data['parsedResult'] = $this->mdl_yaz->fetch_data_from_library($host.":".$port."/".$szerver, $formatum, $ccl_query);
     }
     $this->load->view("honositas_kereso", $data);
-    /*
-    $this->load->model('mdl_yaz');
-    $this->mdl_yaz->fetch_data_from_library("lx2.loc.gov:210/LCDB", "usmarc");
-    */
 }
 
 private function convert_simple_value_to_specified_ccl_value($val)
@@ -704,12 +757,32 @@ private function convert_simple_value_to_specified_ccl_value($val)
         case "nev": return "author_name_personal"; break;
         case "cim": return "title"; break;
         case "targyszavak": return "subject_heading"; break;
-        case "datum": return "date_of_publication"; break;
+        case "megjelenes": return "date_of_publication"; break;
         case "kiado": return "publisher"; break;
         case "leiras": return "content_type"; break;
         case "isbn": return "isbn"; break;
         case "eto": return "dewey_classification"; break;
         default: return "title"; break;
+        
+        /*
+        case "cim": return "titel"; break;
+        case "szerzok": return "author"; break;
+        case "megjelenes": return "pub_date";  break;
+        case "terjedelem": return "extent"; break;
+        case "datum": date('Y. m. d'); break;
+        case "dok_stat": return 'n'; break;
+        case "beszerz_mod": return 'v'; break;
+        case "kotes": return "quality_note"; break;
+        case "targyszavak": return "autho titel";
+        case "peldany_megj": return "diss_note";
+        case "feltuntetett_ar": return "trade_price";
+        case "isbn": return "isbn";
+        case "nyelvek": return "language";
+        case "nemzetkozi_azonosito": return "national_no";
+        case "gyujtemenyek": return "genre";
+        case "eto": return "eto";
+        case "kiadok": return "publisher";
+        */
     }
 }
 
@@ -786,15 +859,19 @@ FROM
     biblioteka.kolcsonzesek.id AND biblioteka.konyvtarak.fiok_id = biblioteka.kolcsonzesek_has_tagok.fiok_id
   WHERE biblioteka.bibliografiak.leltari_szam = $book_id
 ");
-    //die($this->db->last_query());
-
     $this->load->view('details', $data);
 }
 
-function view()
+function view($tab = "egyszeru_kereses")
 {
     $this->load->module('custom_pagination');
     $this->load->module('site_security');
+
+    $this->load->module("nyelvek");
+    $this->load->module("gyujtemenyek");
+    $this->load->module("tipusok");
+    $this->load->module("termek");
+    $this->load->module("konyvtarak");
 
     $data['flash'] = $this->session->flashdata('catalog');
 
@@ -811,8 +888,8 @@ function view()
 
     if(!empty($filter) && !empty($q))
     {
-        $filter = mysqli_real_escape_string($this->get_mysqli(), $filter);    
-        $q = mysqli_real_escape_string($this->get_mysqli(), $q);
+        $filter = $this->site_security->prevent_injection($filter);    
+        $q = $this->site_security->prevent_injection($q);
 
         $valid_options = array("kulcsszo", "nev", "cim", "targyszavak", "kiado", "rszj", "leiras_tipus", "url", "isbn", "gyari_szam", "leiras_gyujtemeny", "megjelenes", "eto");
 
@@ -834,33 +911,48 @@ function view()
                 $query = "SELECT bibliografiak.id, szerzok.nev, bibliografiak.cim, bibliografiak.targyszavak, kiadok.kiado, nyilvantartas.rszj, tipusok.leiras as leiras_tipus, nyilvantartas.url, bibliografiak.isbn, bibliografiak.gyari_szam, gyujtemenyek.leiras as leiras_gyujtemeny, bibliografiak.megjelenes, bibliografiak.eto FROM biblioteka.bibliografiak INNER JOIN biblioteka.tipusok USING(tipus_id) INNER JOIN biblioteka.szerzok USING(szerzo_id) INNER JOIN biblioteka.gyujtemenyek USING(gyujtemeny_id) INNER JOIN biblioteka.kiadok USING(kiado_id) INNER JOIN biblioteka.nyilvantartas USING(nyilvantartas_id) WHERE lower($filter) LIKE lower(CONCAT('%','$q','%')) ORDER BY cim";
             }
 
-            $data['result_number'] = $this->_custom_query($query)->num_rows();
-
-            $mysql_query = $this->_generate_mysql_query($query, $oldal_szam, $limit);
-            $data['query'] = $this->_custom_query($mysql_query);
-
-            $pagination_data['template'] = 'public_bootstrap';
-            $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
-            $pagination_data['total_rows'] = $data['result_number'];
-            $pagination_data['offset_segment'] = 4;
-            $pagination_data['limit'] = $this->get_limit();
-
-            $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
-
-            $pagination_data['offset'] = $this->get_offset();
-            $data['showing_statement'] = $this->custom_pagination->get_showing_statement($pagination_data);
         }
+
+    } else {
+        $result = $this->check_search_result();
+        if(!is_null($result['query'])){
+            $query = $result['query'];
+            $data = $result;
+        }        
     }
 
+    if(isset($query)){
+        $data['result_number'] = $this->_custom_query($query)->num_rows();
+
+        $mysql_query = $this->_generate_mysql_query($query, $oldal_szam, $limit);
+        $data['query'] = $this->_custom_query($mysql_query);
+
+        $pagination_data['template'] = 'public_bootstrap';
+        $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
+        $pagination_data['total_rows'] = $data['result_number'];
+        $pagination_data['offset_segment'] = 4;
+        $pagination_data['limit'] = $this->get_limit();
+
+        $data['pagination'] = $this->custom_pagination->_generate_pagination($pagination_data);
+
+        $pagination_data['offset'] = $this->get_offset();
+        $data['showing_statement'] = $this->custom_pagination->get_showing_statement($pagination_data);
+
+    }
+
+    $data['tipus_query'] = $this->tipusok->get("leiras");
+    $data['nyelv_query'] = $this->nyelvek->get("nyelv");
+    $data['gyujtemeny_query'] = $this->gyujtemenyek->get("leiras");
+
+    $data['get_user_type'] = $this->site_security->_get_user_type();
+
+    $data['q'] = $q;
+    $data['tab'] = $tab;
     $data['view_module'] = "bibliografiak";
     $data['view_file'] = "view";
     $this->load->module('templates');
-    $this->templates->public_template($data);
-}
 
-private function get_mysqli() { 
-    $db = (array)get_instance()->db;
-    return mysqli_connect('localhost', $db['username'], $db['password'], $db['database']);
+    $this->templates->public_template($data);
 }
 
 function delete($update_id)
@@ -919,12 +1011,14 @@ function deleteconf($update_id)
     $this->templates->admin_template($data);
 }
 
-function insert_szerzo($nev)
+function insert_szerzo($nev = "")
 {
-    $this->load->module('site_security');
-    $this->site_security->_is_admin();
-    $mysql_query = "INSERT INTO biblioteka.szerzok (nev) VALUES (?)";
-    $this->db->query($mysql_query, array(urldecode($nev)));
+    if($nev != ""){
+        $this->load->module('site_security');
+        $this->site_security->_is_admin();
+        $mysql_query = "INSERT INTO biblioteka.szerzok (nev) VALUES (?)";
+        $this->db->query($mysql_query, array(urldecode($nev)));
+    }
 }
 
 function delete_szerzo($nev)
@@ -947,9 +1041,10 @@ function katalogus_cedula($leltari_szam)
 
 function get_inventory_number_with_ajax()
 {
+    /*
     $this->load->module('site_security');
     $this->site_security->_is_admin();
-
+    */
     $mysql_query = "SELECT max(leltari_szam) as max_id FROM biblioteka.bibliografiak";
     $query = $this->_custom_query($mysql_query);
     $row = $query->row();
@@ -1062,12 +1157,25 @@ function manage()
     $oldal_szam = $this->uri->segment(3);
     $limit = TRUE;
 
+    $keres = $this->input->get('keres',TRUE);
+    $rendez = $this->input->get('rendez',TRUE);
+
+    if(!empty($rendez) && in_array($rendez, array('leltari_szam', 'cim', 'nev', 'megjelenes'))){
+        $order_by = $rendez;
+    }else{
+        $order_by = 'leltari_szam';
+    }
+    $where = empty($keres)?"":"WHERE lower(leltari_szam) = lower('%$keres%') OR lower(cim) LIKE lower('%$keres%') OR lower(nev) LIKE lower('%$keres%') OR lower(datum) LIKE lower('%$keres%')";
+
     $data['flash'] = $this->session->flashdata('item');
-    $query = "SELECT * FROM  biblioteka.bibliografiak_view";
+    $query = "SELECT * FROM  biblioteka.bibliografiak_view  $where ORDER BY $order_by";
     $data['result_number'] = @$this->_custom_query($query)->num_rows();
-    
+
     $mysql_query = $this->_generate_mysql_query($query, $oldal_szam, $limit);
     $data['query'] = $this->_custom_query($mysql_query);
+
+    $data['rendez'] = $rendez;
+    $data['keres'] = $keres;
 
     $pagination_data['template'] = 'public_bootstrap';
     $pagination_data['target_base_url'] = $this->get_target_pagination_base_url();
@@ -1108,52 +1216,16 @@ function datalist($table_name, $column_name)
 
 function check_constrait_for_nyilvantartas($nyilvantartas_id)
 {
-
-/*
-    if($stuff_x->num_rows() == 0){
-
-        $mysql_query = "SELECT lelohely FROM biblioteka.nyilvantartas WHERE nyilvantartas_id = ?";
-        $isdhis = $this->_custom_query($mysql_query, array($nyilvantartas_id));
-        $uiuasd = $isdhis->row();
-        $lelohely_id = $uiuasd->lelohely;
-
-        $mysql_query = "DELETE FROM biblioteka.nyilvantartas_has_termek WHERE lelohely_id=?";
-        $this->db->query($mysql_query, array($lelohely_id));
-
-        $mysql_query = "SELECT terem_id FROM biblioteka.termek WHERE terem_neve LIKE '$lelohely' AND fiok_id = $lib_id";
-        $this->db->query($mysql_query, array($lib_id, $lelohely));
-        $terem_id = $this->db->insert_id();
-
-        $mysql_query = "SELECT max(lelohely) as max FROM biblioteka.nyilvantartas";
-        $isdhis = $this->_custom_query($mysql_query);
-        $uiuasd = $isdhis->row();
-        $lelohely_id = $uiuasd->max;
-
-        $mysql_query = "INSERT INTO biblioteka.nyilvantartas_has_termek (lelohely_id, terem_id) VALUES (?,?)";
-        $this->db->query($mysql_query,array($lelohely_id, $terem_id));
-    }
-*/
-
     $this->site_security->_get_details_from_user();
     $lib_id = $this->session->userdata('lib_id');
     $lelohely = $this->input->post('lelohely', TRUE);
     $mysql_query = "SELECT terem_id FROM biblioteka.termek WHERE terem_neve LIKE '$lelohely' AND fiok_id = $lib_id";
     $stuff_x = $this->_custom_query($mysql_query);
-    //die($this->db->last_query());
     $row_x = $stuff_x->row();
     $terem_id = $row_x->terem_id;
 
-/*
-    $mysql_query = "SELECT lelohely FROM biblioteka.nyilvantartas WHERE nyilvantartas_id = ?";
-    $this->db->query($mysql_query, array($nyilvantartas_id, $terem_id));
-    $stuff_x = $this->_custom_query($mysql_query);
-    $row_x = $stuff_x->row();
-    $lelohely = $row_x->lelohely;
-*/
-
     $mysql_query2 = "SELECT * FROM nyilvantartas_has_termek WHERE nyilvantartas_id = ? AND terem_id = ?";
     $query = $this->db->query($mysql_query2,array($nyilvantartas_id, $terem_id));
-    //die($this->db->last_query());
     if($query->num_rows() == 0){
         $mysql_query2 = "SELECT * FROM nyilvantartas_has_termek WHERE nyilvantartas_id = ?";
         $query = $this->db->query($mysql_query2,array($nyilvantartas_id));
@@ -1165,14 +1237,11 @@ function check_constrait_for_nyilvantartas($nyilvantartas_id)
         {
             $mysql_query3 = "INSERT INTO biblioteka.nyilvantartas_has_termek (nyilvantartas_id, terem_id) VALUES (?,?)";
             $this->db->query($mysql_query3,array($nyilvantartas_id, $terem_id));
-
-            //return $this->db->insert_id();
         }
-        //die($this->db->last_query());
     }
     $stuff_x = $this->_custom_query($mysql_query);
     $row_x = $stuff_x->row();
-    $id = $row_x->id;
+    $id = $row_x->terem_id;
     return $id;
 }
 
@@ -1240,23 +1309,17 @@ function create()
         $this->form_validation->set_rules('dok_stat', 'Dok stat', 'max_length[100]');  
         $this->form_validation->set_rules('megjelenes', 'Megjelenés', 'max_length[500]');  
         $this->form_validation->set_rules('terjedelem', 'Terjedelem', 'max_length[165]');  
-        $this->form_validation->set_rules('sorozat', 'Sorozat', 'max_length[255]');  
-        //$this->form_validation->set_rules('kozos_megjegyzesek', 'Közös megjegyzések', '');  
-        //$this->form_validation->set_rules('peldany_megjegyzesek', 'Példány megjegyzések', '');  
-        $this->form_validation->set_rules('isbn', 'ISBN', 'max_length[17]');  
-        //$this->form_validation->set_rules('kotes', 'Kötés', '');  
+        $this->form_validation->set_rules('sorozat', 'Sorozat', 'max_length[255]');
+        $this->form_validation->set_rules('isbn', 'ISBN', 'max_length[17]');
         $this->form_validation->set_rules('gyari_szam', 'Gyári szám', 'max_length[100]');  
         $this->form_validation->set_rules('nemzetkozi_azonosito', 'Nemzetközi azonosító', 'max_length[100]');  
         $this->form_validation->set_rules('feltuntetett_ar', 'Feltüntett ár', 'max_length[11]');  
         $this->form_validation->set_rules('beszerz_jegyz', 'Beszerz jegyz', 'max_length[150]');   
         $this->form_validation->set_rules('beszerz_mod', 'Beszerz mód', 'max_length[200]');  
         $this->form_validation->set_rules('datum', 'Dátum', 'max_length[15]');  
-        $this->form_validation->set_rules('beszerzesi_ar', 'Beszerzesi_ar', 'max_length[11]');  
-        //$this->form_validation->set_rules('targyszavak', 'Tárgyszavak', '');  
+        $this->form_validation->set_rules('beszerzesi_ar', 'Beszerzesi_ar', 'max_length[11]');
         $this->form_validation->set_rules('eto', 'ETO', 'max_length[500]');
         $this->form_validation->set_rules('targyi_mt', 'Tárgyi mt', 'max_length[500]');
-        //$this->form_validation->set_rules('kozos_spec_adat', 'Közös spec.adat', '');
-        //$this->form_validation->set_rules('saj_spec_adat', 'Saj.spec.adat', '');
         $this->form_validation->set_rules('csz', 'Csz', 'max_length[10]');
 
         $this->form_validation->set_rules('nyelvek', 'Nyelv', 'required|callback_nyelv_check');
@@ -1269,7 +1332,6 @@ function create()
             if(is_numeric($update_id))
             {
                 //update the page details
-
                 $mysql_query = "SELECT nyilvantartas_id FROM biblioteka.bibliografiak WHERE id = $update_id";
                 $query = $this->_custom_query($mysql_query);
                 $row = $query->row();
@@ -1385,14 +1447,14 @@ function create()
                     kozos_spec_adat,
                     saj_spec_adat,
                     url
-                ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
                 $data = $this->fetch_data_form_post_to_nyilvantartas();
                 if(!empty($data['cserear_datuma'])){
                     $data['cserear_datuma'] = str_replace(". ", "-", $data['cserear_datuma']);
                 }
                 
-                $data['lelohely'] = $this->check_constrait_for_nyilvantartas($nyilvantartas_id);
+                $data['lelohely'] = 0;
 
                 $this->db->query($mysql_query, array(
                     $data['rszj'], 
@@ -1422,6 +1484,8 @@ function create()
 
                 $data = $this->fetch_data_form_post_to_bibliografiak();  
                 $data['nyilvantartas_id'] = $this->db->insert_id();
+                
+                $this->check_constrait_for_nyilvantartas($data['nyilvantartas_id']);
 
                 $szerzok = $this->input->post('szerzok', TRUE);
                 $query = $this->szerzok->get_where_custom('nev', trim($szerzok));
@@ -1502,12 +1566,13 @@ function nyelv_check($val)
 
     if ($num_rows == 0)
     {
-            $this->form_validation->set_message('nyelv_check', 'A {field} mező értéke nem található meg a nyelvek táblában.');
-            return FALSE;
+        $this->db->query("INSERT INTO nyelvek (roviditese) VALUES (?)",array($val));
+        //$this->form_validation->set_message('nyelv_check', 'A {field} mező értéke nem található meg a nyelvek táblában.');
+        return TRUE;
     }
     else
     {
-            return TRUE;
+        return TRUE;
     }
 }
 
@@ -1520,12 +1585,13 @@ function tipus_check($val)
     
     if ($num_rows == 0)
     {
-            $this->form_validation->set_message('tipus_check', 'A {field} mező értéke nem található meg a típusok táblában.');
-            return FALSE;
+        $this->db->query("INSERT INTO tipusok (leiras) VALUES (?)",array($val));
+        //$this->form_validation->set_message('tipus_check', 'A {field} mező értéke nem található meg a típusok táblában.');
+        return TRUE;
     }
     else
     {
-            return TRUE;
+        return TRUE;
     }
 }
 
@@ -1538,12 +1604,13 @@ function gyujtemeny_check($val)
     
     if ($num_rows == 0)
     {
-            $this->form_validation->set_message('gyujtemeny_check', 'A {field} mező értéke nem található meg a gyűjtemények táblában.');
-            return FALSE;
+        $this->db->query("INSERT INTO gyujtemenyek (leiras) VALUES (?)",array($val));
+        //$this->form_validation->set_message('gyujtemeny_check', 'A {field} mező értéke nem található meg a gyűjtemények táblában.');
+        return TRUE;
     }
     else
     {
-            return TRUE;
+        return TRUE;
     }
 }
 
@@ -1556,12 +1623,13 @@ function kiado_check($val)
     
     if ($num_rows == 0)
     {
-            $this->form_validation->set_message('kiado_check', 'A {field} mező értéke nem található meg a kiadók táblában.');
-            return FALSE;
+        $this->db->query("INSERT INTO kiadok (kiado) VALUES (?)",array($val));
+        //$this->form_validation->set_message('kiado_check', 'A {field} mező értéke nem található meg a kiadók táblában.');
+        return TRUE;
     }
     else
     {
-            return TRUE;
+        return TRUE;
     }
 }
 
@@ -1708,7 +1776,7 @@ function fetch_data_from_db($update_id)
         $data['saj_spec_adat'] = $row->saj_spec_adat;
         $data['csz'] = $row->csz;
 
-        $data['nyelv'] = $row->nyelv;
+        $data['nyelv'] = ($row->nyelv)!=""?$row->nyelv:$row->roviditese;
         $data['tipus'] = $row->leiras_tipusok;
         $data['gyujtemeny'] = $row->leiras;
         $data['kiado'] = $row->kiado;
@@ -1803,6 +1871,23 @@ function fetch_data_form_post()
     $data['borito'] = $this->input->post('borito', TRUE);
     return $data;
 
+}
+/*
+function truncate(){
+    $this->load->module('site_security');
+    $this->site_security->_is_admin();
+    
+    $this->_truncate();
+    redirect(base_url().'bibliografiak/manage/20/');
+}
+*/
+function truncate(){
+    $this->load->module('site_security');
+    $this->load->model('mdl_bibliografiak');
+
+    if($this->site_security->_get_user_type() == "admin"){
+        $this->mdl_bibliografiak->_truncate();
+    }
 }
 
 function get($order_by)

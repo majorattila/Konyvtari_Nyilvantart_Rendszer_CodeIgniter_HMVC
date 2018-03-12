@@ -4,12 +4,29 @@ class Mdl_Konyvtarak extends CI_Model
 
 function __construct() {
 parent::__construct();
+$this->db->query("SET FOREIGN_KEY_CHECKS=0");
 }
 
 function get_table() {
     $table = "konyvtarak";
     return $table;
 }
+
+function _truncate(){
+    $table = $this->get_table();
+    $this->_set_foreign_key_check_off();
+    $this->db->truncate($table);
+    $this->_set_foreign_key_check_on();
+}
+
+function _set_foreign_key_check_off(){
+    $this->_custom_query("SET FOREIGN_KEY_CHECKS = 0");    
+}
+
+function _set_foreign_key_check_on(){
+    $this->_custom_query("SET FOREIGN_KEY_CHECKS = 1"); 
+}
+
 
 function get($order_by){
     $table = $this->get_table();

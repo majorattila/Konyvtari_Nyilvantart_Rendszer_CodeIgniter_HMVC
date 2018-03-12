@@ -4,6 +4,9 @@
 <script src="<?= base_url() ?>bower_components/datatables.net/js/jquery.dataTables.js"></script>
 
 
+<!--link rel="stylesheet" type="text/css" media="screen" href="http://saman.fszek.hu/WebPac/css/center.css" title="CorvinaWeb Style">
+<link rel="stylesheet" type="text/css" href="http://saman.fszek.hu/WebPac/CorvinaWeb?action=advancedsearchpage"-->
+
 <style>
 .radiusless-dropdown .btn{
     border-radius: 0;
@@ -23,23 +26,6 @@ li a{
 th{
 	font-weight: initial;
 }
-/*
-td{
-	width: fit-content;
-}
-*/
-
-
-
-/*
-table.dataTable thead .sorting_asc:after {
-    content: none !important;
-}
-
-.sorting_desc:after {
-    content: none !important;
-}
-*/
 
 #ezaz tbody td{
 	max-width: 400px !important;
@@ -76,28 +62,30 @@ $create_account_url = base_url()."Tipusok/create";
 
 <ul class="nav nav-tabs">
     <li id="egyszeru_kereses_tab" 
-    <?= (isset($_GET['type']) and ($_GET['type'] == 'egyszeru_kereses'))?'class="active"':''?>>
+    <?= $tab == 'egyszeru_kereses'?'class="active"':''?>>
     <a class="search_tab" data-toggle="tab" href="#egyszeru_kereses">Egyszerű keresés</a></li>
     <li id="osszetett_kereses_tab" 
-    <?= (isset($_GET['type']) and ($_GET['type'] == 'osszetett_kereses'))?'class="active"':''?>>
+    <?= $tab == 'osszetett_kereses'?'class="active"':''?>>
     <a class="search_tab" data-toggle="tab" href="#osszetett_kereses">Összetett keresés</a></li>
     <li id="bongeszes_tab" 
-    <?= (isset($_GET['type']) and ($_GET['type'] == 'bongeszes'))?'class="active"':''?>>
+    <?= $tab == 'bongeszes'?'class="active"':''?>>
     <a class="search_tab" data-toggle="tab" href="#bongeszes">Böngészés</a></li>
+    <?php if($get_user_type === "admin" || $get_user_type === "user"){ ?>
     <li id="kosar_tartalma_tab" 
-    <?= (isset($_GET['type']) and ($_GET['type'] == 'kosar_tartalma'))?'class="active"':''?>>
+    <?= $tab == 'kosar_tartalma'?'class="active"':''?>>
     <a class="search_tab" data-toggle="tab" href="#kosar_tartalma">Kosár tartalma</a></li>
+    <?php } ?>
   </ul>
 
   <div class="tab-content">
 
-	<div id="egyszeru_kereses" class="tab-pane fade in active"><br/>
-		<form action="<?=base_url()?>bibliografiak/view" method="GET">
+	<div id="egyszeru_kereses" class="tab-pane fade <?=$tab == 'egyszeru_kereses'?'in active':''?>"><br/>
+		<form action="<?=base_url()?>bibliografiak/view/egyszeru_kereses" method="GET">
 	       <div class="input-group"> 
 	       	<span class="input-group-addon"><span class="hidden-xs">Egyszerű keresés</span><span class="visible-xs">EK</span></span>
 	       <div class="input-group-btn radiusless-dropdown">
 	            <button type="button" class="btn btn-default dropdown-toggle as-is bs-dropdown-to-select" data-toggle="dropdown">
-	                <span id="dropdownfield" data-bind="bs-drp-sel-label">Kulcsszó</span>
+	                <span class="dropdownfield" data-bind="bs-drp-sel-label">Kulcsszó</span>
 	                <input type="hidden" name="selected_value" data-bind="bs-drp-sel-value" value="">
 	                <span class="caret"></span>
 	                <span class="sr-only">Toggle Dropdown</span>
@@ -119,8 +107,7 @@ $create_account_url = base_url()."Tipusok/create";
 	            </ul>
 	            <input name="filter" type="hidden" value="kulcsszo"/>
 	        </div>      	
-		    <input name="q" type="text" class="form-control" placeholder="Search">
-		    <input name="type" type="hidden" value="egyszeru_kereses"/>
+		    <input name="q" type="text" value="<?=isset($q)?$q:''?>" class="form-control" placeholder="Search">
 		    <div class="input-group-btn">
 		      <button class="btn btn-default" type="submit">
 		        <i class="glyphicon glyphicon-search"></i>
@@ -130,61 +117,63 @@ $create_account_url = base_url()."Tipusok/create";
     	</form>
 	</div>
 
-    <div id="osszetett_kereses" class="tab-pane fade">
-      <h3>Menu 1</h3>
-      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    <div id="osszetett_kereses" class="tab-pane fade <?=$tab == 'osszetett_kereses'?'in active':''?>">
+	<?php
+    $this->load->module("bibliografiak");
+    echo $this->bibliografiak->_draw_search_toolkit();
+    ?>
     </div>
-    <div id="bongeszes" class="tab-pane fade">
 
-    	<div id="egyszeru_kereses" class="tab-pane fade in active"><br/>
-			<form action="<?=base_url()?>bibliografiak/view" method="GET">
-		       <div class="input-group"> 
-		       	<span class="input-group-addon"><span class="hidden-xs">Böngészés</span><span class="visible-xs">B</span></span>
-		       <div class="input-group-btn radiusless-dropdown">
-		            <button type="button" class="btn btn-default dropdown-toggle as-is bs-dropdown-to-select" data-toggle="dropdown">
-		                <span id="dropdownfield" data-bind="bs-drp-sel-label">Szerző, közreműködő</span>
-		                <input type="hidden" name="selected_value" data-bind="bs-drp-sel-value" value="">
-		                <span class="caret"></span>
-		                <span class="sr-only">Toggle Dropdown</span>
-		            </button>
-		            <ul class="dropdown-menu" role="menu">
-		                <li><a data-value="cim">Szerző, közreműködő</a></li>
-		                <li><a data-value="cim">Cím, cím szavai</a></li>
-		                <li><a data-value="nev">Tárgyszó</a></li>
-		                <li><a data-value="cim">ETO jelzet</a></li>
-		            </ul>
-		            <input name="filter" type="hidden" value="kulcsszo"/>
-		        </div>      	
-			    <input name="q" type="text" class="form-control" placeholder="Search">
-		        <input name="type" type="hidden" value="bongeszes"/>
-			    <div class="input-group-btn">
-			      <button class="btn btn-default" type="submit">
-			        <i class="glyphicon glyphicon-search"></i>
-			      </button>
-			    </div>
-		  	  </div>
-	    	</form>
-		</div>
+    <div id="bongeszes" class="tab-pane fade <?=$tab == 'bongeszes'?'in active':''?>"><br/>
+		<form action="<?=base_url()?>bibliografiak/view/bongeszes" method="GET">
+	       <div class="input-group"> 
+	       	<span class="input-group-addon"><span class="hidden-xs">Böngészés</span><span class="visible-xs">B</span></span>
+	       <div class="input-group-btn radiusless-dropdown">
+	            <button type="button" class="btn btn-default dropdown-toggle as-is bs-dropdown-to-select" data-toggle="dropdown">
+	                <span class="dropdownfield" data-bind="bs-drp-sel-label"><?=!empty($terem)?$terem:'Szerző'?>, közreműködő</span>
+	                <input type="hidden" name="selected_value" data-bind="bs-drp-sel-value" value="">
+	                <span class="caret"></span>
+	                <span class="sr-only">Toggle Dropdown</span>
+	            </button>
+	            <ul class="dropdown-menu" role="menu">
+	                <li><a data-value="nev">Szerző, közreműködő</a></li>
+	                <li><a data-value="cim">Cím, cím szavai</a></li>
+	                <li><a data-value="targyszavak">Tárgyszó</a></li>
+	                <li><a data-value="eto">ETO jelzet</a></li>
+	            </ul>
+	            <input name="filter" type="hidden" value="kulcsszo"/>
+	        </div>      	
+		    <input name="q" type="text" value="<?=isset($q)?$q:''?>" class="form-control" placeholder="Search">
+	        <input name="type" type="hidden" value="bongeszes"/>
+		    <div class="input-group-btn">
+		      <button class="btn btn-default" type="submit">
+		        <i class="glyphicon glyphicon-search"></i>
+		      </button>
+		    </div>
+	  	  </div>
+    	</form>
 
     </div>
-    <div id="kosar_tartalma" class="tab-pane fade"><br/>
+    <div id="kosar_tartalma" class="tab-pane fade  <?=$tab == 'kosar_tartalma'?'in active':''?>"><br/>
     	<form id="elofoglalas_torlese_form">
 		<table id="ezaz" class="table table-striped" style="width: 100%;">
 			<thead>
 				<th class="col-xs-2"><span style="display: inline-flex;"><input class="checkAll" type="checkbox">&nbsp;<a class="elofoglalas_torlese" href="javascript:void(0)">Töröl</a></span></th>
 				<th class="col-xs-3">Dátum</th>
 				<th class="col-xs-3">Szerző</th>
-				<th class="col-xs-4">Cím</th>
+				<th class="col-xs-3">Cím</th>
+				<th class="col-xs-1">Részletek</th>
 			</thead>
 			<tbody>		
       	<?php
       	//foreach ($elofofglalasok_list->result() as $row) {
       	?>
 			<tr>
-				<td class="col-xs-2"></td>
-				<td class="col-xs-3"></td>
-				<td class="col-xs-3"></td>
-				<td class="col-xs-4"></td>
+				<td data-title="Töröl" class="col-xs-2"></td>
+				<td data-title="Dátum" class="col-xs-3  hidden-xs"></td>
+				<td data-title="Szerző" class="col-xs-3"></td>
+				<td data-title="Cím" class="col-xs-3"></td>
+				<td data-title="Részletek" class="col-xs-1"></td>
 			</tr>
       	</tbody>
 		</table>
@@ -198,7 +187,9 @@ $create_account_url = base_url()."Tipusok/create";
 	  <thead>
 		  <tr>
 			  <th class="col-xs-1">#</th>
+    		  <?php if($get_user_type === "admin" || $get_user_type === "user"){ ?>
 			  <th class="col-xs-1"><input class="checkAll" type="checkbox">&nbsp;<a class="elofoglalas" href="javascript:void(0)">Kosár</a></th>
+			  <?php } ?>
 			  <th>Leírás</th>
 			  <th class="col-xs-1"></th>
 		  </tr>
@@ -211,10 +202,12 @@ $create_account_url = base_url()."Tipusok/create";
 	  	$more_detais = base_url()."bibliografiak/details/".$row->id;
 	  ?>
 		<tr>
-			<td><?= $id ?>.</td>	
-			<td><input type="checkbox" name="elofoglal(<?= $id ?>)" value="<?= $row->id ?>"></td>
-			<td><?= $row->cim ?></td>					
-			<td class="tools">
+			<td data-title="#"><?= $id ?>.</td>	
+    		<?php if($get_user_type === "admin" || $get_user_type === "user"){ ?>
+			<td data-title="Kosár"><input type="checkbox" name="elofoglal(<?= $id ?>)" value="<?= $row->id ?>"></td>
+			<?php } ?>
+			<td data-title="Leírás"><?= $row->cim ?></td>					
+			<td data-title="Részletek" class="tools">
 				<a onClick="newwindow = window.open('<?= $more_detais ?>', '_blank', 'resizable=yes, scrollbars=yes, titlebar=yes, width=600, height=600, top=10, left=10');" href="javascript:void(0);">Részletek</a>
 			</td>
 		</tr>
@@ -232,6 +225,9 @@ $create_account_url = base_url()."Tipusok/create";
           <td colspan="4">
             <p><?= $showing_statement ?></p>
           </td>
+	     <tr class="hidden-xl hidden-lg hidden-md hidden-sm">
+	     	 <td colspan="4"><b><i>Műveletek:</i></b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="checkAll" type="checkbox">&nbsp;<a class="elofoglalas" href="javascript:void(0)">Kosár</a></td>
+	     </tr>
         </tr>          
       </tfoot>  
       <?php } }
@@ -246,9 +242,10 @@ $create_account_url = base_url()."Tipusok/create";
   </form>
   <?php } ?>
 </div><!--/row-->
+</div>
 
 
-<script>  
+<script>
     $(document).ready(function(){
 		var table = $('#ezaz').DataTable( {	
 			"bDeferRender": true,			
@@ -261,7 +258,8 @@ $create_account_url = base_url()."Tipusok/create";
 				{ "data": "actions" },
 				{ "data": "datum" },
 				{ "data": "nev" },
-				{ "data": "cim" }
+				{ "data": "cim" },
+				{ "data": "reszletek" }
 				],
 			"oLanguage": {
 	            "sProcessing":     "Folyamatban...",
@@ -343,14 +341,14 @@ $create_account_url = base_url()."Tipusok/create";
 	    $(document).on('click', '.dropdown-menu li a', function() {
 		    text = $(this).text();
 		    data = $(this).data("value");
-		    $('#dropdownfield').text(text);
-		    $('#dropdownfield').attr('width', 'max-content');
+		    $('.dropdownfield').text(text);
+		    $('.dropdownfield').attr('width', 'max-content');
 		    $("input[name='filter']").val(data);
 		});
 
 		$(document).on('click', '.elofoglalas', function(){
 			$('#elofoglalas_form').submit();
-			table.ajax.reload();
+			//table.ajax.reload();
 			$('input:checkbox').not(this).prop('checked', false);
 		});
 		$('#elofoglalas_form').on("submit", function(event){  
@@ -368,4 +366,31 @@ $create_account_url = base_url()."Tipusok/create";
 		    $('input:checkbox').not(this).prop('checked', this.checked);
 		});
 	});
+
+    $(document).ready(function(){
+      $('.pagination a').click(function(){
+        var url = $(this).attr('href');
+        var filter = "<?= isset($_GET['filter'])?$_GET['filter']:'' ?>";
+        var q = "<?= isset( $_GET['q'])?$_GET['q']:'' ?>";
+        var add_filter = 'filter='+filter;
+        var add_q = 'q='+q;
+        var add_variables = "";
+
+        /*
+        if(add_filter!='filter=' && add_q!='q='){
+          add_variables += '?'+add_filter+'&'+add_q;
+        }else if(add_filter!='filter='){
+          add_variables += '?'+add_filter;
+        }else if(add_q!='q='){
+          add_variables += '?'+add_q;
+        }
+        */
+
+      if(<?= (isset($_GET['filter'])||isset($_GET['q']))?"true":"false" ?>){
+        add_variables += '?'+add_filter+'&'+add_q
+      }
+
+        $(this).attr('href',url+add_variables);
+      });
+    });
 </script>

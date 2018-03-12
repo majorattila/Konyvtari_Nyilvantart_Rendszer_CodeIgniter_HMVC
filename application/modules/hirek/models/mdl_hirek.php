@@ -45,6 +45,7 @@ function get_join()
 {
     $table = $this->get_table();
     $this->db->join("hirek_kategoria", "hirek_kategoria.k_id = $table.k_id");
+    $this->db->join("konyvtarak", "$table.fiok_id = konyvtarak.fiok_id");
     $this->db->order_by('publikalas_datuma desc');
     $query = $this->db->get($table);
     return $query;
@@ -53,7 +54,8 @@ function get_join()
 function get_join_with_limit($limit, $offset)
 {
     $table = $this->get_table();
-    $this->db->join("hirek_kategoria", "hirek_kategoria.k_id = $table.k_id");    
+    $this->db->join("hirek_kategoria", "hirek_kategoria.k_id = $table.k_id");
+    $this->db->join("konyvtarak", "$table.fiok_id = konyvtarak.fiok_id");
     $this->db->limit($limit, $offset);
     $this->db->order_by('publikalas_datuma desc');
     $query = $this->db->get($table);
@@ -64,6 +66,19 @@ function get_join_with_condition($col, $val)
 {
     $table = $this->get_table();
     $this->db->join("hirek_kategoria", "hirek_kategoria.k_id = $table.k_id");
+    $this->db->join("konyvtarak", "$table.fiok_id = konyvtarak.fiok_id");
+    $this->db->like($col, $val, 'none', false);
+    $this->db->order_by('publikalas_datuma desc');
+    $query = $this->db->get($table);
+    return $query;
+}
+
+function get_join_with_condition_and_limit($col, $val, $limit, $offset)
+{
+    $table = $this->get_table();
+    $this->db->join("hirek_kategoria", "hirek_kategoria.k_id = $table.k_id");
+    $this->db->join("konyvtarak", "$table.fiok_id = konyvtarak.fiok_id");
+    $this->db->limit($limit, $offset);
     $this->db->like($col, $val, 'none', false);
     $this->db->order_by('publikalas_datuma desc');
     $query = $this->db->get($table);
@@ -74,6 +89,7 @@ function get_join_with_double_condition($col1, $val1, $col2, $val2)
 {
     $table = $this->get_table();
     $this->db->join("hirek_kategoria", "hirek_kategoria.k_id = $table.k_id");
+    $this->db->join("konyvtarak", "$table.fiok_id = konyvtarak.fiok_id");
     $this->db->like($col1, $val1, 'none', false);    
     $this->db->like($col2, $val2, 'none', false);
     $this->db->order_by('publikalas_datuma desc');

@@ -9,7 +9,7 @@
 	}
 	?>
 
-<div class="row sortable">
+<div class="sortable">
 	<div class="box box-default">
 		<div class="box-header with-border" data-original-title>
 			<h3 class="box-title">Törlés Megerősítése</h3>

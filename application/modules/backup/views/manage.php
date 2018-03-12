@@ -12,11 +12,11 @@ if(isset($flash))
 	echo $flash;
 }
 $create_account_url = base_url()."backup/create";
-$last_id = 1;
 ?>
 <div id="error_msg"></div>
 <p style="margin-top: 30px;">
 	<!--a href="<?php echo $create_account_url ?>"--><button type="button" class="btn btn-primary margin" name="mentes">Új adatbázis mentés</button><!--/a-->
+  <button type="button" class="btn btn-danger margin" name="kiurites">Adatbázis kiüresítése</button>
 	</p>
 <div class="row-fluid sortable">		
 				<div class="box box-default">
@@ -43,18 +43,13 @@ $last_id = 1;
 						  foreach($query->result() as $row){
 						  	$edit_account_url = base_url()."backup/create/".$row->id;
 							$view_accounts_url = base_url()."backup/view/".$row->id;
-							$last_id = $row->id + 1;
 						  ?>
 							<tr>
 								<td data-title="Dátum"><?= $row->datum ?></td>
 								<td data-title="Fájl"><?= base_url().'backups/'.$row->fajl_nev.'.sql' ?></td>								
 								<td data-title="Műveletek" class="center col-xs-12 col-sm-2 col-md-2 col-lg-2">
-									<!--a class="btn btn-primary" href="<?= $edit_account_url ?>"-->
-										<button name="torles" data-id="<?= $row->id ?>" class="btn btn-primary"><i class="fa fa-fw fa-trash"></i></button>  
-									<!--/a-->
-									<!--a class="btn btn-primary" href="<?= $edit_account_url ?>"-->
-										<button name="check" data-name="<?= $row->fajl_nev ?>" class="btn btn-primary"><i class="fa fa-fw fa-check"></i></button> 
-									<!--/a-->
+									<button name="torles" data-id="<?= $row->id ?>" class="btn btn-primary"><i class="fa fa-fw fa-trash"></i></button>
+									<button name="check" data-name="<?= $row->fajl_nev ?>" class="btn btn-primary"><i class="fa fa-fw fa-check"></i></button>
 								</td>
 							</tr>
 							<?php
@@ -115,12 +110,41 @@ $last_id = 1;
     \$('#backup_form').on(\"submit\", function(event){
   	\$(window).on('beforeunload', confirmOnPageExit);
   	
-    \$(\"#myTable > tbody\").append('<tr><td>'+datum+'</td><td>".base_url()."database/'+random_name+'.sql</td><td class=\"center\"><button name=\"torles\" data-id=\"".$last_id."\" class=\"btn btn-primary\"><i class=\"fa fa-fw fa-trash\"></i></button> <button name=\"check\" data-name=\"'+random_name+'\" class=\"btn btn-primary\"><i class=\"fa fa-fw fa-check\"></i></button> </td></tr>');
+
+    \$.get('".base_url()."backup/print_last_id', function(data, status){
+      \$(\"#myTable > tbody\").prepend('<tr><td>'+datum+'</td><td>".base_url()."database/'+random_name+'.sql</td><td class=\"center\"><button name=\"torles\" data-id=\"'+data+'\" class=\"btn btn-primary\"><i class=\"fa fa-fw fa-trash\"></i></button> <button name=\"check\" data-name=\"'+random_name+'\" class=\"btn btn-primary\"><i class=\"fa fa-fw fa-check\"></i></button> </td></tr>');
+    });
+
 	\$('#loader').show();
 	\$(\"#add_new_Modal button\").prop('disabled', true);
   });";
   $modal_message = "<h5 style='color: red; display: inline;'>&nbsp;&nbsp;&nbsp;Biztos, hogy szeretné elmenteni az adatbázist?</h5>&nbsp;&nbsp;&nbsp;<img id='loader' src='".base_url()."dist/img/loader.gif' alt='loader' style='height: 20px; display: none;'><br/>";
   $this->php_strap_cv->new_modal("add_new_Modal", "Új Adatbázis mentés", "backup_form", $fields, "mentes", $ajax_url, $message, $custom_script, "", $modal_message, "", "glyphicon glyphicon-save");
+
+  $ajax_url = base_url().$first_segment."/ajax_api/truncate";
+  $message = "Sikeresen törölte az adatbázis tartalmát!";
+  $modal_message = "<h5 style='color: red; display: inline;'>&nbsp;&nbsp;&nbsp;Biztos, hogy szeretné törölni az adatbázis tartalmát?</h5>&nbsp;&nbsp;&nbsp;<img id='loader3' src='".base_url()."dist/img/loader.gif' alt='loader' style='height: 20px; display: none;'><br/>";
+  $custom_script = 
+  "
+  \$(\"body\").on('click', \"button[name='kiurites']\", function(){
+
+  \$(\"input[name='kiurites']\").val(\$(this).data('id'));
+  \$('#loader3').hide();
+  
+  \$(\"#truncate_Modal\").removeData('bs.modal').modal({
+        backdrop: 'static',
+        keyboard: 'true',
+        show: 'true'
+    });   
+  });
+
+  \$('#truncate_form').on(\"submit\", function(event){
+  \$(window).on('beforeunload', confirmOnPageExit);
+  \$('#loader3').show();
+  \$(\"#truncate_Modal button\").prop('disabled', true);
+  });
+  ";
+  $this->php_strap_cv->new_modal("truncate_Modal", "Adatbázis tisztítása", "truncate_form", array(), "kiurites", $ajax_url, $message, $custom_script, "", $modal_message, "Visszaállít", "fa fa-fw fa-eraser");
 
   $fields = array(
     array('label' => 'hidden' ,'name' => 'item', 'type' => 'hidden')
@@ -155,7 +179,6 @@ $last_id = 1;
   ";
   $modal_message = "<h5 style='color: red; display: inline;'>&nbsp;&nbsp;&nbsp;Biztos, hogy szeretné törölni a mentést?</h5>&nbsp;&nbsp;&nbsp;<img id='loader2' src='".base_url()."dist/img/loader.gif' alt='loader' style='height: 20px; display: none;'><br/>";
   $this->php_strap_cv->new_modal("remove_Modal", "Mentés eltávolítása", "delete_form", $fields, "torles", $ajax_url, $message, $custom_script, "", $modal_message, "Törlés", "glyphicon glyphicon-trash");
-
 
   $fields = array(
     array('label' => 'hidden' ,'name' => 'item', 'type' => 'hidden')
@@ -226,9 +249,4 @@ function addZero(i) {
     }
     return i;
 }
-
-/*
-\$('#add_new_Modal').data('bs.modal',null);
-\$('#add_new_Modal').modal({backdrop: 'true', keyboard: true}); 
-*/
 </script>
