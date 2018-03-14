@@ -53,6 +53,12 @@ $this->load->helper('text');
               </div>
             </div>
           <br/>
+
+          <div id='afscontainer1'></div>
+          <!--div id="sky-right">
+             <iframe src="//thepiratebay.org/static/si0Eim0u/exo_na/sky2.html" width="160" height="600" frameborder="0" scrolling="no"></iframe>
+          </div-->
+
         </div>
       </div>
 

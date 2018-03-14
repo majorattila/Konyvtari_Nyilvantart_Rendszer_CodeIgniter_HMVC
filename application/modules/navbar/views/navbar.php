@@ -47,8 +47,8 @@ $this->load->module('site_security');
       $customer_id = $this->site_security->_get_user_id();
       if(!$customer_id > 0){
       ?>
-      <li><a href="<?=base_url()?>fiok/start"><span class="glyphicon glyphicon-user"></span> <span class="hidden-sm">Regisztráció</span></a></li>
-      <li><a href="<?=base_url()?>fiok/login"><span class="glyphicon glyphicon-log-in"></span> <span class="hidden-sm">Belépés</span></a></li>
+      <li class="hidden-xs"><a href="<?=base_url()?>fiok/start"><span class="glyphicon glyphicon-user"></span> <span class="hidden-sm">Regisztráció</span></a></li>
+      <li class="hidden-xs"><a href="<?=base_url()?>fiok/login"><span class="glyphicon glyphicon-log-in"></span> <span class="hidden-sm">Belépés</span></a></li>
       <?php }else{ ?>
 
       

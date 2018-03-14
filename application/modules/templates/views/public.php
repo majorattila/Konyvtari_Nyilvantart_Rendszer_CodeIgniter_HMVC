@@ -54,6 +54,30 @@ $second_segment = $this->uri->segment(2);
     background-attachment: fixed;
   }  
 }
+@media (max-width:576px){
+	body div.container::after{
+		margin-bottom: 60px;
+	}
+	nav{
+		z-index:999;
+		width:100%;
+		position:fixed !important;
+	}
+}
+
+
+
+
+
+
+
+
+
+@media (max-width:992px){
+	#afscontainer1{
+		display: none;
+	}
+}
 </style>
 </head>
 <body>
@@ -97,13 +121,59 @@ $second_segment = $this->uri->segment(2);
     $this->load->view($view_module.'/'.$view_file);
   }
 ?>
+
+
+<!-- Composite Start -->
+<div id="M308608ScriptRootC199269">
+<div id="M308608PreloadC199269">
+Loading...    </div>
+<script>
+        (function(){
+    var D=new Date(),d=document,b='body',ce='createElement',ac='appendChild',st='style',ds='display',n='none',gi='getElementById';
+    var i=d[ce]('iframe');i[st][ds]=n;d[gi]("M308608ScriptRootC199269")[ac](i);try{var iw=i.contentWindow.document;iw.open();iw.writeln("<ht"+"ml><bo"+"dy></bo"+"dy></ht"+"ml>");iw.close();var c=iw[b];}
+    catch(e){var iw=d;var c=d[gi]("M308608ScriptRootC199269");}var dv=iw[ce]('div');dv.id="MG_ID";dv[st][ds]=n;dv.innerHTML=199269;c[ac](dv);
+    var s=iw[ce]('script');s.async='async';s.defer='defer';s.charset='utf-8';s.src="//jsc.adskeeper.co.uk/f/i/filmek-online.com.199269.js?t="+D.getYear()+D.getMonth()+D.getDate()+D.getHours();c[ac](s);})();
+</script>
+</div>
+<!-- Composite End -->
+
+
 </div>
 
 
 <footer class="container">
+
+<div class="col-xs-12" style="width:100%;height: max-content;background-color:#ccc;"><br>
+	<div class="col-sm-4 col-xs-12">
+	    <h4>Gyorslinkek</h4>
+	    <dl class="text-center">
+		    <dd><a href="<?=base_url()?>hirek/kategoriak">Hírek</a></dd>
+		    <dd><a href="<?=base_url()?>katalogus/kereses">Katalógus</a></dd>
+		    <dd><a href="<?=base_url()?>konyvtarak/kirendeltseg">Alkönyvtárak</a></dd>
+		</dl>
+	</div>
+
+	<div class="col-sm-4 col-xs-12">
+	    <h4>Rólunk</h4>
+		<dl class="text-center">
+		    <dd><a href="<?=base_url()?>joginyilatkozat">Jogi nyilatkozat</a></dd>
+		    <dd><a href="<?=base_url()?>szabalyok_es_feltetelek">Szabályok és feltételek</a></dd>
+		    <dd><a href="<?=base_url()?>adatvedelem">Adatvédelmi szabályzat</a></dd>
+		</dl>
+	</div>
+
+	<div class="col-sm-4 col-xs-12">
+	    <h4>Kapcsolat</h4><dl class="text-center">
+	    <dd><span>Tel.: </span><a href="tel:06205534854156">+36 (20) 553 48-54</a></dd>
+	    <dd>Cím: Budapest 1083 Tömő u. 48-54 156</dd>
+	    <dd>Email: <a href="mailto:attilamajor1997@gmail.com">attilamajor1997@gmail.com</a></dd>
+	</dl>
+
+	</div>
+</div>
+
   <p><span class="hidden-xs">&nbsp;&nbsp;&nbsp;Copyright © 2018 </span>Created By Major Attila</p>
 </footer>
-
 
 <!-- jQuery 3 -->
 <script src="<?=base_url()?>bower_components/jquery/dist/jquery.min.js"></script>
@@ -155,6 +225,62 @@ $second_segment = $this->uri->segment(2);
 
 })(jQuery);
 */
+</script>
+
+
+
+
+
+
+
+<!--https://cookieconsent.insites.com/-->
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+<script>
+window.addEventListener("load", function(){
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#000"
+    },
+    "button": {
+      "background": "#f1d600"
+    }
+  },
+  "content": {
+    "message": "Weboldalunk a jobb felhasználói élmény biztosítása érdekében sütiket használ. A weboldal használatával Ön beleegyezik az ilyen adatfájlok fogadásába és elfogadja a süti-kezelésre vonatkozó irányelveket.",
+    "dismiss": "Megértettem",
+    "link": "Bővebben"
+  }
+})});
+</script>
+
+
+
+
+
+
+
+
+<!--https://developers.google.com/custom-search-ads/docs/code-generator-->
+<script src="https://www.google.com/adsense/search/ads.js" type="text/javascript" nonce="5gxYe56Da/6O3uqnbE1j/g=="></script>
+
+<script type="text/javascript" charset="utf-8">
+
+  var pageOptions = {
+    "pubId": "pub-9616389000213823", // Make sure this the correct client ID!
+    "query": "hawai",
+    "adPage": 1
+  };
+
+  var adblock1 = {
+    "container": "afscontainer1",
+    "width": "100%",
+    "number": 2
+  };
+
+  _googCsa('ads', pageOptions, adblock1);
+
 </script>
 
 </body>

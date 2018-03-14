@@ -9,24 +9,6 @@
         max-width: 100%;
     }
   }
-  @media (min-width: 576px) and (max-width: 1000px) {
-    .row {
-      display: grid;
-      width: 100% !important;
-      margin-left: 0 !important;
-    }
-    .feed_hp.row{
-      padding-top: 16px !important;
-      padding-bottom: 16px !important;
-      background: -webkit-gradient(linear, 0% 30%, 100% 0%, from(rgb(255, 255, 255)), color-stop(0.6, rgb(245, 245, 245)), color-stop(1, rgb(235, 235, 235)));/*#e6e6e6*/
-      display: inline-block;
-    }
-    .cat_menu, .content{
-      display: block;
-      height: min-content;
-      width: 100% !important;
-    }
-  }
 </style>
 
 <?php

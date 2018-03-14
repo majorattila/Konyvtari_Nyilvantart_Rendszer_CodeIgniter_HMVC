@@ -5,7 +5,7 @@ $this->load->helper('text');
 
 <style>
   @media (max-width: 576px) {
-    .categories img{
+    .feed_hp.row img{
       width: -webkit-fill-available;
     }
   }
@@ -14,7 +14,7 @@ $this->load->helper('text');
         max-width: 100%;
     }
   }
-  @media (min-width: 576px) and (max-width: 1000px) {
+  @media (min-width: 576px) and (max-width: 991px) {
     .row {
       display: grid;
       width: 100% !important;
@@ -43,7 +43,7 @@ $this->load->helper('text');
     <!--div class="container"-->
       <!-- Kezdőlap Tartalma -->
       <div class="row">
-        <div class="col-md-7 col-xs-12 hidden-xs">          
+        <div class="col-md-7 col-xs-12">          
           <?= Modules::run('hirek/_draw_about_us') ?>
         </div>
           
