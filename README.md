@@ -9,3 +9,4 @@
 
 <h3 id="h3-kit-z-tt-c-lok"><a name="Kitűzött célok" class="reference-link"></a><span class="header-link octicon octicon-link"></span>Kitűzött célok</h3><p>A megvalósításnál szerettem volna minél pontosabban visszaadni azt a felületet, amit a valódi könyvtárakban is felhasználnak. Sok könyvtári alkalmazást kipróbáltam és ami közös volt, az az, hogy lehetőleg minden bibliográfiai adatot eltároltak, és hogy többségük képes volt kapcsolódni más könyvtári adatbázisokhoz. A téma kiírásánál meg kikötötték, hogy lehetőleg minden létező dokumentum eltárolható legyen és hogy legyen lehetőség előfoglalásra és hosszabbításra. Kitűzött célom volt, hogy megfeleljek ezeknek az elvárásoknak. </p>
 <p></p><h4 style="margin-bottom: 5px;">Készítő:</h4><b><a href="mailto:attilamajor1997@gmail.com" title="Major Attila László">Major Attila László</a></b><p></p>
+ 
