@@ -6,7 +6,8 @@ $this->load->helper('text');
 
       <!-- Kezdőlap Tartalma -->
       <div class="row">
-        <div class="col-md-8 col-xs-12 hidden-xs"> 
+        <h1 class="hidden-xl hidden-lg hidden-md hidden-sm text-center">KossuthKönyvtár<hr/></h1>
+        <div class="col-md-8 col-xs-12"> 
             <?= Modules::run('hirek/_draw_carousel') ?>
         <br/></div>
 
@@ -25,7 +26,7 @@ $this->load->helper('text');
         </div>
       </div>
       <div class="row">
-        <h1 class="hidden-xl hidden-lg hidden-md hidden-sm">KossuthKönyvtár</h1>
+        
         <div class="col-md-8 col-xs-12 col-sm-12">
           <?= Modules::run('hirek/_draw_news_and_events_with_pagination') ?>
         </div>        

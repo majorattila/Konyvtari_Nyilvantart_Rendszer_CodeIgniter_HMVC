@@ -1,6 +1,46 @@
 <style>
+
+	@media (min-width:295px) and (max-width:576px){	
+		#myCarousel{
+			height: 230px !important;
+		}
+	}
+
+	@media (max-width:295px){			
+		#myCarousel{
+			height: 200px !important;
+		}
+	}
+
+	@media (max-width:576px){
+		.carousel-caption {
+		    padding: 0px 20px 0px 20px;
+		    height: 54px !important;
+		}
+		.carousel-caption h4{
+			display: none;
+		}
+		.link {
+		    font-size: 12pt !important;
+		}
+		.carousel-control.left {
+		    background-image: none;
+		    background-color: #ff7f00;
+		    border-right: 1px solid white;
+		    width: 24px;
+		    opacity: unset;
+		}
+		.carousel-control.right {
+		    background-image: none;
+		    background-color: #ff7f00;
+		    border-left: 1px solid white;
+		    width: 24px;
+		    opacity: unset;
+		}	
+	}
+
 	.link{
-		font-size:22pt !important;
+		font-size:22pt;
 		color: #FFFFFF;
 	}
 	.link:hover{

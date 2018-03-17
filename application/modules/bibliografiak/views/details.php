@@ -11,6 +11,15 @@ $third_segment = $this->uri->segment(3);
 	<script src="<?=base_url()?>bower_components/jquery/dist/jquery.min.js"></script>
 	<script src="<?=base_url()?>bower_components/bootstrap/dist/js/popper.js"></script>
 	<script src="<?=base_url()?>bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <style>
+    ::selection {
+      background: #D5F447; /* WebKit/Blink Browsers */
+    }
+    ::-moz-selection {
+      background: #D5F447; /* Gecko Browsers */
+    }
+  </style>
 </head>
 <body><br/>   
 

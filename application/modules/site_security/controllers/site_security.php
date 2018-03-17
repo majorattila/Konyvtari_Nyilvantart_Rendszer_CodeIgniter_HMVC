@@ -138,6 +138,18 @@ function _click_counter(){
     $this->load->module('latogatok');
     $this->load->module('diagram_nezettseg');
 
+    $datum = "";
+    $query = $this->db->query("SELECT ev, honap FROM diagram_nezettseg where ev = (SELECT max(ev) FROM diagram_nezettseg) ORDER BY honap desc LIMIT 1");
+
+    foreach ($query->result() as $row) {
+        $datum = $row->ev."-".$row->honap;
+    }
+
+    if(date('Y-n') != $datum){
+    $this->db->query("INSERT INTO biblioteka.diagram_nezettseg (ev,honap,latogatok) VALUES (YEAR(CURDATE()),MONTH(CURDATE()),0)");
+    $this->db->query("TRUNCATE TABLE latogatok");
+    }
+
     //get number of "latogatok"
     $query = $this->diagram_nezettseg->get_with_double_condition('ev', date("Y"), 'honap', date("m"));
 

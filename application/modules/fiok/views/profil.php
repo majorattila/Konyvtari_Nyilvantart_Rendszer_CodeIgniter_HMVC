@@ -109,24 +109,24 @@ function previewFile() {
    <br/><br/>
    <table class="table table-striped">
 		<tr>
-			<td><b>Vezetéknév:</b></td>
-			<td><?= $lastname ?></td>
+			<td class="hidden-xs"><b>Vezetéknév:</b></td>
+			<td data-title="Vezetéknév"><?= $lastname ?></td>
 		</tr>
 		<tr>			
-			<td><b>Keresztnév:</b></td>
-			<td><?= $firstname ?></td>
+			<td class="hidden-xs"><b>Keresztnév:</b></td>
+			<td data-title="Keresztnév"><?= $firstname ?></td>
 		</tr>
 		<tr>			
-			<td><b>Felhasználónév:</b></td>
-			<td><?= $username ?></td>
+			<td class="hidden-xs"><b>Felhasználónév:</b></td>
+			<td data-title="Felhasználónév"><?= $username ?></td>
 		</tr>
 		<tr>
-			<td><b>Email:</b></td>
-			<td><?= $email ?></td>			
+			<td class="hidden-xs"><b>Email:</b></td>
+			<td data-title="Email"><?= $email ?></td>			
 		</tr>
 		<tr>
-			<td><b>Olvasójegy:</b></td>
-			<td><?= $library_card ?></td>
+			<td class="hidden-xs"><b>Olvasójegy:</b></td>
+			<td data-title="Olvasójegy"><?= $library_card ?></td>
 		</tr>
    </table>
  </div>
@@ -223,13 +223,13 @@ $form_location = base_url().'fiok/profil';
 	                <img src="<?= base_url() . 'dist/img/avatar/png/man-4.png'?>" data-img="man-4.png" class="img-responsive">
 	            </div>
 
-	            <div class="add_gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-4 filter irrigation">
+	            <!--div class="add_gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-4 filter irrigation">
 	                <label class="" for="file5" style="cursor:pointer;">
 	                	<img src="<?= base_url() . 'dist/img/avatar/png/plus.png'?>" class="img-responsive">
 	                </label>
 	                
 	                <input onchange="previewFile()" style="display:none;" id="file5" type="file">
-	            </div>
+	            </div-->
 
 			</div>
 

@@ -174,9 +174,12 @@ $create_account_url = base_url()."Tipusok/create";
 				<td data-title="Szerző" class="col-xs-3"></td>
 				<td data-title="Cím" class="col-xs-3"></td>
 				<td data-title="Részletek" class="col-xs-1"></td>
-			</tr>
+			</tr>			
       	</tbody>
 		</table>
+		<div class="hidden-xl hidden-lg hidden-md hidden-sm">
+	     	 <td colspan="4"><b><i>Műveletek:</i></b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="checkAll" type="checkbox">&nbsp;<a class="elofoglalas_torlese" href="javascript:void(0)">Törlés</a></td>
+	     	</div>
 		</form>
     </div>
 <br/>

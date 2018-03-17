@@ -40,6 +40,15 @@ require_once('sort_this_code.php');
   <!-- Word Press Button -->
   <link rel="stylesheet" href="<?=base_url()?>plugins/wp-buttons/button.css">
 
+  <style>
+    ::selection {
+      background: #D5F447; /* WebKit/Blink Browsers */
+    }
+    ::-moz-selection {
+      background: #D5F447; /* Gecko Browsers */
+    }
+  </style>
+
   <script src="<?=base_url()?>bower_components/jquery/dist/jquery.min.js"></script>
 
 <?php /*

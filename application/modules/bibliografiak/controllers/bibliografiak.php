@@ -854,8 +854,8 @@ FROM
   INNER JOIN biblioteka.konyvtarak ON biblioteka.termek.fiok_id = biblioteka.konyvtarak.fiok_id
   INNER JOIN biblioteka.bibliografiak ON biblioteka.bibliografiak.nyilvantartas_id =
     biblioteka.nyilvantartas.nyilvantartas_id
-  INNER JOIN biblioteka.kolcsonzesek ON biblioteka.bibliografiak.leltari_szam = biblioteka.kolcsonzesek.leltari_szam
-  INNER JOIN biblioteka.kolcsonzesek_has_tagok ON biblioteka.kolcsonzesek_has_tagok.kolcsonzesek_id =
+  LEFT JOIN biblioteka.kolcsonzesek ON biblioteka.bibliografiak.leltari_szam = biblioteka.kolcsonzesek.leltari_szam
+  LEFT JOIN biblioteka.kolcsonzesek_has_tagok ON biblioteka.kolcsonzesek_has_tagok.kolcsonzesek_id =
     biblioteka.kolcsonzesek.id AND biblioteka.konyvtarak.fiok_id = biblioteka.kolcsonzesek_has_tagok.fiok_id
   WHERE biblioteka.bibliografiak.leltari_szam = $book_id
 ");

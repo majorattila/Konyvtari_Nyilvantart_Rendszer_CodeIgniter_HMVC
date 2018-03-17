@@ -29,6 +29,8 @@ $second_segment = $this->uri->segment(2);
 <!--link href="https://fonts.googleapis.com/css?family=Expletus+Sans" rel="stylesheet"-->
 <!--link href="https://fonts.googleapis.com/css?family=Fugaz+One" rel="stylesheet"-->
 
+<link href="https://fonts.googleapis.com/css?family=Crete+Round" rel="stylesheet">
+
 <link rel="stylesheet" href="<?=base_url()?>dist/css/public.css">
 <style>
   @font-face {
@@ -146,28 +148,28 @@ Loading...    </div>
 <div class="col-xs-12" style="width:100%;height: max-content;background-color:#ccc;"><br>
 	<div class="col-sm-4 col-xs-12">
 	    <h4>Gyorslinkek</h4>
-	    <dl class="text-center">
-		    <dd><a href="<?=base_url()?>hirek/kategoriak">Hírek</a></dd>
-		    <dd><a href="<?=base_url()?>katalogus/kereses">Katalógus</a></dd>
-		    <dd><a href="<?=base_url()?>konyvtarak/kirendeltseg">Alkönyvtárak</a></dd>
-		</dl>
+	    <div class="text-center">
+		    <div class="col-xs-4 col-sm-12"><a href="<?=base_url()?>hirek/kategoriak">Hírek</a></div>
+		    <div class="col-xs-4 col-sm-12"><a href="<?=base_url()?>katalogus/kereses">Katalógus</a></div>
+		    <div class="col-xs-4 col-sm-12"><a href="<?=base_url()?>konyvtarak/kirendeltseg">Alkönyvtárak</a></div>
+		</div>
 	</div>
 
 	<div class="col-sm-4 col-xs-12">
 	    <h4>Rólunk</h4>
-		<dl class="text-center">
-		    <dd><a href="<?=base_url()?>joginyilatkozat">Jogi nyilatkozat</a></dd>
-		    <dd><a href="<?=base_url()?>szabalyok_es_feltetelek">Szabályok és feltételek</a></dd>
-		    <dd><a href="<?=base_url()?>adatvedelem">Adatvédelmi szabályzat</a></dd>
-		</dl>
+		<div class="text-center">
+		    <div class="col-xs-4 col-sm-12"><a href="<?=base_url()?>joginyilatkozat">Jogi nyilatkozat</a></div>
+		    <div class="col-xs-4 col-sm-12"><a href="<?=base_url()?>szabalyok_es_feltetelek">Szabályok és feltételek</a></div>
+		    <div class="col-xs-4 col-sm-12"><a href="<?=base_url()?>adatvedelem">Adatvédelmi szabályzat</a></div>
+		</div>
 	</div>
 
 	<div class="col-sm-4 col-xs-12">
-	    <h4>Kapcsolat</h4><dl class="text-center">
-	    <dd><span>Tel.: </span><a href="tel:06205534854156">+36 (20) 553 48-54</a></dd>
-	    <dd>Cím: Budapest 1083 Tömő u. 48-54 156</dd>
-	    <dd>Email: <a href="mailto:attilamajor1997@gmail.com">attilamajor1997@gmail.com</a></dd>
-	</dl>
+	    <h4>Kapcsolat</h4><div class="text-center">
+	    <div class="col-xs-12 col-sm-12"><span>Tel.: </span><a href="tel:06205534854156">+36 (20) 553 48-54</a></div>
+	    <div class="col-xs-12 col-sm-12">Cím: Budapest 1083 Tömő u. 48-54 156</div>
+	    <div class="col-xs-12 col-sm-12">Email: <a href="mailto:attilamajor1997@gmail.com">attilamajor1997@gmail.com</a></div>
+	</div>
 
 	</div>
 </div>
@@ -275,6 +277,30 @@ window.cookieconsent.initialise({
 
   var adblock1 = {
     "container": "afscontainer1",
+    "width": "100%",
+    "number": 2
+  };
+
+  _googCsa('ads', pageOptions, adblock1);
+
+</script>
+
+
+
+
+
+
+
+<script type="text/javascript" charset="utf-8">
+
+  var pageOptions = {
+    "pubId": "pub-9616389000213823", // Make sure this the correct client ID!
+    "query": "usa",
+    "adPage": 1
+  };
+
+  var adblock1 = {
+    "container": "afscontainer2",
     "width": "100%",
     "number": 2
   };

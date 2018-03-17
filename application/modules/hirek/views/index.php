@@ -1,3 +1,4 @@
+<?php //header("Access-Control-Allow-Origin: *"); ?>
 <style>
   @media (max-width: 576px) {
     .categories img{
@@ -8,6 +9,15 @@
     .categories img {
         max-width: 100%;
     }
+  }
+  @media (max-width: 1200px) and (min-width: 576px){
+  .cat_menu {
+      display: grid;
+  }
+  .col-md-5{
+    display: table-column-group;
+  }
+  
   }
 </style>
 
@@ -108,6 +118,28 @@ $sixth_bit = $this->uri->segment(6);
           <?php $this->hirek->_draw_feed_hp(); ?>
         </div>
       </div>
+
+
+      <div id='afscontainer1'></div>
+
+<div class="partner-placement partner-asset-right-ad" style="display: block; opacity: 1;height:270px;"> 
+  <div id="bottom-300" style="margin: 0 auto; width: min-content;"> 
+  <script src="https://www.googletagservices.com/tag/js/gpt.js">
+   googletag.pubads().definePassback('7103/az-phoenix-C1531/poster_btf/money/features_basics', [300, 250]).setClickUrl("%c").display();</script>
+ </div> 
+</div>
+
+<div id='afscontainer2'></div>
+
+<div class="partner-placement partner-asset-right-ad" style="display: block; opacity: 1;height:270px;"> 
+  <div id="bottom-300" style="margin: 0 auto; width: min-content;"> 
+  <script src="https://www.googletagservices.com/tag/js/gpt.js">
+   googletag.pubads().definePassback('7103/az-phoenix-C1531/poster_btf/money/features_basics', [300, 250]).setClickUrl("%c").display();</script>
+ </div> 
+</div>
+
+
+
     </div>
 
     <div class="hidden-sm hidden-md hidden-lg hidden-xl">
